@@ -14,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @MappedSuperclass
-@EntityListeners({AuditingEntityListener.class})
+@EntityListeners({AuditingEntityListener.class, AuditListenerHandler.class})
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt", "createdBy", "updatedBy"}, allowGetters = true)
 public class Audit implements Serializable {
 

@@ -11,5 +11,5 @@ public class GlobalCategoryTO extends AuditTO {
     private Integer id;
     private String name;
     private Integer assignedId;
-
+    private boolean deleteFlag;
 }

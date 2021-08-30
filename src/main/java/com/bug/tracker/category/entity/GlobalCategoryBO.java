@@ -23,4 +23,7 @@ public class GlobalCategoryBO extends Audit {
     @Column(name = "assigned_id")
     private Integer assignedId;
 
+    @Column(name = "delete_flag")
+    private boolean deleteFlag;
+
 }

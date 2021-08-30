@@ -2,11 +2,13 @@ package com.bug.tracker.common.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Service("modelConvertorService")
 public class ModelConvertorServiceImpl implements ModelConvertorService{
 
     @Autowired
