@@ -5,12 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "global_category")
-public class GlobalCategoryBO extends Audit {
+public class GlobalCategoryBO extends Audit implements Serializable {
+
+    private static final long serialVersionUID = -5803214131709345860L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

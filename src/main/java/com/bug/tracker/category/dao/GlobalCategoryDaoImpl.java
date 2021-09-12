@@ -14,7 +14,7 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
-public class GlobalCategoryDaoImpl implements GlobalCategoryDao{
+public class GlobalCategoryDaoImpl implements GlobalCategoryDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -22,14 +22,16 @@ public class GlobalCategoryDaoImpl implements GlobalCategoryDao{
     private static final Logger logger = LoggerFactory.getLogger(GlobalCategoryDaoImpl.class);
 
     @Override
-    public GlobalCategoryBO addUpdate(GlobalCategoryBO globalCategoryBO) {
-        if (globalCategoryBO.getId() == null) {
-            entityManager.persist(globalCategoryBO);
-            logger.info("Global Category has added successfully, Global Category details=" + globalCategoryBO);
-        } else {
-            entityManager.merge(globalCategoryBO);
-            logger.info("Global Category has updated successfully, Global Category details=" + globalCategoryBO);
-        }
+    public GlobalCategoryBO add(GlobalCategoryBO globalCategoryBO) {
+        entityManager.persist(globalCategoryBO);
+        logger.info("Global Category has added successfully, Global Category details=" + globalCategoryBO);
+        return globalCategoryBO;
+    }
+
+    @Override
+    public GlobalCategoryBO update(GlobalCategoryBO globalCategoryBO) {
+        entityManager.merge(globalCategoryBO);
+        logger.info("Global Category has updated successfully, Global Category details=" + globalCategoryBO);
         return globalCategoryBO;
     }
 

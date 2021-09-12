@@ -36,18 +36,25 @@ public class GlobalCategoryController {
         binder.setValidator(globalCategoryValidator);
     }
 
-    @PostMapping("/addUpdate")
-    public ResponseEntity<?> addUpdate(@Valid @RequestBody GlobalCategoryTO globalCategoryTO, Errors errors){
+    @PostMapping("/add")
+    public ResponseEntity<?> add(@Valid @RequestBody GlobalCategoryTO globalCategoryTO, Errors errors) {
         if (errors.hasErrors()) {
             ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
             return new ResponseEntity<ValidationError>(validationError, HttpStatus.OK);
         }
-        GlobalCategoryTO globalCategoryTO2 = globalCategoryService.addUpdate(globalCategoryTO);
-        if (globalCategoryTO.getId() == null) {
-            responseBuilder(200, "BT001", APP_MSG.MESSAGE.get("BT001"), "globalCategory", globalCategoryTO2);
-        } else {
-            responseBuilder(200, "BT002", APP_MSG.MESSAGE.get("BT002"), "globalCategory", globalCategoryTO2);
+        GlobalCategoryTO globalCategoryTO2 = globalCategoryService.add(globalCategoryTO);
+        responseBuilder(200, "BT001", APP_MSG.MESSAGE.get("BT001"), "globalCategory", globalCategoryTO2);
+        return new ResponseEntity<ResponseTO>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@Valid @RequestBody GlobalCategoryTO globalCategoryTO, Errors errors) {
+        if (errors.hasErrors()) {
+            ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+            return new ResponseEntity<ValidationError>(validationError, HttpStatus.OK);
         }
+        GlobalCategoryTO globalCategoryTO2 = globalCategoryService.update(globalCategoryTO);
+        responseBuilder(200, "BT002", APP_MSG.MESSAGE.get("BT002"), "globalCategory", globalCategoryTO2);
         return new ResponseEntity<ResponseTO>(response, HttpStatus.OK);
     }
 

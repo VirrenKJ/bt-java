@@ -1,0 +1,8 @@
+2021-08-30AM 05:25:21 - Application availability state ReadinessState changed from ACCEPTING_TRAFFIC to REFUSING_TRAFFIC
+2021-08-30AM 05:25:21 - Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@1edbd093, started on Sun Aug 29 12:37:10 IST 2021
+2021-08-30AM 05:25:21 - Stopping beans in phase 2147483647
+2021-08-30AM 05:25:21 - Bean 'webServerGracefulShutdown' completed its stop procedure
+2021-08-30AM 05:25:21 - Stopping beans in phase 2147483646
+2021-08-30AM 05:25:21 - Bean 'webServerStartStop' completed its stop procedure
+2021-08-30AM 05:25:21 - Shutting down ExecutorService 'taskScheduler'
+2021-08-30AM 05:25:21 - Closing JPA EntityManagerFactory for persistence unit 'default'

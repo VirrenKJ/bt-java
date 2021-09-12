@@ -23,9 +23,15 @@ public class GlobalCategoryServiceImpl implements GlobalCategoryService{
     private ModelConvertorService modelConvertorService;
 
     @Override
-    public GlobalCategoryTO addUpdate(GlobalCategoryTO globalCategoryTO) {
+    public GlobalCategoryTO add(GlobalCategoryTO globalCategoryTO) {
         GlobalCategoryBO globalCategoryBO = modelConvertorService.map(globalCategoryTO, GlobalCategoryBO.class);
-        return modelConvertorService.map(globalCategoryDao.addUpdate(globalCategoryBO), GlobalCategoryTO.class);
+        return modelConvertorService.map(globalCategoryDao.add(globalCategoryBO), GlobalCategoryTO.class);
+    }
+
+    @Override
+    public GlobalCategoryTO update(GlobalCategoryTO globalCategoryTO) {
+        GlobalCategoryBO globalCategoryBO = modelConvertorService.map(globalCategoryTO, GlobalCategoryBO.class);
+        return modelConvertorService.map(globalCategoryDao.update(globalCategoryBO), GlobalCategoryTO.class);
     }
 
     @Override

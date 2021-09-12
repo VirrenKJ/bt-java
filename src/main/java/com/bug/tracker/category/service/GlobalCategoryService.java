@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface GlobalCategoryService {
 
-    GlobalCategoryTO addUpdate(GlobalCategoryTO globalCategoryTO);
+    GlobalCategoryTO add(GlobalCategoryTO globalCategoryTO);
+
+    GlobalCategoryTO update(GlobalCategoryTO globalCategoryTO);
 
     List<GlobalCategoryTO> getList(SearchCriteriaObj searchCriteriaObj);
 
