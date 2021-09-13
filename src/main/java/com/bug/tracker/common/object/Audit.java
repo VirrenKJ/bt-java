@@ -24,7 +24,7 @@ public class Audit implements Serializable {
     private Date createdAt;
 
     @Column(name = "created_by")
-    private Long createdBy;
+    private Integer createdBy;
 
     @Column(nullable = false, name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -32,6 +32,6 @@ public class Audit implements Serializable {
     private Date updatedAt;
 
     @Column(name = "updated_by")
-    private Long updatedBy;
+    private Integer updatedBy;
 
 }

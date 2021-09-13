@@ -3,6 +3,7 @@ package com.bug.tracker.category.validator;
 import com.bug.tracker.category.controller.GlobalCategoryController;
 import com.bug.tracker.category.dto.GlobalCategoryTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.service.APP_MSG;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 public class GlobalCategoryValidator implements Validator {
 
     @Override
-    public boolean supports(Class<?> clazz) {
-        boolean support = GlobalCategoryTO.class.equals(clazz);
+    public boolean supports(Class<?> aClass) {
+        boolean support = GlobalCategoryTO.class.equals(aClass);
         if (!support) {
-            support = SearchCriteriaObj.class.equals(clazz);
+            support = SearchCriteriaObj.class.equals(aClass);
         }
         return support;
     }
@@ -24,7 +25,7 @@ public class GlobalCategoryValidator implements Validator {
     public void validate(Object target, Errors errors) {
         GlobalCategoryTO globalCategoryTO = (GlobalCategoryTO) target;
 
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "BT001E", ApplicationMessages.MESSAGE.get("BT001E"));
+//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "BT001E", APP_MSG.MESSAGE.get("BT001E"));
     }
 
 }

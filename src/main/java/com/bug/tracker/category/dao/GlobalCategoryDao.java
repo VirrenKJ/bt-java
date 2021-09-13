@@ -7,6 +7,7 @@ import com.bug.tracker.common.object.SearchCriteriaObj;
 import java.util.List;
 
 public interface GlobalCategoryDao {
+
     GlobalCategoryBO add(GlobalCategoryBO globalCategoryBO);
 
     GlobalCategoryBO update(GlobalCategoryBO globalCategoryBO);

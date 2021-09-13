@@ -27,13 +27,13 @@ public class ResponseTO {
 
     private List<FieldError> fieldErrors;
 
-    public static ResponseTO responseBuilder(int setStatus, String setPath, String setCode, Object data) {
+    public static ResponseTO responseBuilder(int status, String code, String path, String key, Object data) {
         ResponseTO response = new ResponseTO();
-        response.setStatus(setStatus);
-        response.setPath("/" + setPath);
-        response.setMessage(APP_MSG.getMessage(null, null, setCode));
-        response.setCode(setCode);
-        response.putData(setPath, data);
+        response.setStatus(status);
+        response.setPath(path);
+        response.setMessage(APP_MSG.MESSAGE.get(code));
+        response.setCode(code);
+        response.putData(key, data);
         return response;
     }
 

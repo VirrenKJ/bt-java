@@ -25,4 +25,7 @@ public class RoleBO extends Audit implements Serializable {
     @Column(name = "role_name")
     private String roleName;
 
+    @Column(name = "delete_flag")
+    private boolean deleteFlag;
+
 }

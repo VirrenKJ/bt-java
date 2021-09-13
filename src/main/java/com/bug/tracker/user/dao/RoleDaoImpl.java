@@ -2,6 +2,7 @@ package com.bug.tracker.user.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.user.entity.RoleBO;
 import com.bug.tracker.user.entity.UserBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,32 +15,32 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements UserDao{
+public class RoleDaoImpl implements RoleDao{
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
 
     @Override
-    public UserBO add(UserBO userBO) {
-        entityManager.persist(userBO);
-        logger.info("User has added successfully, User details=" + userBO);
-        return userBO;
+    public RoleBO add(RoleBO roleBO) {
+        entityManager.persist(roleBO);
+        logger.info("Role has added successfully, Role details=" + roleBO);
+        return roleBO;
     }
 
     @Override
-    public UserBO update(UserBO userBO) {
-        entityManager.merge(userBO);
-        logger.info("User has updated successfully, User details=" + userBO);
-        return userBO;
+    public RoleBO update(RoleBO roleBO) {
+        entityManager.merge(roleBO);
+        logger.info("Role has updated successfully, Role details=" + roleBO);
+        return roleBO;
     }
 
     @Override
-    public CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj) {
+    public CommonListTO<RoleBO> getList(SearchCriteriaObj searchCriteriaObj) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
-        Root<UserBO> root = criteriaQuery.from(UserBO.class);
+        CriteriaQuery<RoleBO> criteriaQuery = criteriaBuilder.createQuery(RoleBO.class);
+        Root<RoleBO> root = criteriaQuery.from(RoleBO.class);
         criteriaQuery.where(criteriaBuilder.equal(root.get("deleteFlag"), false));
 
         //condition for search
@@ -66,9 +67,9 @@ public class UserDaoImpl implements UserDao{
         }
 
         // Adding Pagination total Count
-        CommonListTO<UserBO> commonListTO = new CommonListTO<>();
+        CommonListTO<RoleBO> commonListTO = new CommonListTO<>();
         CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
-        Root<UserBO> root2 = criteriaQuery2.from(UserBO.class);
+        Root<RoleBO> root2 = criteriaQuery2.from(RoleBO.class);
         criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
         CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
         Long count = entityManager.createQuery(select).getSingleResult();
@@ -81,7 +82,7 @@ public class UserDaoImpl implements UserDao{
             commonListTO.setPageCount(1);
         }
 
-        TypedQuery<UserBO> typedQuery = entityManager.createQuery(criteriaQuery);
+        TypedQuery<RoleBO> typedQuery = entityManager.createQuery(criteriaQuery);
         // Condition for paging.
         if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
             typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
@@ -93,11 +94,11 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public UserBO getById(Integer id) {
+    public RoleBO getById(Integer id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
+        CriteriaQuery<RoleBO> criteriaQuery = criteriaBuilder.createQuery(RoleBO.class);
 
-        Root<UserBO> root = criteriaQuery.from(UserBO.class);
+        Root<RoleBO> root = criteriaQuery.from(RoleBO.class);
         Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
         Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
         Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
@@ -108,8 +109,8 @@ public class UserDaoImpl implements UserDao{
     @Override
     public void delete(List<Integer> id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaUpdate<UserBO> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(UserBO.class);
-        Root<UserBO> root = criteriaUpdate.from(UserBO.class);
+        CriteriaUpdate<RoleBO> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(RoleBO.class);
+        Root<RoleBO> root = criteriaUpdate.from(RoleBO.class);
         criteriaUpdate.set("deleteFlag", true);
         criteriaUpdate.where(root.get("id").in(id));
         entityManager.createQuery(criteriaUpdate).executeUpdate();

@@ -1,11 +1,11 @@
-package com.bug.tracker.category.controller;
+package com.bug.tracker.user.controller;
 
-import com.bug.tracker.category.dto.GlobalCategoryTO;
-import com.bug.tracker.category.service.GlobalCategoryService;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.common.object.ValidationErrorBuilder;
 import com.bug.tracker.master.dto.ResponseTO;
+import com.bug.tracker.user.dto.RoleTO;
+import com.bug.tracker.user.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,66 +19,66 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/category")
-public class GlobalCategoryController {
+@RequestMapping("/role")
+public class RoleController {
 
     @Autowired
-    private Validator globalCategoryValidator;
+    private Validator roleValidator;
 
     @Autowired
-    private GlobalCategoryService globalCategoryService;
+    private RoleService roleService;
 
     private ResponseTO response;
 
     @InitBinder
     private void initBinder(WebDataBinder binder) {
-        binder.setValidator(globalCategoryValidator);
+        binder.setValidator(roleValidator);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> add(@Valid @RequestBody GlobalCategoryTO globalCategoryTO, Errors errors) {
+    public ResponseEntity<?> add(@Valid @RequestBody RoleTO roleTO, Errors errors) {
         if (errors.hasErrors()) {
             ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
             return new ResponseEntity<>(validationError, HttpStatus.OK);
         }
-        GlobalCategoryTO globalCategoryTO2 = globalCategoryService.add(globalCategoryTO);
-        ResponseTO.responseBuilder(200, "BT001", "/category", "globalCategory", globalCategoryTO2);
+        RoleTO roleTO_return = roleService.add(roleTO);
+        ResponseTO.responseBuilder(200, "BT001", "/role", "role", roleTO_return);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> update(@Valid @RequestBody GlobalCategoryTO globalCategoryTO, Errors errors) {
+    public ResponseEntity<?> update(@Valid @RequestBody RoleTO roleTO, Errors errors) {
         if (errors.hasErrors()) {
             ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
             return new ResponseEntity<>(validationError, HttpStatus.OK);
         }
-        GlobalCategoryTO globalCategoryTO2 = globalCategoryService.update(globalCategoryTO);
-        ResponseTO.responseBuilder(200, "BT002", "/category", "globalCategory", globalCategoryTO2);
+        RoleTO roleTO_return = roleService.update(roleTO);
+        ResponseTO.responseBuilder(200, "BT002", "/role", "role", roleTO_return);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/list")
     public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-        List<GlobalCategoryTO> globalCategoryTOs = globalCategoryService.getList(searchCriteriaObj);
-        if (globalCategoryTOs.isEmpty()) {
-            ResponseTO.responseBuilder(200, "BT006", "/category", "globalCategory", globalCategoryTOs);
+        List<RoleTO> roleTOS = roleService.getList(searchCriteriaObj);
+        if (roleTOS.isEmpty()) {
+            ResponseTO.responseBuilder(200, "BT006", "/role", "role", roleTOS);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        ResponseTO.responseBuilder(200, "BT003", "/category", "globalCategory", globalCategoryTOs);
+        ResponseTO.responseBuilder(200, "BT003", "/role", "role", roleTOS);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
-        GlobalCategoryTO globalCategoryTO = globalCategoryService.getById(id);
-        ResponseTO.responseBuilder(200, "BT004", "/category", "globalCategory", globalCategoryTO);
+        RoleTO roleTO = roleService.getById(id);
+        ResponseTO.responseBuilder(200, "BT004", "/role", "role", roleTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestParam(name = "id") List<Integer> id) {
-        globalCategoryService.delete(id);
-        ResponseTO.responseBuilder(200, "BT005", "/category", "globalCategory", id);
+        roleService.delete(id);
+        ResponseTO.responseBuilder(200, "BT005", "/role", "role", id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

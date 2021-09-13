@@ -2,18 +2,18 @@ package com.bug.tracker.user.validator;
 
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.service.APP_MSG;
-import com.bug.tracker.user.controller.UserController;
-import com.bug.tracker.user.dto.UserTO;
+import com.bug.tracker.user.controller.RoleController;
+import com.bug.tracker.user.dto.RoleTO;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
-@ControllerAdvice(assignableTypes = UserController.class)
-public class UserValidator implements Validator {
+@ControllerAdvice(assignableTypes = RoleController.class)
+public class RoleValidator implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {
-        boolean support = UserTO.class.equals(aClass);
+        boolean support = RoleTO.class.equals(aClass);
         if (!support) {
             support = SearchCriteriaObj.class.equals(aClass);
         }
@@ -23,9 +23,8 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
 
-        UserTO userTO = (UserTO) o;
+        RoleTO roleTO = (RoleTO) o;
 
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "BT001E", APP_MSG.MESSAGE.get("BT001E"));
-
     }
 }

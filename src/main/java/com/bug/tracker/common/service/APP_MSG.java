@@ -22,19 +22,19 @@ public class APP_MSG {
         MESSAGE.put("BT001E", "Required Field!");
     }
 
-    public static String getMessage(String moduleName, String fieldName, String messageCode) {
-        String messageStr = MESSAGE.get(messageCode);
-        String returnMessage = "";
-        if (messageStr == null) {
-            messageStr = "Invalid Message Code";
-        }
-        if (moduleName != null && !moduleName.trim().isEmpty()) {
-            returnMessage = moduleName.trim() + " ";
-        }
-        if (fieldName != null && !fieldName.trim().isEmpty()) {
-            returnMessage += fieldName.trim() + " ";
-        }
-        returnMessage += messageStr;
-        return returnMessage;
-    }
+//    public static String getMessage(String moduleName, String fieldName, String messageCode) {
+//        String messageStr = MESSAGE.get(messageCode);
+//        String returnMessage = "";
+//        if (messageStr == null) {
+//            messageStr = "Invalid Message Code";
+//        }
+//        if (moduleName != null && !moduleName.trim().isEmpty()) {
+//            returnMessage = moduleName.trim() + " ";
+//        }
+//        if (fieldName != null && !fieldName.trim().isEmpty()) {
+//            returnMessage += fieldName.trim() + " ";
+//        }
+//        returnMessage += messageStr;
+//        return returnMessage;
+//    }
 }

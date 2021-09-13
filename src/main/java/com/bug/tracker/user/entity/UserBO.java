@@ -38,6 +38,9 @@ public class UserBO implements Serializable {
     @Column(name = "enabled")
     private boolean enabled = true;
 
+    @Column(name = "delete_flag")
+    private boolean deleteFlag;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
