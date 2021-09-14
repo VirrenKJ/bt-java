@@ -9,14 +9,17 @@ import java.util.Collection;
 import java.util.List;
 
 @Service("modelConvertorService")
-public class ModelConvertorServiceImpl implements ModelConvertorService{
+public class ModelConvertorServiceImpl implements ModelConvertorService {
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
     public <D, T> D map(final T entity, Class<D> outClass) {
-        return modelMapper.map(entity, outClass);
+        if (entity != null) {
+            return modelMapper.map(entity, outClass);
+        }
+        return null;
     }
 
     @Override

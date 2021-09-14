@@ -3,19 +3,20 @@ package com.bug.tracker.user.dao;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.user.entity.RoleBO;
-import com.bug.tracker.user.entity.UserBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
-public class RoleDaoImpl implements RoleDao{
+public class RoleDaoImpl implements RoleDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,7 +63,7 @@ public class RoleDaoImpl implements RoleDao{
             }
             criteriaQuery.orderBy(order);
         } else {
-            Order order = criteriaBuilder.desc(root.get("id"));
+            Order order = criteriaBuilder.desc(root.get("roleId"));
             criteriaQuery.orderBy(order);
         }
 
@@ -99,11 +100,17 @@ public class RoleDaoImpl implements RoleDao{
         CriteriaQuery<RoleBO> criteriaQuery = criteriaBuilder.createQuery(RoleBO.class);
 
         Root<RoleBO> root = criteriaQuery.from(RoleBO.class);
-        Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
+        Predicate predicateForId = criteriaBuilder.equal(root.get("roleId"), id);
         Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
         Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
         criteriaQuery.where(predicate);
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+        try {
+            RoleBO roleBO = entityManager.createQuery(criteriaQuery).getSingleResult();
+            return roleBO;
+        } catch (EmptyResultDataAccessException | NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -112,7 +119,7 @@ public class RoleDaoImpl implements RoleDao{
         CriteriaUpdate<RoleBO> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(RoleBO.class);
         Root<RoleBO> root = criteriaUpdate.from(RoleBO.class);
         criteriaUpdate.set("deleteFlag", true);
-        criteriaUpdate.where(root.get("id").in(id));
+        criteriaUpdate.where(root.get("roleId").in(id));
         entityManager.createQuery(criteriaUpdate).executeUpdate();
     }
 }

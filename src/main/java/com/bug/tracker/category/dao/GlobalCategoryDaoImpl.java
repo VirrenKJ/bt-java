@@ -3,11 +3,14 @@ package com.bug.tracker.category.dao;
 import com.bug.tracker.category.entity.GlobalCategoryBO;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.user.entity.RoleBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
@@ -102,7 +105,13 @@ public class GlobalCategoryDaoImpl implements GlobalCategoryDao {
         Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
         Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
         criteriaQuery.where(predicate);
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+        try {
+            GlobalCategoryBO globalCategoryBO = entityManager.createQuery(criteriaQuery).getSingleResult();
+            return globalCategoryBO;
+        } catch (EmptyResultDataAccessException | NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

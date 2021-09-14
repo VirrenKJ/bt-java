@@ -42,7 +42,7 @@ public class GlobalCategoryController {
             return new ResponseEntity<>(validationError, HttpStatus.OK);
         }
         GlobalCategoryTO globalCategoryTO2 = globalCategoryService.add(globalCategoryTO);
-        ResponseTO.responseBuilder(200, "BT001", "/category", "globalCategory", globalCategoryTO2);
+        response = ResponseTO.responseBuilder(200, "BT001", "/category", "globalCategory", globalCategoryTO2);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -53,32 +53,36 @@ public class GlobalCategoryController {
             return new ResponseEntity<>(validationError, HttpStatus.OK);
         }
         GlobalCategoryTO globalCategoryTO2 = globalCategoryService.update(globalCategoryTO);
-        ResponseTO.responseBuilder(200, "BT002", "/category", "globalCategory", globalCategoryTO2);
+        response = ResponseTO.responseBuilder(200, "BT002", "/category", "globalCategory", globalCategoryTO2);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/list")
     public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
         List<GlobalCategoryTO> globalCategoryTOs = globalCategoryService.getList(searchCriteriaObj);
-        if (globalCategoryTOs.isEmpty()) {
-            ResponseTO.responseBuilder(200, "BT006", "/category", "globalCategory", globalCategoryTOs);
+        if (globalCategoryTOs == null || globalCategoryTOs.isEmpty()) {
+            response = ResponseTO.responseBuilder(200, "BT006", "/category", "globalCategory", globalCategoryTOs);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        ResponseTO.responseBuilder(200, "BT003", "/category", "globalCategory", globalCategoryTOs);
+        response = ResponseTO.responseBuilder(200, "BT003", "/category", "globalCategory", globalCategoryTOs);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
         GlobalCategoryTO globalCategoryTO = globalCategoryService.getById(id);
-        ResponseTO.responseBuilder(200, "BT004", "/category", "globalCategory", globalCategoryTO);
+        if (globalCategoryTO == null) {
+            response = ResponseTO.responseBuilder(200, "BT006", "/category", "globalCategory", null);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        response = ResponseTO.responseBuilder(200, "BT004", "/category", "globalCategory", globalCategoryTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestParam(name = "id") List<Integer> id) {
         globalCategoryService.delete(id);
-        ResponseTO.responseBuilder(200, "BT005", "/category", "globalCategory", id);
+        response = ResponseTO.responseBuilder(200, "BT005", "/category", "globalCategory", id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -2,19 +2,22 @@ package com.bug.tracker.user.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.user.entity.RoleBO;
 import com.bug.tracker.user.entity.UserBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -102,7 +105,13 @@ public class UserDaoImpl implements UserDao{
         Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
         Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
         criteriaQuery.where(predicate);
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+        try {
+            UserBO userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
+            return userBO;
+        } catch (EmptyResultDataAccessException | NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

@@ -8,15 +8,15 @@ public class AuditListenerHandler {
     @PrePersist
     public void onPrePersist(Audit audit) {
         if(audit != null) {
-            audit.setCreatedBy(2502L);
-            audit.setUpdatedBy(2502L);
+            audit.setCreatedBy(2502);
+            audit.setUpdatedBy(2502);
         }
     }
 
     @PreUpdate
     public void onPreUpdate(Audit audit) {
         if(audit != null) {
-            audit.setUpdatedBy(2502L);
+            audit.setUpdatedBy(2502);
         }
     }
 }

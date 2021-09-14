@@ -41,9 +41,9 @@ public class UserBO implements Serializable {
     @Column(name = "delete_flag")
     private boolean deleteFlag;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id", updatable = false, insertable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", updatable = false, insertable = false)})
     private List<RoleBO> roles;
 
 }

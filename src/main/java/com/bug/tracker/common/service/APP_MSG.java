@@ -17,7 +17,7 @@ public class APP_MSG {
         MESSAGE.put("BT003", "Fetched List!");
         MESSAGE.put("BT004", "Selected section!");
         MESSAGE.put("BT005", "Deleted successfully!");
-        MESSAGE.put("BT006", "Empty List!");
+        MESSAGE.put("BT006", "Empty!");
         MESSAGE.put("BT007", "Invalid argument!");
         MESSAGE.put("BT001E", "Required Field!");
     }

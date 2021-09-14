@@ -22,10 +22,10 @@ public class UserRoleBO implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", unique = false)
     private Integer userId;
 
-    @Column(name = "role_id")
+    @Column(name = "role_id", unique = false)
     private Integer roleId;
 
 }

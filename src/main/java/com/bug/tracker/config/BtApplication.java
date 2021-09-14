@@ -1,5 +1,6 @@
 package com.bug.tracker.config;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,11 +18,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableScheduling
 @EntityScan(basePackages = "com.bug.tracker")
-public class BtApplication {
+public class BtApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BtApplication.class, args);
-		System.out.println("Application Started");
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+		System.out.println();
+		System.out.println("****************************************Application Started****************************************");
+		System.out.println();
+	}
 }

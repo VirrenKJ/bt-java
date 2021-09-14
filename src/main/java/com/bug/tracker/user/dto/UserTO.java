@@ -13,8 +13,8 @@ public class UserTO {
     private String firstName;
     private String lastName;
     private String username;
-    private Integer password;
-    private Integer email;
+    private String password;
+    private String email;
     private boolean enabled = true;
     private boolean deleteFlag;
     private List<RoleTO> roles;

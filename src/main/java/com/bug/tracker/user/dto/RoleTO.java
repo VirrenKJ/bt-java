@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 public class RoleTO extends AuditTO {
 
-    private Integer id;
+    private Integer roleId;
     private String roleName;
     private boolean deleteFlag;
 }
