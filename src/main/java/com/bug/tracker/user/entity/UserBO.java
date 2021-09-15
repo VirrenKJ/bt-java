@@ -16,7 +16,7 @@ public class UserBO implements Serializable {
     private static final long serialVersionUID = -2700877336857161147L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -41,7 +41,7 @@ public class UserBO implements Serializable {
     @Column(name = "delete_flag")
     private boolean deleteFlag;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id", updatable = false, insertable = false)},
             inverseJoinColumns = {@JoinColumn(name = "role_id", updatable = false, insertable = false)})
     private List<RoleBO> roles;
