@@ -10,5 +10,6 @@ public class RoleTO extends AuditTO {
 
     private Integer roleId;
     private String roleName;
+    private String description;
     private boolean deleteFlag;
 }
