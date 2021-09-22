@@ -115,6 +115,25 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public UserBO getByUsername(String username) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
+
+        Root<UserBO> root = criteriaQuery.from(UserBO.class);
+        Predicate predicateForId = criteriaBuilder.equal(root.get("username"), username);
+        Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
+        Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
+        criteriaQuery.where(predicate);
+        try {
+            UserBO userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
+            return userBO;
+        } catch (EmptyResultDataAccessException | NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public void delete(List<Integer> id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<UserBO> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(UserBO.class);

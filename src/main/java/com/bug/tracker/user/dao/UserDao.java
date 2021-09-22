@@ -7,7 +7,7 @@ import com.bug.tracker.user.entity.UserBO;
 import java.util.List;
 
 public interface UserDao {
-    
+
     UserBO add(UserBO userBO);
 
     UserBO update(UserBO userBO);
@@ -15,6 +15,8 @@ public interface UserDao {
     CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj);
 
     UserBO getById(Integer id);
+
+    UserBO getByUsername(String username);
 
     void delete(List<Integer> id);
 }

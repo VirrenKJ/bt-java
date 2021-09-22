@@ -2,16 +2,20 @@ package com.bug.tracker.user.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "user")
-public class UserBO implements Serializable {
+public class UserBO implements UserDetails {
 
     private static final long serialVersionUID = -2700877336857161147L;
 
@@ -46,4 +50,27 @@ public class UserBO implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "role_id", updatable = false, insertable = false)})
     private List<RoleBO> roles;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<UserAuthority> userAuthorities = new ArrayList<>();
+        roles.forEach(role ->{
+            userAuthorities.add(new UserAuthority(role.getRoleName()));
+        });
+        return userAuthorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }
