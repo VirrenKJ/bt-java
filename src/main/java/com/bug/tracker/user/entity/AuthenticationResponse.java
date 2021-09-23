@@ -5,13 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
-public class JwtRequest {
-
-    String username;
-    String password;
-
+@AllArgsConstructor
+public class AuthenticationResponse {
+    private String jwtToken;
 }

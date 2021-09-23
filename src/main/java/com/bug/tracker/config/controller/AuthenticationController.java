@@ -1,8 +1,8 @@
 package com.bug.tracker.config.controller;
 
 import com.bug.tracker.config.JwtUtil;
-import com.bug.tracker.user.entity.JwtRequest;
-import com.bug.tracker.user.entity.JwtResponse;
+import com.bug.tracker.user.entity.AuthenticationRequest;
+import com.bug.tracker.user.entity.AuthenticationResponse;
 import com.bug.tracker.user.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +29,17 @@ public class AuthenticationController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/generate-token")
-    public ResponseEntity<?> generateToken (@RequestBody JwtRequest jwtRequest) throws Exception {
+    public ResponseEntity<?> generateToken (@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try{
-            authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
+            authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         }catch(UsernameNotFoundException e){
             e.printStackTrace();
             throw new Exception("User not found");
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtRequest.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         String token = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -52,5 +52,4 @@ public class AuthenticationController {
             throw new Exception("Invalid Credentials " + e.getMessage());
         }
     }
-
 }
