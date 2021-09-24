@@ -1,5 +1,6 @@
 package com.bug.tracker.user.dto;
 
+import com.bug.tracker.user.entity.UserAuthority;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,5 +19,12 @@ public class UserTO {
     private boolean enabled = true;
     private boolean deleteFlag;
     private List<RoleTO> roles;
+
+    //UserDetails
+    private List<UserAuthority> authorities;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+
 
 }
