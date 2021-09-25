@@ -3,6 +3,7 @@ package com.bug.tracker.config.controller;
 import com.bug.tracker.config.JwtUtil;
 import com.bug.tracker.user.entity.AuthenticationRequest;
 import com.bug.tracker.user.entity.AuthenticationResponse;
+import com.bug.tracker.user.entity.UserBO;
 import com.bug.tracker.user.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,12 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
     @Autowired
@@ -42,6 +44,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 
+    @GetMapping("/current-user")
+    public UserBO getCurrentUser(Principal principal){
+        return (UserBO) userDetailsService.loadUserByUsername((principal.getName()));
+    }
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -49,7 +56,7 @@ public class AuthenticationController {
             e.printStackTrace();
             throw new Exception("USER DISABLED" + e.getMessage());
         } catch (BadCredentialsException e) {
-            throw new Exception("Invalid Credentials " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 }
