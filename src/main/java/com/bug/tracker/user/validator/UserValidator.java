@@ -4,6 +4,8 @@ import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.service.APP_MSG;
 import com.bug.tracker.user.controller.UserController;
 import com.bug.tracker.user.dto.UserTO;
+import com.bug.tracker.user.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -11,6 +13,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice(assignableTypes = UserController.class)
 public class UserValidator implements Validator {
+
+    @Autowired
+    private UserService userService;
+
     @Override
     public boolean supports(Class<?> aClass) {
         boolean support = UserTO.class.equals(aClass);
@@ -25,7 +31,13 @@ public class UserValidator implements Validator {
 
         UserTO userTO = (UserTO) o;
 
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "BT001E", APP_MSG.MESSAGE.get("BT001E"));
-
+        if (userTO.getUsername() == null) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "BT001E", APP_MSG.MESSAGE.get("BT001E"));
+        }else{
+            UserTO user = userService.getByUsername(userTO.getUsername());
+            if (user != null && user.getId() == null) {
+                errors.rejectValue("username", "BT002E", APP_MSG.MESSAGE.get("BT002E"));
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.bug.tracker.user.dao.UserDao;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.entity.UserBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,8 +23,12 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private ModelConvertorService modelConvertorService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserTO add(UserTO userTO) {
+        userTO.setPassword(passwordEncoder.encode(userTO.getPassword()));
         UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
         return modelConvertorService.map(userDao.add(userBO), UserTO.class);
     }
@@ -45,6 +50,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserTO getById(Integer id) {
         UserTO userTO = modelConvertorService.map(userDao.getById(id), UserTO.class);
+        return userTO;
+    }
+
+    @Override
+    public UserTO getByUsername(String username) {
+        UserTO userTO = modelConvertorService.map(userDao.getByUsername(username), UserTO.class);
         return userTO;
     }
 

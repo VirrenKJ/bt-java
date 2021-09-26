@@ -15,6 +15,8 @@ public interface UserService {
 
     UserTO getById(Integer id);
 
+    UserTO getByUsername(String username);
+
     void delete(List<Integer> id);
 
 }

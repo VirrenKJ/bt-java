@@ -20,6 +20,7 @@ public class APP_MSG {
         MESSAGE.put("BT006", "Empty!");
         MESSAGE.put("BT007", "Invalid argument!");
         MESSAGE.put("BT001E", "Required Field!");
+        MESSAGE.put("BT002E", "Must be unique!");
     }
 
 //    public static String getMessage(String moduleName, String fieldName, String messageCode) {

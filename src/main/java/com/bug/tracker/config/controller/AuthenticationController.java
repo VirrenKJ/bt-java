@@ -46,7 +46,9 @@ public class AuthenticationController {
 
     @GetMapping("/current-user")
     public UserBO getCurrentUser(Principal principal){
-        return (UserBO) userDetailsService.loadUserByUsername((principal.getName()));
+        UserBO userBO = (UserBO) userDetailsService.loadUserByUsername((principal.getName()));
+        userBO.setPassword(null);
+        return userBO;
     }
 
     private void authenticate(String username, String password) throws Exception {
