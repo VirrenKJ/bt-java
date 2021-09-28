@@ -79,6 +79,17 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/username")
+    public ResponseEntity<?> getByUsername(@RequestParam(name = "username") String username) {
+        UserTO userTO = userService.getByUsername(username);
+        if (userTO == null) {
+            response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", null);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        response = ResponseTO.responseBuilder(200, "BT004", "/user", "user", userTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestParam(name = "id") List<Integer> id) {
         userService.delete(id);
