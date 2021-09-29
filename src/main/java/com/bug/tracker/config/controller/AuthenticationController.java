@@ -58,6 +58,7 @@ public class AuthenticationController {
             e.printStackTrace();
             throw new Exception("USER DISABLED" + e.getMessage());
         } catch (BadCredentialsException e) {
+            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }

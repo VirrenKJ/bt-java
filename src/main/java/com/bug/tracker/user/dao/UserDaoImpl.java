@@ -2,7 +2,6 @@ package com.bug.tracker.user.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
-import com.bug.tracker.user.entity.RoleBO;
 import com.bug.tracker.user.entity.UserBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,7 +114,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserBO getByUsername(String username) {
+    public UserBO getByUsername(String username) throws Exception {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
 
@@ -124,13 +123,14 @@ public class UserDaoImpl implements UserDao {
         Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
         Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
         criteriaQuery.where(predicate);
+        UserBO userBO;
         try {
-            UserBO userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
-            return userBO;
+            userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
         } catch (EmptyResultDataAccessException | NoResultException e) {
-            e.printStackTrace();
-            return null;
+            System.out.println(e.getMessage());
+            throw new Exception(e.getMessage(), e);
         }
+        return userBO;
     }
 
     @Override

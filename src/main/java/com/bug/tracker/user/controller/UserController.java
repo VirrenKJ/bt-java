@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @GetMapping("/username")
-    public ResponseEntity<?> getByUsername(@RequestParam(name = "username") String username) {
+    public ResponseEntity<?> getByUsername(@RequestParam(name = "username") String username) throws Exception {
         UserTO userTO = userService.getByUsername(username);
         if (userTO == null) {
             response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", null);

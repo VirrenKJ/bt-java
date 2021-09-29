@@ -3,11 +3,12 @@ package com.bug.tracker.config;
 import com.bug.tracker.user.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +22,8 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
@@ -32,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NotNull HttpServletResponse httpServletResponse,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = httpServletRequest.getHeader("Authorization");
-        System.out.println("**********" + requestTokenHeader + "**********");
+        logger.warn("**********" + requestTokenHeader + "**********");
 
         String username = null;
         String jwt = null;
@@ -43,13 +46,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = jwtUtil.extractUsername(jwt);
             } catch (ExpiredJwtException e) {
                 e.printStackTrace();
-                System.out.println("JWT has expired");
+                logger.error("JWT has expired");
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error in JwtAuthenticationFilter");
+                logger.error("Error in JwtAuthenticationFilter");
             }
         } else {
-            System.out.println("requestTokenHeader does not starts with Bearer or is null in JwtAuthenticationFilter Class");
+            logger.warn("Header must starts with Bearer.");
         }
 
         //Validate
@@ -61,10 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             } else {
-                System.out.println("Token Invalid");
+                logger.warn("Token Invalid.");
             }
         } else {
-            System.out.println("Username is null or SecurityContextHolder.getContext().getAuthentication() is not null in JwtAuthenticationFilter");
+            logger.warn("Username is null or SecurityContextHolder.getContext().getAuthentication() is not null in JwtAuthenticationFilter");
         }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);

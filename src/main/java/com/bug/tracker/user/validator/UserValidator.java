@@ -5,6 +5,7 @@ import com.bug.tracker.common.service.APP_MSG;
 import com.bug.tracker.user.controller.UserController;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.service.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -26,6 +27,7 @@ public class UserValidator implements Validator {
         return support;
     }
 
+    @SneakyThrows
     @Override
     public void validate(Object o, Errors errors) {
 

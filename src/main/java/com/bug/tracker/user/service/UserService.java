@@ -15,7 +15,7 @@ public interface UserService {
 
     UserTO getById(Integer id);
 
-    UserTO getByUsername(String username);
+    UserTO getByUsername(String username) throws Exception;
 
     void delete(List<Integer> id);
 

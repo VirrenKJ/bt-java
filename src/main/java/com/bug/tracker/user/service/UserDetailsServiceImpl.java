@@ -19,8 +19,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserBO userBO = null;
         try {
             userBO = userDao.getByUsername(username);
-        } catch (UsernameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new UsernameNotFoundException(e.getMessage());
         }
         return userBO;
     }

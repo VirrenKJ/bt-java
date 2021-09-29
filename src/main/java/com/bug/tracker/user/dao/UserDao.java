@@ -16,7 +16,7 @@ public interface UserDao {
 
     UserBO getById(Integer id);
 
-    UserBO getByUsername(String username);
+    UserBO getByUsername(String username) throws Exception;
 
     void delete(List<Integer> id);
 }

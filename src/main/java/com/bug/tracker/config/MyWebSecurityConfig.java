@@ -43,7 +43,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/authenticate", "/user/username", "/user/add","/role/list").permitAll()
+                .antMatchers("/authenticate", "/user/username", "/user/add", "/role/list").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
                 .and()

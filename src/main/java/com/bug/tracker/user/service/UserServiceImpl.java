@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserTO getByUsername(String username) {
+    public UserTO getByUsername(String username) throws Exception {
         UserTO userTO = modelConvertorService.map(userDao.getByUsername(username), UserTO.class);
         return userTO;
     }
