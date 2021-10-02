@@ -6,6 +6,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +18,15 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    private final String SECRET_KEY = "VmuO`&Oht4<SKs>LPcldDh{s*K^ofe2ip?8PEK<OH%16{'7~PfQ:LGU;A'mt_&`C2ix7IE>AEsqJ_;3<{A{4^a><6v-[Iity$j-4%HlJG9P6$wh';Qp4Ljfg3yn|h-RY-RJ";
+    private final String SECRET_KEY = readFile();
+
+    public JwtUtil() throws IOException {
+    }
+
+    static String readFile() throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get("/home/hostbooks/Storage/Personal/secret.txt"));
+        return new String(encoded, Charset.defaultCharset());
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
