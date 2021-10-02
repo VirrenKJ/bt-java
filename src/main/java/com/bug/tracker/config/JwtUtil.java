@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    private final String SECRET_KEY = "secret";
+    private final String SECRET_KEY = "VmuO`&Oht4<SKs>LPcldDh{s*K^ofe2ip?8PEK<OH%16{'7~PfQ:LGU;A'mt_&`C2ix7IE>AEsqJ_;3<{A{4^a><6v-[Iity$j-4%HlJG9P6$wh';Qp4Ljfg3yn|h-RY-RJ";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -45,7 +45,7 @@ public class JwtUtil {
     private String createToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60)))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 

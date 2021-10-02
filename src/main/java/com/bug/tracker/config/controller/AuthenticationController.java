@@ -1,8 +1,8 @@
 package com.bug.tracker.config.controller;
 
 import com.bug.tracker.config.JwtUtil;
-import com.bug.tracker.user.entity.AuthenticationRequest;
-import com.bug.tracker.user.entity.AuthenticationResponse;
+import com.bug.tracker.config.entity.AuthenticationRequest;
+import com.bug.tracker.config.entity.AuthenticationResponse;
 import com.bug.tracker.user.entity.UserBO;
 import com.bug.tracker.user.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +40,10 @@ public class AuthenticationController {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        UserBO user = (UserBO) userDetails;
+        user.setPassword(null);
         String token = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthenticationResponse(token));
+        return ResponseEntity.ok(new AuthenticationResponse(token, user));
     }
 
     @GetMapping("/current-user")

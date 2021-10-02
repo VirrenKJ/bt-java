@@ -2368,7 +2368,7 @@ Unconditional classes:
 2021-09-24AM 08:10:58 - POST "/generate-token", parameters={}
 2021-09-24AM 08:10:58 - Mapped to com.bug.tracker.config.controller.AuthenticationController#generateToken(AuthenticationRequest)
 2021-09-24AM 08:10:58 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2021-09-24AM 08:10:58 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.entity.AuthenticationRequest@3f074f3e]
+2021-09-24AM 08:10:58 - Read "application/json;charset=UTF-8" to [com.bug.tracker.config.entity.AuthenticationRequest@3f074f3e]
 2021-09-24AM 08:10:58 - 
     select
         userbo0_.id as id1_2_,
@@ -2425,7 +2425,7 @@ Unconditional classes:
 2021-09-24AM 08:10:58 - binding parameter [1] as [VARCHAR] - [viren.kj]
 2021-09-24AM 08:10:58 - binding parameter [2] as [BOOLEAN] - [false]
 2021-09-24AM 08:10:58 - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2021-09-24AM 08:10:58 - Writing [com.bug.tracker.user.entity.AuthenticationResponse@64eb2e63]
+2021-09-24AM 08:10:58 - Writing [com.bug.tracker.config.entity.AuthenticationResponse@64eb2e63]
 2021-09-24AM 08:10:58 - Closing JPA EntityManager in OpenEntityManagerInViewInterceptor
 2021-09-24AM 08:10:58 - Completed 200 OK
 2021-09-24AM 08:10:58 - Cleared SecurityContextHolder to complete request

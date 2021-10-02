@@ -104,13 +104,13 @@ public class UserDaoImpl implements UserDao {
         Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
         Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
         criteriaQuery.where(predicate);
+        UserBO userBO = null;
         try {
-            UserBO userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
-            return userBO;
+            userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
         } catch (EmptyResultDataAccessException | NoResultException e) {
             e.printStackTrace();
-            return null;
         }
+        return userBO;
     }
 
     @Override
@@ -123,12 +123,11 @@ public class UserDaoImpl implements UserDao {
         Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
         Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
         criteriaQuery.where(predicate);
-        UserBO userBO;
+        UserBO userBO = null;
         try {
             userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
         } catch (EmptyResultDataAccessException | NoResultException e) {
-            System.out.println(e.getMessage());
-            throw new Exception(e.getMessage(), e);
+            e.printStackTrace();
         }
         return userBO;
     }
