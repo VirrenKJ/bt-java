@@ -54,18 +54,17 @@ public class UserDaoImpl implements UserDao {
         }
 
         // Condition for sorting.
+        Order order;
         if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
-            Order order = null;
             if (searchCriteriaObj.getSortType() == 2) {
                 order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
             } else {
                 order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
             }
-            criteriaQuery.orderBy(order);
         } else {
-            Order order = criteriaBuilder.desc(root.get("id"));
-            criteriaQuery.orderBy(order);
+            order = criteriaBuilder.desc(root.get("id"));
         }
+        criteriaQuery.orderBy(order);
 
         // Adding Pagination total Count
         CommonListTO<UserBO> commonListTO = new CommonListTO<>();
