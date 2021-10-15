@@ -12,7 +12,8 @@ public class TenantInterceptorAdapter implements HandlerInterceptor {
 
   @Override
   public boolean preHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object object) throws Exception {
+                           HttpServletResponse response,
+                           Object object) throws Exception {
     System.out.println("In preHandle we are Intercepting the Request");
     System.out.println("____________________________________________");
     String requestURI = request.getRequestURI();
@@ -29,9 +30,10 @@ public class TenantInterceptorAdapter implements HandlerInterceptor {
   }
 
   @Override
-  public void postHandle(
-          HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
-          throws Exception {
+  public void postHandle(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Object handler,
+                         ModelAndView modelAndView) {
     TenantContext.clear();
   }
 }
