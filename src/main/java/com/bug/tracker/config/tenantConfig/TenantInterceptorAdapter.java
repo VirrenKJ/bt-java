@@ -14,18 +14,18 @@ public class TenantInterceptorAdapter implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request,
                            HttpServletResponse response,
                            Object object) throws Exception {
-    System.out.println("In preHandle we are Intercepting the Request");
-    System.out.println("____________________________________________");
-    String requestURI = request.getRequestURI();
-    String tenantID = request.getHeader("X-TenantID");
-    System.out.println("RequestURI::" + requestURI + " || Search for X-TenantID  :: " + tenantID);
-    System.out.println("____________________________________________");
-    if (tenantID == null) {
-      response.getWriter().write("X-TenantID not present in the Request Header");
-      response.setStatus(400);
-      return false;
-    }
-    TenantContext.setCurrentTenant(tenantID);
+//    System.out.println("In preHandle we are Intercepting the Request");
+//    System.out.println("____________________________________________");
+//    String requestURI = request.getRequestURI();
+//    String tenantID = request.getHeader("X-TenantID");
+//    System.out.println("RequestURI::" + requestURI + " || Search for X-TenantID  :: " + tenantID);
+//    System.out.println("____________________________________________");
+//    if (tenantID == null) {
+//      response.getWriter().write("X-TenantID not present in the Request Header");
+//      response.setStatus(400);
+//      return false;
+//    }
+//    TenantContext.setCurrentTenant(tenantID);
     return true;
   }
 
