@@ -12,7 +12,7 @@ public class MultiTenantConnectionProviderImpl implements MultiTenantConnectionP
 
   private static final long serialVersionUID = 4594035686849152415L;
   private static final Logger logger = LoggerFactory.getLogger(MultiTenantConnectionProviderImpl.class);
-  private final String DEFAULT_TENANT = "public";
+  private final String DEFAULT_TENANT = "bug_tracker";
   private final DataSource datasource;
 
   public MultiTenantConnectionProviderImpl(DataSource dataSource) {

@@ -4,7 +4,7 @@ import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
 
-  private String defaultTenant = "public";
+  private String defaultTenant = "bug_tracker";
 
   @Override
   public String resolveCurrentTenantIdentifier() {
