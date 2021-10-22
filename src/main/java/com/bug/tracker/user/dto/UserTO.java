@@ -25,6 +25,4 @@ public class UserTO {
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
-
-
 }

@@ -1,5 +1,6 @@
 package com.bug.tracker.config;
 
+import com.bug.tracker.config.tenantConfig.TenantContext;
 import com.bug.tracker.user.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +64,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        //Set current tenant
+        TenantContext.setCurrentTenant(httpServletRequest.getHeader("x-tenant"));
       } else {
         logger.warn("Token Invalid.");
       }
