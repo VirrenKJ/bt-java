@@ -7,16 +7,16 @@ import java.util.List;
 
 public interface UserService {
 
-    UserTO add(UserTO userTO);
+  UserTO add(UserTO userTO);
 
-    UserTO update(UserTO userTO);
+  UserTO update(UserTO userTO);
 
-    List<UserTO> getList(SearchCriteriaObj searchCriteriaObj);
+  List<UserTO> getList(SearchCriteriaObj searchCriteriaObj);
 
-    UserTO getById(Integer id);
+  UserTO getById(Integer id);
 
-    UserTO getByUsername(String username) throws Exception;
+  UserTO getByUsername(String username) throws Exception;
 
-    void delete(List<Integer> id);
+  void delete(List<Integer> id);
 
 }

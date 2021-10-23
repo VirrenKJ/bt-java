@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface UserDao {
 
-    UserBO add(UserBO userBO);
+  UserBO add(UserBO userBO);
 
-    UserBO update(UserBO userBO);
+  UserBO update(UserBO userBO);
 
-    CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj);
+  CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj);
 
-    UserBO getById(Integer id);
+  UserBO getById(Integer id);
 
-    UserBO getByUsername(String username) throws Exception;
+  UserBO getByUsername(String username) throws Exception;
 
-    void delete(List<Integer> id);
+  void delete(List<Integer> id);
 }

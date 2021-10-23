@@ -1,13 +1,17 @@
 package com.bug.tracker.config.tenantConfig;
 
+import com.bug.tracker.config.ClientDBCache;
+import com.bug.tracker.config.MultiLocationDBSource;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Component
 public class MultiTenantConnectionProviderImpl implements MultiTenantConnectionProvider {
 
   private static final long serialVersionUID = 4594035686849152415L;
@@ -31,9 +35,27 @@ public class MultiTenantConnectionProviderImpl implements MultiTenantConnectionP
 
   @Override
   public Connection getConnection(String tenantIdentifier) throws SQLException {
-    logger.info("Get connection for tenant {}", tenantIdentifier);
-    final Connection connection = getAnyConnection();
-    connection.setSchema(tenantIdentifier);
+    final Connection connection;
+    logger.info("*************************" + tenantIdentifier + "*********************");
+    if (DEFAULT_TENANT.equals(tenantIdentifier)) {
+      if (ClientDBCache.driverManagerMap.isEmpty()) {
+        new MultiLocationDBSource().databaseDetail();
+      }
+      connection = getAnyConnection();
+      logger.info("**********Fetching default connection***********");
+    } else if (tenantIdentifier != null) {
+      if (ClientDBCache.driverManagerMap.isEmpty()) {
+        new MultiLocationDBSource().databaseDetail();
+      }
+      logger.info("**********Fetching Client DB connection***********");
+      if (ClientDBCache.driverManagerMap.get(tenantIdentifier) != null) {
+        connection = ClientDBCache.driverManagerMap.get(tenantIdentifier).getConnection();
+      } else {
+        connection = getAnyConnection();
+      }
+    } else {
+      connection = getAnyConnection();
+    }
     return connection;
   }
 

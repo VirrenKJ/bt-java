@@ -1,6 +1,5 @@
 package com.bug.tracker.config;
 
-import com.bug.tracker.config.tenantConfig.TenantContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;

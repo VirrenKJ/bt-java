@@ -21,47 +21,47 @@ import java.security.Principal;
 @CrossOrigin(origins = "*")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+  @Autowired
+  private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+  @Autowired
+  private UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+  @Autowired
+  private JwtUtil jwtUtil;
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> generateToken (@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-        try{
-            authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        }catch(UsernameNotFoundException e){
-            e.printStackTrace();
-            throw new Exception("User not found");
-        }
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        UserBO user = (UserBO) userDetails;
-        user.setPassword(null);
-        String token = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthenticationResponse(token, user));
+  @PostMapping("/authenticate")
+  public ResponseEntity<?> generateToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    try {
+      authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+    } catch (UsernameNotFoundException e) {
+      e.printStackTrace();
+      throw new Exception("User not found");
     }
 
-    @GetMapping("/current-user")
-    public UserBO getCurrentUser(Principal principal){
-        UserBO userBO = (UserBO) userDetailsService.loadUserByUsername((principal.getName()));
-        userBO.setPassword(null);
-        return userBO;
-    }
+    UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+    UserBO user = (UserBO) userDetails;
+    user.setPassword(null);
+    String token = jwtUtil.generateToken(userDetails);
+    return ResponseEntity.ok(new AuthenticationResponse(token, user));
+  }
 
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            e.printStackTrace();
-            throw new Exception("USER DISABLED" + e.getMessage());
-        } catch (BadCredentialsException e) {
-            e.printStackTrace();
-            throw new Exception(e.getMessage());
-        }
+  @GetMapping("/current-user")
+  public UserBO getCurrentUser(Principal principal) {
+    UserBO userBO = (UserBO) userDetailsService.loadUserByUsername((principal.getName()));
+    userBO.setPassword(null);
+    return userBO;
+  }
+
+  private void authenticate(String username, String password) throws Exception {
+    try {
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    } catch (DisabledException e) {
+      e.printStackTrace();
+      throw new Exception("USER DISABLED" + e.getMessage());
+    } catch (BadCredentialsException e) {
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
+  }
 }

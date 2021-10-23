@@ -8,16 +8,16 @@ import org.springframework.security.core.GrantedAuthority;
 @Setter
 public class UserAuthority implements GrantedAuthority {
 
-    private static final long serialVersionUID = -3091574199895366733L;
+  private static final long serialVersionUID = -3091574199895366733L;
 
-    private String authority;
+  private String authority;
 
-    public UserAuthority(String authority) {
-        this.authority = authority;
-    }
+  public UserAuthority(String authority) {
+    this.authority = authority;
+  }
 
-    @Override
-    public String getAuthority() {
-        return this.authority;
-    }
+  @Override
+  public String getAuthority() {
+    return this.authority;
+  }
 }

@@ -19,12 +19,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackages = "com.bug.tracker")
 public class BtApplication implements CommandLineRunner {
 
-    public static void main(String[] args) {
-        SpringApplication.run(BtApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(BtApplication.class, args);
+  }
 
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println("\n" + "****************************************Application Started****************************************" + "\n");
-    }
+  @Override
+  public void run(String... args) throws Exception {
+    System.out.println("\n" + "****************************************Application Started****************************************" + "\n");
+  }
 }
