@@ -1,8 +1,8 @@
-package com.bug.tracker.user.dao;
+package com.bug.tracker.company.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
-import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.company.entity.CompanyBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,32 +16,32 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class CompanyDaoImpl implements CompanyDao {
 
   @PersistenceContext
   private EntityManager entityManager;
 
-  private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
   @Override
-  public UserBO add(UserBO userBO) {
-    entityManager.persist(userBO);
-    logger.info("User has added successfully, User details=" + userBO);
-    return userBO;
+  public CompanyBO add(CompanyBO companyBO) {
+    entityManager.persist(companyBO);
+    logger.info("Company has added successfully, Company details=" + companyBO);
+    return companyBO;
   }
 
   @Override
-  public UserBO update(UserBO userBO) {
-    entityManager.merge(userBO);
-    logger.info("User has updated successfully, User details=" + userBO);
-    return userBO;
+  public CompanyBO update(CompanyBO companyBO) {
+    entityManager.merge(companyBO);
+    logger.info("Company has updated successfully, Company details=" + companyBO);
+    return companyBO;
   }
 
   @Override
-  public CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj) {
+  public CommonListTO<CompanyBO> getList(SearchCriteriaObj searchCriteriaObj) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
-    Root<UserBO> root = criteriaQuery.from(UserBO.class);
+    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
+    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
     criteriaQuery.where(criteriaBuilder.equal(root.get("deleteFlag"), false));
 
     //condition for search
@@ -67,9 +67,9 @@ public class UserDaoImpl implements UserDao {
     criteriaQuery.orderBy(order);
 
     // Adding Pagination total Count
-    CommonListTO<UserBO> commonListTO = new CommonListTO<>();
+    CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
-    Root<UserBO> root2 = criteriaQuery2.from(UserBO.class);
+    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
     criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
@@ -82,7 +82,7 @@ public class UserDaoImpl implements UserDao {
       commonListTO.setPageCount(1);
     }
 
-    TypedQuery<UserBO> typedQuery = entityManager.createQuery(criteriaQuery);
+    TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
     // Condition for paging.
     if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
       typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
@@ -94,48 +94,29 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public UserBO getById(Integer id) {
+  public CompanyBO getById(Integer id) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
+    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
 
-    Root<UserBO> root = criteriaQuery.from(UserBO.class);
+    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
     Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
     Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
     Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
     criteriaQuery.where(predicate);
-    UserBO userBO = null;
+    CompanyBO companyBO = null;
     try {
-      userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
+      companyBO = entityManager.createQuery(criteriaQuery).getSingleResult();
     } catch (EmptyResultDataAccessException | NoResultException e) {
       e.printStackTrace();
     }
-    return userBO;
-  }
-
-  @Override
-  public UserBO getByUsername(String username) throws Exception {
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
-
-    Root<UserBO> root = criteriaQuery.from(UserBO.class);
-    Predicate predicateForId = criteriaBuilder.equal(root.get("username"), username);
-    Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
-    Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
-    criteriaQuery.where(predicate);
-    UserBO userBO = null;
-    try {
-      userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
-    } catch (EmptyResultDataAccessException | NoResultException e) {
-      e.printStackTrace();
-    }
-    return userBO;
+    return companyBO;
   }
 
   @Override
   public void delete(List<Integer> id) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaUpdate<UserBO> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(UserBO.class);
-    Root<UserBO> root = criteriaUpdate.from(UserBO.class);
+    CriteriaUpdate<CompanyBO> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(CompanyBO.class);
+    Root<CompanyBO> root = criteriaUpdate.from(CompanyBO.class);
     criteriaUpdate.set("deleteFlag", true);
     criteriaUpdate.where(root.get("id").in(id));
     entityManager.createQuery(criteriaUpdate).executeUpdate();
