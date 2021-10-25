@@ -18,4 +18,5 @@ public class CompanyTO {
   private String state;
   private String city;
   private boolean deleteFlag;
+//  CompanyDbDetailTO companyDbDetail;
 }

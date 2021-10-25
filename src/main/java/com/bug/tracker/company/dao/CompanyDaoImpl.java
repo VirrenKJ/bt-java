@@ -90,7 +90,6 @@ public class CompanyDaoImpl implements CompanyDao {
     }
     commonListTO.setDataList(typedQuery.getResultList());
     return commonListTO;
-
   }
 
   @Override

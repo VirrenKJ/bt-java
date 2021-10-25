@@ -15,7 +15,7 @@ public class CompanyBO extends Audit {
   private static final long serialVersionUID = 5552166560392622180L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", unique = true, nullable = false)
   private Integer id;
 
@@ -48,4 +48,8 @@ public class CompanyBO extends Audit {
 
   @Column(name = "delete_flag")
   private boolean deleteFlag;
+
+//  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+//  @JoinColumn(name = "company_id", referencedColumnName = "id")
+//  CompanyDbDetailBO companyDbDetail;
 }

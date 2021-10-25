@@ -40,7 +40,7 @@ public class MultiLocationDBSource {
   }
 
   private String getDatabaseDetailQuery(boolean isAll, String dbUUID) {
-    String dbQuery = "SELECT cdb.db_url as url, cdb.db_username as userName, cdb.db_password as password, comp.db_uuid as uuid FROM company_db_details cdb INNER join company comp on cdb.company_id = comp.id";
+    String dbQuery = "SELECT cdb.db_url as url, cdb.db_username as userName, cdb.db_password as password, comp.db_uuid as uuid FROM company_db_detail cdb INNER join company comp on cdb.company_id = comp.id";
     if (!isAll && !StringUtils.isNullOrEmpty(dbUUID)) {
       dbQuery += " where comp.db_uuid='" + dbUUID + "'";
     }
@@ -59,4 +59,20 @@ public class MultiLocationDBSource {
     }
   }
 
+  public void updateDriverManagerForNewCompany(String dbUUID) {
+    Properties props;
+    try {
+      props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/application.properties"));
+      JdbcTemplate jdbcDatabaseDetail = new JdbcTemplate(getDataSource(props.getProperty("spring.datasource.url"),
+              props.getProperty("spring.datasource.username"), props.getProperty("spring.datasource.password")));
+      List<Map<String, Object>> rows = jdbcDatabaseDetail
+              .queryForList(this.getDatabaseDetailQuery(false, dbUUID));
+      for (Map<String, Object> row : rows) {
+        ClientDBCache.driverManagerMap.put(row.get("uuid").toString(), getDataSource(row.get("url").toString(),
+                row.get("userName").toString(), row.get("password").toString()));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }

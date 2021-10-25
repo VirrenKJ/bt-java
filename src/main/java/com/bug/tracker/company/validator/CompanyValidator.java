@@ -19,7 +19,6 @@ public class CompanyValidator implements Validator {
     return support;
   }
 
-  @SneakyThrows
   @Override
   public void validate(Object o, Errors errors) {
 

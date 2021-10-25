@@ -10,8 +10,8 @@ import java.util.Date;
 public class AuditTO {
 
     private Date createdAt;
-    private Long createdBy;
+    private Integer createdBy;
     private Date updatedAt;
-    private Long updatedBy;
+    private Integer updatedBy;
 
 }
