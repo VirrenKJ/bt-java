@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,6 +39,7 @@ public class CompanyServiceImpl implements CompanyService {
     companyTO.setDbUuid(UUID.randomUUID().toString());
     companyDetail(companyTO);
     createCompanyDb(companyTO.getDbName());
+    runCompanyDbScript(companyTO.getDbName());
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
     CompanyTO companyTO_return = modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
     ClientDBCache.getAllKey().put(companyTO_return.getDbUuid(), companyTO_return.getDbName());
@@ -45,7 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
     return companyTO_return;
   }
 
-  public void companyDetail(CompanyTO companyTO) {
+  private void companyDetail(CompanyTO companyTO) {
     companyTO.setCompanyDbDetail(new CompanyDbDetailTO());
     companyTO.getCompanyDbDetail().setDbUrl("jdbc:mysql://localhost:3306/" + companyTO.getDbName());
     Properties props;
@@ -71,8 +73,28 @@ public class CompanyServiceImpl implements CompanyService {
     }
   }
 
+  private void runCompanyDbScript(String dbName) {
+    ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(
+            false, false, "UTF-8", new ClassPathResource("company-setup-script.sql"));
+    Properties props;
+    try {
+      props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/application.properties"));
+      DriverManagerDataSource dataSource =
+              getDataSource(dbName, props.getProperty("spring.datasource.username"), props.getProperty("spring.datasource.password"));
+      resourceDatabasePopulator.execute(dataSource);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   private DriverManagerDataSource getDataSource(String userName, String password) {
     DriverManagerDataSource dataSource = new DriverManagerDataSource("jdbc:mysql://localhost:3306", userName, password);
+    dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+    return dataSource;
+  }
+
+  private DriverManagerDataSource getDataSource(String dbName, String userName, String password) {
+    DriverManagerDataSource dataSource = new DriverManagerDataSource("jdbc:mysql://localhost:3306/" + dbName, userName, password);
     dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
     return dataSource;
   }

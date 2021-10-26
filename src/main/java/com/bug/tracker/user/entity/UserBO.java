@@ -19,7 +19,7 @@ public class UserBO implements UserDetails {
   private static final long serialVersionUID = -2700877336857161147L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", unique = true, nullable = false)
   private Integer id;
 

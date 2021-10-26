@@ -40,7 +40,7 @@ public class MultiLocationDBSource {
   }
 
   private String getDatabaseDetailQuery(boolean isAll, String dbUUID) {
-    String dbQuery = "SELECT cdb.db_url as url, cdb.db_username as username, cdb.db_password as password, comp.db_uuid as uuid FROM company_db_detail cdb INNER join company comp on cdb.id = comp.company_db_detail_id ";
+    String dbQuery = "SELECT cdb.db_url as url, cdb.db_username as username, cdb.db_password as password, comp.db_uuid as uuid FROM company_db_detail cdb INNER join company comp on cdb.id = comp.company_db_detail_id";
     if (!isAll && !StringUtils.isNullOrEmpty(dbUUID)) {
       dbQuery += " where comp.db_uuid='" + dbUUID + "'";
     }

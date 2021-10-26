@@ -18,7 +18,7 @@ public class RoleBO extends Audit implements Serializable {
     private static final long serialVersionUID = -4857844478191178785L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id", unique = true, nullable = false)
     private Integer roleId;
 
