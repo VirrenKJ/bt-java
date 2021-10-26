@@ -36,7 +36,7 @@ public class CompanyServiceImpl implements CompanyService {
   public CompanyTO add(CompanyTO companyTO) {
     companyTO.setDbName(companyTO.getName().toLowerCase().replace(" ", "_"));
     companyTO.setDbUuid(UUID.randomUUID().toString());
-//    companyDetail(companyTO);
+    companyDetail(companyTO);
     createCompanyDb(companyTO.getDbName());
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
     CompanyTO companyTO_return = modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
@@ -45,18 +45,18 @@ public class CompanyServiceImpl implements CompanyService {
     return companyTO_return;
   }
 
-//  public void companyDetail(CompanyTO companyTO) {
-//    companyTO.setCompanyDbDetail(new CompanyDbDetailTO());
-//    companyTO.getCompanyDbDetail().setDbUrl("jdbc:mysql://localhost:3306/" + companyTO.getDbName());
-//    Properties props;
-//    try {
-//      props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/application.properties"));
-//      companyTO.getCompanyDbDetail().setDbUsername(props.getProperty("spring.datasource.username"));
-//      companyTO.getCompanyDbDetail().setDbPassword(props.getProperty("spring.datasource.password"));
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
-//  }
+  public void companyDetail(CompanyTO companyTO) {
+    companyTO.setCompanyDbDetail(new CompanyDbDetailTO());
+    companyTO.getCompanyDbDetail().setDbUrl("jdbc:mysql://localhost:3306/" + companyTO.getDbName());
+    Properties props;
+    try {
+      props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/application.properties"));
+      companyTO.getCompanyDbDetail().setDbUsername(props.getProperty("spring.datasource.username"));
+      companyTO.getCompanyDbDetail().setDbPassword(props.getProperty("spring.datasource.password"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   private void createCompanyDb(String dbName) {
     JdbcTemplate jdbcTemplate;

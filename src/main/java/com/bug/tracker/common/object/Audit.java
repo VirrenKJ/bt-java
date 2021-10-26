@@ -18,6 +18,8 @@ import java.util.Date;
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt", "createdBy", "updatedBy"}, allowGetters = true)
 public class Audit implements Serializable {
 
+    private static final long serialVersionUID = 504809938785368217L;
+
     @Column(nullable = false, updatable = false, name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp

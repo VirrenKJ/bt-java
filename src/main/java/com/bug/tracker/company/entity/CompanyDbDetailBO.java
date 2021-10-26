@@ -19,9 +19,6 @@ public class CompanyDbDetailBO extends Audit {
   @Column(name = "id", unique = true, nullable = false)
   private Integer id;
 
-  @Column(name = "company_id")
-  private Integer companyId;
-
   @Column(name = "db_url")
   private String dbUrl;
 

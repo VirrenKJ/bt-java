@@ -8,6 +8,7 @@ import lombok.Setter;
 public class CompanyTO {
 
   private Integer id;
+  private Integer companyDbDetailId;
   private String name;
   private String dbName;
   private String dbUuid;
@@ -18,5 +19,5 @@ public class CompanyTO {
   private String state;
   private String city;
   private boolean deleteFlag;
-//  CompanyDbDetailTO companyDbDetail;
+  CompanyDbDetailTO companyDbDetail;
 }

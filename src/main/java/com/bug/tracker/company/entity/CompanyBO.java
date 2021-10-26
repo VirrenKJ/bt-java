@@ -19,6 +19,9 @@ public class CompanyBO extends Audit {
   @Column(name = "id", unique = true, nullable = false)
   private Integer id;
 
+  @Column(name = "company_db_detail_id", insertable = false, updatable = false)
+  private Integer companyDbDetailId;
+
   @Column(name = "name")
   private String name;
 
@@ -49,7 +52,7 @@ public class CompanyBO extends Audit {
   @Column(name = "delete_flag")
   private boolean deleteFlag;
 
-//  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-//  @JoinColumn(name = "company_id", referencedColumnName = "id")
-//  CompanyDbDetailBO companyDbDetail;
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "company_db_detail_id")
+  CompanyDbDetailBO companyDbDetail;
 }

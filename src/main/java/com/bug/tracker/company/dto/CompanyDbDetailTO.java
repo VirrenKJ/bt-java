@@ -9,7 +9,6 @@ import lombok.Setter;
 public class CompanyDbDetailTO extends AuditTO {
 
   private Integer id;
-  private Integer companyId;
   private String dbUrl;
   private String dbUsername;
   private String dbPassword;
