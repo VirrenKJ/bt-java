@@ -1,7 +1,6 @@
 package com.bug.tracker.company.entity;
 
 import com.bug.tracker.common.object.Audit;
-import com.bug.tracker.user.entity.RoleBO;
 import com.bug.tracker.user.entity.UserBO;
 import lombok.Getter;
 import lombok.Setter;

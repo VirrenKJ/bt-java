@@ -21956,3 +21956,11 @@ Unconditional classes:
 2021-10-27AM 11:35:29 - Release connection for tenant default
 2021-10-27AM 11:35:29 - Completed 200 OK
 2021-10-27AM 11:35:29 - Cleared SecurityContextHolder to complete request
+2021-10-27AM 11:38:23 - Application availability state ReadinessState changed from ACCEPTING_TRAFFIC to REFUSING_TRAFFIC
+2021-10-27AM 11:38:23 - Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@1cbfaea2, started on Wed Oct 27 11:29:31 IST 2021
+2021-10-27AM 11:38:23 - Stopping beans in phase 2147483647
+2021-10-27AM 11:38:23 - Bean 'webServerGracefulShutdown' completed its stop procedure
+2021-10-27AM 11:38:23 - Stopping beans in phase 2147483646
+2021-10-27AM 11:38:23 - Bean 'webServerStartStop' completed its stop procedure
+2021-10-27AM 11:38:23 - Shutting down ExecutorService 'taskScheduler'
+2021-10-27AM 11:38:23 - Closing JPA EntityManagerFactory for persistence unit 'default'
