@@ -52,9 +52,11 @@ public class UserBO implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<UserAuthority> userAuthorities = new ArrayList<>();
-    roles.forEach(role -> {
-      userAuthorities.add(new UserAuthority(role.getRoleName()));
-    });
+    if (roles != null && !roles.isEmpty()) {
+      roles.forEach(role -> {
+        userAuthorities.add(new UserAuthority(role.getRoleName()));
+      });
+    }
     return userAuthorities;
   }
 

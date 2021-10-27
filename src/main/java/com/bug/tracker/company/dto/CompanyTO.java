@@ -1,7 +1,10 @@
 package com.bug.tracker.company.dto;
 
+import com.bug.tracker.user.entity.UserBO;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +22,6 @@ public class CompanyTO {
   private String state;
   private String city;
   private boolean deleteFlag;
-  CompanyDbDetailTO companyDbDetail;
+  private CompanyDbDetailTO companyDbDetail;
+  private List<UserBO> users;
 }

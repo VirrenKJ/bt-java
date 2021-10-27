@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //Validate
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-      // Setting User Into UserSessionContext
+      // Setting User into UserSessionContext
       UserSessionContext.setCurrentTenant((UserBO) userDetails);
 
       if (jwtUtil.validateToken(jwt, userDetails)) {

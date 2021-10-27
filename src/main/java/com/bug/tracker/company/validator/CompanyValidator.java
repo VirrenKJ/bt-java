@@ -2,7 +2,6 @@ package com.bug.tracker.company.validator;
 
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.dto.CompanyTO;
-import lombok.SneakyThrows;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ControllerAdvice;

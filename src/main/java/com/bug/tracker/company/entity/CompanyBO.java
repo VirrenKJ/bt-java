@@ -1,10 +1,13 @@
 package com.bug.tracker.company.entity;
 
 import com.bug.tracker.common.object.Audit;
+import com.bug.tracker.user.entity.RoleBO;
+import com.bug.tracker.user.entity.UserBO;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -54,5 +57,10 @@ public class CompanyBO extends Audit {
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "company_db_detail_id")
-  CompanyDbDetailBO companyDbDetail;
+  private CompanyDbDetailBO companyDbDetail;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "user_company", joinColumns = {@JoinColumn(name = "company_id", updatable = false, insertable = false)},
+          inverseJoinColumns = {@JoinColumn(name = "user_id", updatable = false, insertable = false)})
+  private List<UserBO> users;
 }
