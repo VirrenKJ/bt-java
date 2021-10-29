@@ -7,9 +7,11 @@ import com.bug.tracker.company.dao.CompanyDao;
 import com.bug.tracker.company.dto.CompanyDbDetailTO;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.entity.CompanyBO;
+import com.bug.tracker.company.entity.CompanyDetailsNewTenantBO;
 import com.bug.tracker.config.ClientDBCache;
 import com.bug.tracker.config.MultiLocationDBSource;
 import com.bug.tracker.config.UserSessionContext;
+import com.bug.tracker.config.tenantConfig.TenantContext;
 import com.bug.tracker.user.dao.UserDao;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.entity.RoleBO;
@@ -50,24 +52,20 @@ public class CompanyServiceImpl implements CompanyService {
     companyDbDetail(companyTO);
     createCompanyDb(companyTO.getDbName());
     runCompanyDbScript(companyTO.getDbName());
-//    addUserAndCompanyData(companyTO);
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
     CompanyTO companyTO_return = modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
     ClientDBCache.getAllKey().put(companyTO_return.getDbUuid(), companyTO_return.getDbName());
     new MultiLocationDBSource().updateDriverManagerForNewCompany(companyTO_return.getDbUuid());
+    addUserAndCompanyData(companyTO);
     return companyTO_return;
   }
 
   private void companyDbDetail(CompanyTO companyTO) {
-    companyTO.setCompanyDbDetail(new CompanyDbDetailTO());
-    companyTO.getCompanyDbDetail().setDbUrl("jdbc:mysql://localhost:3306/" + companyTO.getDbName());
-    Properties props;
-    try {
-      props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/application.properties"));
-      companyTO.getCompanyDbDetail().setDbUsername(props.getProperty("spring.datasource.username"));
-      companyTO.getCompanyDbDetail().setDbPassword(props.getProperty("spring.datasource.password"));
-    } catch (IOException e) {
-      e.printStackTrace();
+    if (getProperties() != null) {
+      companyTO.setCompanyDbDetail(new CompanyDbDetailTO());
+      companyTO.getCompanyDbDetail().setDbUrl("jdbc:mysql://localhost:3306/" + companyTO.getDbName());
+      companyTO.getCompanyDbDetail().setDbUsername(getProperties().getProperty("spring.datasource.username"));
+      companyTO.getCompanyDbDetail().setDbPassword(getProperties().getProperty("spring.datasource.password"));
     }
   }
 
@@ -100,15 +98,14 @@ public class CompanyServiceImpl implements CompanyService {
       try {
         dataSource.getConnection();
         UserBO userBO = UserSessionContext.getCurrentTenant();
-        userBO.setId(null);
         List<RoleBO> roles = new ArrayList<>();
         RoleBO roleBO = new RoleBO();
         roleBO.setRoleId(userBO.getRoles().get(0).getRoleId());
         roles.add(roleBO);
         userBO.setRoles(roles);
-        CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
-        modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
-        modelConvertorService.map(userDao.add(userBO), UserTO.class);
+        CompanyDetailsNewTenantBO companyDetailsNewTenantBO = modelConvertorService.map(companyTO, CompanyDetailsNewTenantBO.class);
+        modelConvertorService.map(userDao.update(userBO), UserTO.class);
+        modelConvertorService.map(companyDao.add(companyDetailsNewTenantBO), CompanyTO.class);
       } catch (SQLException e) {
         e.printStackTrace();
       }

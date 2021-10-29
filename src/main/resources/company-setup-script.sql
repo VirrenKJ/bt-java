@@ -94,11 +94,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS `user_role` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `role_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `FK859n2jvi8ivhui0rl0esws6o` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`)
+  `user_id` int DEFAULT NULL,
+  `role_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `company` (
