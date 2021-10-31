@@ -8,10 +8,7 @@ import com.bug.tracker.company.dto.CompanyDbDetailTO;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.company.entity.CompanyDetailsNewTenantBO;
-import com.bug.tracker.config.ClientDBCache;
-import com.bug.tracker.config.MultiLocationDBSource;
 import com.bug.tracker.config.UserSessionContext;
-import com.bug.tracker.config.tenantConfig.TenantContext;
 import com.bug.tracker.user.dao.UserDao;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.entity.RoleBO;
@@ -49,14 +46,15 @@ public class CompanyServiceImpl implements CompanyService {
   public CompanyTO add(CompanyTO companyTO) {
     companyTO.setDbName(companyTO.getName().toLowerCase().replace(" ", "_"));
     companyTO.setDbUuid(UUID.randomUUID().toString());
+    companyTO.setUserId(UserSessionContext.getCurrentTenant().getId());
     companyDbDetail(companyTO);
     createCompanyDb(companyTO.getDbName());
     runCompanyDbScript(companyTO.getDbName());
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
     CompanyTO companyTO_return = modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
-    ClientDBCache.getAllKey().put(companyTO_return.getDbUuid(), companyTO_return.getDbName());
-    new MultiLocationDBSource().updateDriverManagerForNewCompany(companyTO_return.getDbUuid());
-    addUserAndCompanyData(companyTO);
+//    ClientDBCache.getAllKey().put(companyTO_return.getDbUuid(), companyTO_return.getDbName());
+//    new MultiLocationDBSource().updateDriverManagerForNewCompany(companyTO_return.getDbUuid());
+//    addUserAndCompanyData(companyTO);
     return companyTO_return;
   }
 
