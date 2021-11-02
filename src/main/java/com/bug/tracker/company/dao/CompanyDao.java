@@ -17,6 +17,8 @@ public interface CompanyDao {
 
   CommonListTO<CompanyBO> getList(SearchCriteriaObj searchCriteriaObj);
 
+  CommonListTO<CompanyBO> getBusinessList(SearchCriteriaObj searchCriteriaObj);
+
   CompanyBO getById(Integer id);
 
   void delete(List<Integer> id);

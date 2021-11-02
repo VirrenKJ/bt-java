@@ -11,20 +11,21 @@ import java.io.Serializable;
 @Getter
 @ToString
 public class SearchCriteriaObj implements Serializable {
-    private static final long serialVersionUID = 9080407426651168569L;
 
-    private int page;
+  private static final long serialVersionUID = 9080407426651168569L;
 
-    private int limit;
+  private int page;
 
-    private int firstLimit;
+  private int limit;
 
-    private int endLimit;
+  private int firstLimit;
 
-    private int sortType;
+  private int endLimit;
 
-    private String sortField;
+  private int sortType;
 
-    private SearchFieldsObj searchFieldsObj = null;
+  private String sortField;
+
+  private SearchFieldsObj searchFieldsObj = null;
 
 }

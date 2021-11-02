@@ -15,6 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -36,7 +37,7 @@ public class CompanyController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> add(@Valid @RequestBody CompanyTO companyTO, Errors errors) {
+  public ResponseEntity<?> add(@Valid @RequestBody CompanyTO companyTO, Errors errors) throws SQLException {
     if (errors.hasErrors()) {
       ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
@@ -60,6 +61,17 @@ public class CompanyController {
   @PostMapping("/list")
   public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
     List<CompanyTO> companyTOs = companyService.getList(searchCriteriaObj);
+    if (companyTOs == null || companyTOs.isEmpty()) {
+      response = ResponseTO.responseBuilder(200, "BT006", "/company", "company", companyTOs);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    response = ResponseTO.responseBuilder(200, "BT003", "/company", "company", companyTOs);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @PostMapping("/business-list")
+  public ResponseEntity<?> getBusinessList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
+    List<CompanyTO> companyTOs = companyService.getBusinessList(searchCriteriaObj);
     if (companyTOs == null || companyTOs.isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/company", "company", companyTOs);
       return new ResponseEntity<>(response, HttpStatus.OK);

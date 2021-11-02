@@ -101,6 +101,63 @@ public class CompanyDaoImpl implements CompanyDao {
   }
 
   @Override
+  public CommonListTO<CompanyBO> getBusinessList(SearchCriteriaObj searchCriteriaObj) {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
+    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
+    Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
+    Predicate predicateId = criteriaBuilder.equal(root.get("userId"), searchCriteriaObj.getSearchFieldsObj().getId());
+    criteriaQuery.where(criteriaBuilder.and(predicateDelete, predicateId));
+
+    //condition for search
+    if (searchCriteriaObj.getSearchFieldsObj() != null) {
+      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
+        Path<String> pathName = root.get("name");
+        Predicate predicateForName = criteriaBuilder.like(pathName, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
+        criteriaQuery.where(predicateForName);
+      }
+    }
+
+    // Condition for sorting.
+    Order order;
+    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
+      if (searchCriteriaObj.getSortType() == 2) {
+        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
+      } else {
+        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
+      }
+    } else {
+      order = criteriaBuilder.desc(root.get("id"));
+    }
+    criteriaQuery.orderBy(order);
+
+    // Adding Pagination total Count
+    CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
+    CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
+    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
+    criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
+    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
+    Long count = entityManager.createQuery(select).getSingleResult();
+    commonListTO.setTotalRow(count);
+    int size = count.intValue();
+    int limit = searchCriteriaObj.getLimit();
+    if (limit != 0) {
+      commonListTO.setPageCount((size + limit - 1) / limit);
+    } else {
+      commonListTO.setPageCount(1);
+    }
+
+    TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
+    // Condition for paging.
+    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
+      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
+      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
+    }
+    commonListTO.setDataList(typedQuery.getResultList());
+    return commonListTO;
+  }
+
+  @Override
   public CompanyBO getById(Integer id) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);

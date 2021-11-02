@@ -8,7 +8,11 @@ import com.bug.tracker.company.dto.CompanyDbDetailTO;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.company.entity.CompanyDetailsNewTenantBO;
+import com.bug.tracker.config.ClientDBCache;
+import com.bug.tracker.config.MultiLocationDBSource;
 import com.bug.tracker.config.UserSessionContext;
+import com.bug.tracker.config.tenantConfig.MultiTenantConnectionProviderImpl;
+import com.bug.tracker.config.tenantConfig.TenantContext;
 import com.bug.tracker.user.dao.UserDao;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.entity.RoleBO;
@@ -43,18 +47,16 @@ public class CompanyServiceImpl implements CompanyService {
   private ModelConvertorService modelConvertorService;
 
   @Override
-  public CompanyTO add(CompanyTO companyTO) {
+  public CompanyTO add(CompanyTO companyTO) throws SQLException {
     companyTO.setDbName(companyTO.getName().toLowerCase().replace(" ", "_"));
     companyTO.setDbUuid(UUID.randomUUID().toString());
     companyTO.setUserId(UserSessionContext.getCurrentTenant().getId());
     companyDbDetail(companyTO);
     createCompanyDb(companyTO.getDbName());
     runCompanyDbScript(companyTO.getDbName());
+//    addUserAndCompanyData(companyTO);
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
     CompanyTO companyTO_return = modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
-//    ClientDBCache.getAllKey().put(companyTO_return.getDbUuid(), companyTO_return.getDbName());
-//    new MultiLocationDBSource().updateDriverManagerForNewCompany(companyTO_return.getDbUuid());
-//    addUserAndCompanyData(companyTO);
     return companyTO_return;
   }
 
@@ -89,25 +91,18 @@ public class CompanyServiceImpl implements CompanyService {
     }
   }
 
-  private void addUserAndCompanyData(CompanyTO companyTO) {
-    if (getProperties() != null) {
-      DriverManagerDataSource dataSource = new DriverManagerDataSource("jdbc:mysql://localhost:3306/" + companyTO.getDbName(),
-              getProperties().getProperty("spring.datasource.username"), getProperties().getProperty("spring.datasource.password"));
-      try {
-        dataSource.getConnection();
-        UserBO userBO = UserSessionContext.getCurrentTenant();
-        List<RoleBO> roles = new ArrayList<>();
-        RoleBO roleBO = new RoleBO();
-        roleBO.setRoleId(userBO.getRoles().get(0).getRoleId());
-        roles.add(roleBO);
-        userBO.setRoles(roles);
-        CompanyDetailsNewTenantBO companyDetailsNewTenantBO = modelConvertorService.map(companyTO, CompanyDetailsNewTenantBO.class);
-        modelConvertorService.map(userDao.update(userBO), UserTO.class);
-        modelConvertorService.map(companyDao.add(companyDetailsNewTenantBO), CompanyTO.class);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
+  private void addUserAndCompanyData(CompanyTO companyTO) throws SQLException {
+    getDataSource(companyTO.getCompanyDbDetail().getDbUrl(),
+            companyTO.getCompanyDbDetail().getDbUsername(), companyTO.getCompanyDbDetail().getDbPassword()).getConnection();
+    UserBO userBO = UserSessionContext.getCurrentTenant();
+    List<RoleBO> roles = new ArrayList<>();
+    RoleBO roleBO = new RoleBO();
+    roleBO.setRoleId(userBO.getRoles().get(0).getRoleId());
+    roles.add(roleBO);
+    userBO.setRoles(roles);
+    CompanyDetailsNewTenantBO companyDetailsNewTenantBO = modelConvertorService.map(companyTO, CompanyDetailsNewTenantBO.class);
+    modelConvertorService.map(userDao.update(userBO), UserTO.class);
+    modelConvertorService.map(companyDao.add(companyDetailsNewTenantBO), CompanyTO.class);
   }
 
   private Properties getProperties() {
@@ -120,6 +115,12 @@ public class CompanyServiceImpl implements CompanyService {
     return props;
   }
 
+  private DriverManagerDataSource getDataSource(String url, String userName, String password) {
+    DriverManagerDataSource dataSource = new DriverManagerDataSource(url, userName, password);
+    dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+    return dataSource;
+  }
+
   @Override
   public CompanyTO update(CompanyTO companyTO) {
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
@@ -130,14 +131,19 @@ public class CompanyServiceImpl implements CompanyService {
   public List<CompanyTO> getList(SearchCriteriaObj searchCriteriaObj) {
     CommonListTO<CompanyBO> commonListTO = companyDao.getList(searchCriteriaObj);
     List<CompanyBO> companyBOS = commonListTO.getDataList();
-    List<CompanyTO> companyTOS = modelConvertorService.map(companyBOS, CompanyTO.class);
-    return companyTOS;
+    return modelConvertorService.map(companyBOS, CompanyTO.class);
+  }
+
+  @Override
+  public List<CompanyTO> getBusinessList(SearchCriteriaObj searchCriteriaObj) {
+    CommonListTO<CompanyBO> commonListTO = companyDao.getBusinessList(searchCriteriaObj);
+    List<CompanyBO> companyBOS = commonListTO.getDataList();
+    return modelConvertorService.map(companyBOS, CompanyTO.class);
   }
 
   @Override
   public CompanyTO getById(Integer id) {
-    CompanyTO companyTO = modelConvertorService.map(companyDao.getById(id), CompanyTO.class);
-    return companyTO;
+    return modelConvertorService.map(companyDao.getById(id), CompanyTO.class);
   }
 
   @Override
