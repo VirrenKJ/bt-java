@@ -107,7 +107,8 @@ public class CompanyDaoImpl implements CompanyDao {
     Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
     Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
     Predicate predicateId = criteriaBuilder.equal(root.get("userId"), searchCriteriaObj.getSearchFieldsObj().getId());
-    criteriaQuery.where(criteriaBuilder.and(predicateDelete, predicateId));
+    Predicate predicate = criteriaBuilder.and(predicateDelete, predicateId);
+    criteriaQuery.where(predicate);
 
     //condition for search
     if (searchCriteriaObj.getSearchFieldsObj() != null) {
@@ -135,7 +136,10 @@ public class CompanyDaoImpl implements CompanyDao {
     CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
-    criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
+    Predicate predicateDeleteCount = criteriaBuilder.equal(root2.get("deleteFlag"), false);
+    Predicate predicateIdCount = criteriaBuilder.equal(root2.get("userId"), searchCriteriaObj.getSearchFieldsObj().getId());
+    Predicate predicateCount = criteriaBuilder.and(predicateDeleteCount, predicateIdCount);
+    criteriaQuery2.where(predicateCount);
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);

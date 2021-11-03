@@ -1,6 +1,7 @@
 package com.bug.tracker.company.service;
 
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.company.dto.CompanyTO;
 
 import java.sql.SQLException;
@@ -14,7 +15,7 @@ public interface CompanyService {
 
   List<CompanyTO> getList(SearchCriteriaObj searchCriteriaObj);
 
-  List<CompanyTO> getBusinessList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getBusinessList(SearchCriteriaObj searchCriteriaObj);
 
   CompanyTO getById(Integer id);
 

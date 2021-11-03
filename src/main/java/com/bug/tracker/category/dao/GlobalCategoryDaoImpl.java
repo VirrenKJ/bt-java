@@ -79,7 +79,7 @@ public class GlobalCategoryDaoImpl implements GlobalCategoryDao {
         int size = count.intValue();
         int limit = searchCriteriaObj.getLimit();
         if (limit != 0) {
-            commonListTO.setPageCount((int) ((size + limit - 1) / limit));
+            commonListTO.setPageCount(((size + limit - 1) / limit));
         } else {
             commonListTO.setPageCount(1);
         }

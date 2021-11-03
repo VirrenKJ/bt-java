@@ -2,6 +2,7 @@ package com.bug.tracker.company.service;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.company.dao.CompanyDao;
 import com.bug.tracker.company.dto.CompanyDbDetailTO;
@@ -135,10 +136,18 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
-  public List<CompanyTO> getBusinessList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getBusinessList(SearchCriteriaObj searchCriteriaObj) {
+    SearchResponseTO searchResponseTO = new SearchResponseTO();
     CommonListTO<CompanyBO> commonListTO = companyDao.getBusinessList(searchCriteriaObj);
+
     List<CompanyBO> companyBOS = commonListTO.getDataList();
-    return modelConvertorService.map(companyBOS, CompanyTO.class);
+    List<CompanyTO> companyTOS = modelConvertorService.map(companyBOS, CompanyTO.class);
+
+    searchResponseTO.setList(companyTOS);
+    searchResponseTO.setPageCount(commonListTO.getPageCount());
+    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
+
+    return searchResponseTO;
   }
 
   @Override

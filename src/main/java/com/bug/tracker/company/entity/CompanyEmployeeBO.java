@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserCompanyBO {
+public class CompanyEmployeeBO {
 
   private Integer id;
-  private Integer userId;
   private Integer companyId;
+  private Integer userId;
 }
