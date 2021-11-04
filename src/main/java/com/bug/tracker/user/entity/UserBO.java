@@ -1,5 +1,7 @@
 package com.bug.tracker.user.entity;
 
+import com.bug.tracker.company.entity.CompanyBO;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,6 +50,10 @@ public class UserBO implements UserDetails {
   @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id", updatable = false, insertable = false)},
           inverseJoinColumns = {@JoinColumn(name = "role_id", updatable = false, insertable = false)})
   private List<RoleBO> roles;
+
+  @ManyToMany(mappedBy="users")
+  @JsonManagedReference
+  private List<CompanyBO> companies = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
