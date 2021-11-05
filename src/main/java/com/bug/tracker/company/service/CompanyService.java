@@ -13,9 +13,7 @@ public interface CompanyService {
 
   CompanyTO update(CompanyTO companyTO);
 
-  List<CompanyTO> getList(SearchCriteriaObj searchCriteriaObj);
-
-  SearchResponseTO getBusinessList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj);
 
   CompanyTO getById(Integer id);
 

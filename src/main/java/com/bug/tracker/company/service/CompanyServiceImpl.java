@@ -129,16 +129,9 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
-  public List<CompanyTO> getList(SearchCriteriaObj searchCriteriaObj) {
-    CommonListTO<CompanyBO> commonListTO = companyDao.getList(searchCriteriaObj);
-    List<CompanyBO> companyBOS = commonListTO.getDataList();
-    return modelConvertorService.map(companyBOS, CompanyTO.class);
-  }
-
-  @Override
-  public SearchResponseTO getBusinessList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<CompanyBO> commonListTO = companyDao.getBusinessList(searchCriteriaObj);
+    CommonListTO<CompanyBO> commonListTO = companyDao.getList(searchCriteriaObj);
 
     List<CompanyBO> companyBOS = commonListTO.getDataList();
     List<CompanyTO> companyTOS = modelConvertorService.map(companyBOS, CompanyTO.class);
@@ -146,7 +139,6 @@ public class CompanyServiceImpl implements CompanyService {
     searchResponseTO.setList(companyTOS);
     searchResponseTO.setPageCount(commonListTO.getPageCount());
     searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
-
     return searchResponseTO;
   }
 

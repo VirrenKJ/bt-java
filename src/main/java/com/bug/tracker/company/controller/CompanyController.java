@@ -61,18 +61,7 @@ public class CompanyController {
 
   @PostMapping("/list")
   public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    List<CompanyTO> companyTOs = companyService.getList(searchCriteriaObj);
-    if (companyTOs == null || companyTOs.isEmpty()) {
-      response = ResponseTO.responseBuilder(200, "BT006", "/company", "company", companyTOs);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    response = ResponseTO.responseBuilder(200, "BT003", "/company", "company", companyTOs);
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
-
-  @PostMapping("/business-list")
-  public ResponseEntity<?> getBusinessList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    SearchResponseTO searchResponseTO = companyService.getBusinessList(searchCriteriaObj);
+    SearchResponseTO searchResponseTO = companyService.getList(searchCriteriaObj);
     if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/company", "company", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);

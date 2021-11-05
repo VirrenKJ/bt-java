@@ -2,7 +2,7 @@ package com.bug.tracker.company.entity;
 
 import com.bug.tracker.common.object.Audit;
 import com.bug.tracker.user.entity.UserBO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +14,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "company")
+//Alternative to @JsonIgnoreProperties for bidirectional many to many mapping
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CompanyBO extends Audit {
 
   private static final long serialVersionUID = 5552166560392622180L;
@@ -64,9 +66,9 @@ public class CompanyBO extends Audit {
   private CompanyDbDetailBO companyDbDetail;
 
   @ManyToMany
-  @JsonBackReference
   @JoinTable(name = "company_employee", joinColumns = {@JoinColumn(name = "company_id", updatable = false, insertable = false)},
           inverseJoinColumns = {@JoinColumn(name = "user_id", updatable = false, insertable = false)})
+  @JsonIgnoreProperties("companies")
   private List<UserBO> users = new ArrayList<>();
 
 }

@@ -1,7 +1,7 @@
 package com.bug.tracker.user.entity;
 
 import com.bug.tracker.company.entity.CompanyBO;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +16,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user")
+//Alternative to @JsonIgnoreProperties for bidirectional many to many mapping
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserBO implements UserDetails {
 
   private static final long serialVersionUID = -2700877336857161147L;
@@ -52,7 +54,7 @@ public class UserBO implements UserDetails {
   private List<RoleBO> roles;
 
   @ManyToMany(mappedBy="users")
-  @JsonManagedReference
+  @JsonIgnoreProperties("users")
   private List<CompanyBO> companies = new ArrayList<>();
 
   @Override
