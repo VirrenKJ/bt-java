@@ -47,9 +47,16 @@ public class UserDaoImpl implements UserDao {
     //condition for search
     if (searchCriteriaObj.getSearchFieldsObj() != null) {
       if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
-        Path<String> pathName = root.get("name");
-        Predicate predicateForName = criteriaBuilder.like(pathName, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        criteriaQuery.where(predicateForName);
+        if (searchCriteriaObj.getSearchFieldsObj().getSearchFor().contains("\\")) {
+          searchCriteriaObj.getSearchFieldsObj().setSearchFor(
+                  searchCriteriaObj.getSearchFieldsObj().getSearchFor().replace("\\", "\\\\\\\\"));
+        }
+        Path<String> pathUsername = root.get("username");
+        Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
+        Path<String> pathEmail = root.get("email");
+        Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
+        Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
+        criteriaQuery.where(predicateSearch);
       }
     }
 

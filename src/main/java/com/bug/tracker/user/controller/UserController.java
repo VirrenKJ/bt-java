@@ -1,6 +1,7 @@
 package com.bug.tracker.user.controller;
 
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.common.object.ValidationErrorBuilder;
 import com.bug.tracker.master.dto.ResponseTO;
@@ -59,12 +60,12 @@ public class UserController {
 
   @PostMapping("/list")
   public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    List<UserTO> userTOs = userService.getList(searchCriteriaObj);
-    if (userTOs == null || userTOs.isEmpty()) {
-      response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", userTOs);
+    SearchResponseTO searchResponseTO = userService.getList(searchCriteriaObj);
+    if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
+      response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    response = ResponseTO.responseBuilder(200, "BT003", "/user", "user", userTOs);
+    response = ResponseTO.responseBuilder(200, "BT003", "/user", "user", searchResponseTO);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 

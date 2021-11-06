@@ -1,6 +1,7 @@
 package com.bug.tracker.user.service;
 
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.user.dto.UserTO;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface UserService {
 
   UserTO update(UserTO userTO);
 
-  List<UserTO> getList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj);
 
   UserTO getById(Integer id);
 

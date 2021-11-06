@@ -2,6 +2,7 @@ package com.bug.tracker.user.service;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.user.dao.UserDao;
 import com.bug.tracker.user.dto.UserTO;
@@ -40,11 +41,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserTO> getList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj) {
+    SearchResponseTO searchResponseTO = new SearchResponseTO();
     CommonListTO<UserBO> commonListTO = userDao.getList(searchCriteriaObj);
+
     List<UserBO> userBOS = commonListTO.getDataList();
     List<UserTO> userTOS = modelConvertorService.map(userBOS, UserTO.class);
-    return userTOS;
+
+    searchResponseTO.setList(userTOS);
+    searchResponseTO.setPageCount(commonListTO.getPageCount());
+    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
+    return searchResponseTO;
   }
 
   @Override
