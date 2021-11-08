@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,4 +16,5 @@ public class SearchFieldsObj implements Serializable {
 
   private Integer id;
 
+  private List<Integer> ids;
 }

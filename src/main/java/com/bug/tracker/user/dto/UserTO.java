@@ -23,6 +23,7 @@ public class UserTO {
     private boolean deleteFlag;
     private List<RoleTO> roles;
     private List<CompanyTO> companies = new ArrayList<>();
+    private String name;
 
     //UserDetails
     private List<UserAuthority> authorities;

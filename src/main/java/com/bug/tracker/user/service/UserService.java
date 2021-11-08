@@ -14,6 +14,8 @@ public interface UserService {
 
   SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj);
 
+  SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj);
+
   UserTO getById(Integer id);
 
   UserTO getByUsername(String username) throws Exception;

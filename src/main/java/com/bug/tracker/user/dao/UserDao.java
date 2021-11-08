@@ -14,6 +14,8 @@ public interface UserDao {
 
   CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj);
 
+  CommonListTO<UserBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj);
+
   UserBO getById(Integer id);
 
   UserBO getByUsername(String username) throws Exception;
