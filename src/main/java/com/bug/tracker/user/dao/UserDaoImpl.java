@@ -3,19 +3,14 @@ package com.bug.tracker.user.dao;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.entity.CompanyBO;
-import com.bug.tracker.company.entity.CompanyEmployeeBO;
 import com.bug.tracker.user.entity.UserBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
-import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -103,20 +98,20 @@ public class UserDaoImpl implements UserDao {
   }
 
   /*
-SELECT u.*, c.name
-FROM user as u JOIN company_employee as ce ON u.id = ce.user_id
-JOIN company AS c ON ce.company_id = c.id
-WHERE c.id IN (28, 29, 32, 34, 35, 36)
-*/
+  SELECT u.*, c.name
+  FROM user as u JOIN company_employee as ce ON u.id = ce.user_id
+  JOIN company AS c ON ce.company_id = c.id
+  WHERE c.id IN (28, 29, 32, 34, 35, 36)
+  */
   @Override
   public CommonListTO<UserBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
-    Root<UserBO> root = criteriaQuery.from(UserBO.class);
-    Join<UserBO, CompanyBO> lineJoin = root.join("companies");
-//    criteriaQuery.select(root);
-    criteriaQuery.multiselect(root, lineJoin.get("name"));
-    Predicate predicateIds = lineJoin.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
+    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
+//    Join<CompanyBO, UserBO> lineJoin = root.join("users");
+//    criteriaQuery.select(root.get("name"));
+//    criteriaQuery.multiselect(lineJoin.get("firstName"), root.get("name"));
+    Predicate predicateIds = root.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
     Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
     criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
 
@@ -150,11 +145,13 @@ WHERE c.id IN (28, 29, 32, 34, 35, 36)
     criteriaQuery.orderBy(order);
 
     // Adding Pagination total Count
-    CommonListTO<UserBO> commonListTO = new CommonListTO<>();
+    CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
-    Root<UserBO> root2 = criteriaQuery2.from(UserBO.class);
-    Join<UserBO, CompanyBO> lineJoin2 = root2.join("companies");
-    Predicate predicateIds2 = lineJoin2.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
+//    Join<CompanyBO, UserBO> lineJoin2 = root2.join("users");
+//    criteriaQuery.multiselect(lineJoin2.get("firstName"), root2.get("name"));
+//    criteriaQuery.select(root2.get("name"));
+    Predicate predicateIds2 = root2.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
     Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
     criteriaQuery2.where(criteriaBuilder.and(predicateIds2, predicateDelete2));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
@@ -168,14 +165,15 @@ WHERE c.id IN (28, 29, 32, 34, 35, 36)
       commonListTO.setPageCount(1);
     }
 
-    TypedQuery<UserBO> typedQuery = entityManager.createQuery(criteriaQuery);
+    TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
     // Condition for paging.
     if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
       typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
       typedQuery.setMaxResults(searchCriteriaObj.getLimit());
     }
-    commonListTO.setDataList(typedQuery.getResultList());
-    return commonListTO;
+    List<CompanyBO> list = typedQuery.getResultList();
+    commonListTO.setDataList(list);
+    return new CommonListTO<>();
   }
 
   @Override

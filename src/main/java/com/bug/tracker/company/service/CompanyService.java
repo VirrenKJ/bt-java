@@ -13,6 +13,8 @@ public interface CompanyService {
 
   CompanyTO update(CompanyTO companyTO);
 
+  CompanyTO copyCompanyToTenant(CompanyTO companyTO) throws SQLException;
+
   SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj);
 
   CompanyTO getById(Integer id);

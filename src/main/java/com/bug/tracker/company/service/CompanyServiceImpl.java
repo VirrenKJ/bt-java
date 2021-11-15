@@ -55,10 +55,8 @@ public class CompanyServiceImpl implements CompanyService {
     companyDbDetail(companyTO);
     createCompanyDb(companyTO.getDbName());
     runCompanyDbScript(companyTO.getDbName());
-//    addUserAndCompanyData(companyTO);
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
-    CompanyTO companyTO_return = modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
-    return companyTO_return;
+    return modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
   }
 
   private void companyDbDetail(CompanyTO companyTO) {
@@ -92,20 +90,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
   }
 
-  private void addUserAndCompanyData(CompanyTO companyTO) throws SQLException {
-    getDataSource(companyTO.getCompanyDbDetail().getDbUrl(),
-            companyTO.getCompanyDbDetail().getDbUsername(), companyTO.getCompanyDbDetail().getDbPassword()).getConnection();
-    UserBO userBO = UserSessionContext.getCurrentTenant();
-    List<RoleBO> roles = new ArrayList<>();
-    RoleBO roleBO = new RoleBO();
-    roleBO.setRoleId(userBO.getRoles().get(0).getRoleId());
-    roles.add(roleBO);
-    userBO.setRoles(roles);
-    CompanyDetailsNewTenantBO companyDetailsNewTenantBO = modelConvertorService.map(companyTO, CompanyDetailsNewTenantBO.class);
-    modelConvertorService.map(userDao.update(userBO), UserTO.class);
-    modelConvertorService.map(companyDao.add(companyDetailsNewTenantBO), CompanyTO.class);
-  }
-
   private Properties getProperties() {
     Properties props = null;
     try {
@@ -116,16 +100,29 @@ public class CompanyServiceImpl implements CompanyService {
     return props;
   }
 
-  private DriverManagerDataSource getDataSource(String url, String userName, String password) {
-    DriverManagerDataSource dataSource = new DriverManagerDataSource(url, userName, password);
-    dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-    return dataSource;
-  }
-
   @Override
   public CompanyTO update(CompanyTO companyTO) {
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
     return modelConvertorService.map(companyDao.update(companyBO), CompanyTO.class);
+  }
+
+  @Override
+  public CompanyTO copyCompanyToTenant(CompanyTO companyTO) {
+    UserBO userBO = UserSessionContext.getCurrentTenant();
+    userBO.setId(null);
+    userBO.setCompanies(null);
+    List<RoleBO> roleBOS = new ArrayList<>();
+    RoleBO roleBO = new RoleBO();
+    roleBO.setRoleId(userBO.getRoles().get(0).getRoleId());
+    roleBOS.add(roleBO);
+    userBO.setRoles(null);
+    userBO.setRoles(roleBOS);
+    userDao.add(userBO);
+    companyTO.setId(null);
+    companyTO.setCompanyDbDetail(null);
+    CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
+    CompanyTO companyTO_return = modelConvertorService.map(companyDao.copyCompanyToTenant(companyBO), CompanyTO.class);
+    return companyTO_return;
   }
 
   @Override

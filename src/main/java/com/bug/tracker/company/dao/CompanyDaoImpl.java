@@ -32,16 +32,16 @@ public class CompanyDaoImpl implements CompanyDao {
   }
 
   @Override
-  public CompanyDetailsNewTenantBO add(CompanyDetailsNewTenantBO companyDetailsNewTenantBO) {
-    entityManager.persist(companyDetailsNewTenantBO);
-    logger.info("Company has added successfully, Company details=" + companyDetailsNewTenantBO);
-    return companyDetailsNewTenantBO;
-  }
-
-  @Override
   public CompanyBO update(CompanyBO companyBO) {
     entityManager.merge(companyBO);
     logger.info("Company has updated successfully, Company details=" + companyBO);
+    return companyBO;
+  }
+
+  @Override
+  public CompanyBO copyCompanyToTenant(CompanyBO companyBO) {
+    entityManager.persist(companyBO);
+    logger.info("Company has added successfully, Company details=" + companyBO);
     return companyBO;
   }
 

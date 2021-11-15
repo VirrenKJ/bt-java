@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `company` (
+CREATE TABLE IF NOT EXISTS `company` (
    `id` int NOT NULL AUTO_INCREMENT,
    `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
    `db_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
@@ -117,3 +117,23 @@ CREATE TABLE `company` (
    `updated_by` int DEFAULT NULL,
    PRIMARY KEY (`id`)
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `company_db_detail` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `db_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `db_username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `db_password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `delete_flag` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` int NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `company_employee` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `company_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

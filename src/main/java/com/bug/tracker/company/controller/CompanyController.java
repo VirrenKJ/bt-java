@@ -59,6 +59,17 @@ public class CompanyController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
+  @PostMapping("/copy-company")
+  public ResponseEntity<?> copyCompanyToTenant(@Valid @RequestBody CompanyTO companyTO, Errors errors) throws SQLException {
+    if (errors.hasErrors()) {
+      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      return new ResponseEntity<>(validationError, HttpStatus.OK);
+    }
+    CompanyTO companyTO_return = companyService.copyCompanyToTenant(companyTO);
+    response = ResponseTO.responseBuilder(200, "BT001", "/company", "company", companyTO_return);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
   @PostMapping("/list")
   public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
     SearchResponseTO searchResponseTO = companyService.getList(searchCriteriaObj);

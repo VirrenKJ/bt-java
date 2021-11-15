@@ -47,10 +47,11 @@ public class MultiTenantConnectionProviderImpl implements MultiTenantConnectionP
       if (ClientDBCache.driverManagerMap.isEmpty()) {
         new MultiLocationDBSource().databaseDetail();
       }
-      logger.info("**********Fetching Client DB connection***********");
       if (ClientDBCache.driverManagerMap.get(tenantIdentifier) != null) {
         connection = ClientDBCache.driverManagerMap.get(tenantIdentifier).getConnection();
+        logger.info("**********Fetching Client DB connection***********");
       } else {
+        logger.info("**********Fetching default connection***********");
         connection = getAnyConnection();
       }
     } else {
