@@ -8,15 +8,9 @@ import com.bug.tracker.company.dao.CompanyDao;
 import com.bug.tracker.company.dto.CompanyDbDetailTO;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.entity.CompanyBO;
-import com.bug.tracker.company.entity.CompanyDetailsNewTenantBO;
-import com.bug.tracker.config.ClientDBCache;
 import com.bug.tracker.config.MultiLocationDBSource;
 import com.bug.tracker.config.UserSessionContext;
-import com.bug.tracker.config.tenantConfig.MultiTenantConnectionProviderImpl;
-import com.bug.tracker.config.tenantConfig.TenantContext;
 import com.bug.tracker.user.dao.UserDao;
-import com.bug.tracker.user.dto.UserTO;
-import com.bug.tracker.user.entity.RoleBO;
 import com.bug.tracker.user.entity.UserBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -29,7 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -45,6 +38,9 @@ public class CompanyServiceImpl implements CompanyService {
   private UserDao userDao;
 
   @Autowired
+  private MultiLocationDBSource multiLocationDBSource;
+
+  @Autowired
   private ModelConvertorService modelConvertorService;
 
   @Override
@@ -55,6 +51,8 @@ public class CompanyServiceImpl implements CompanyService {
     companyDbDetail(companyTO);
     createCompanyDb(companyTO.getDbName());
     runCompanyDbScript(companyTO.getDbName());
+    multiLocationDBSource.updateDriverManagerForNewCompany(companyTO.getDbUuid(), companyTO.getCompanyDbDetail().getDbUrl(),
+            companyTO.getCompanyDbDetail().getDbUsername(), companyTO.getCompanyDbDetail().getDbPassword());
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
     return modelConvertorService.map(companyDao.add(companyBO), CompanyTO.class);
   }
@@ -109,20 +107,10 @@ public class CompanyServiceImpl implements CompanyService {
   @Override
   public CompanyTO copyCompanyToTenant(CompanyTO companyTO) {
     UserBO userBO = UserSessionContext.getCurrentTenant();
-    userBO.setId(null);
-    userBO.setCompanies(null);
-    List<RoleBO> roleBOS = new ArrayList<>();
-    RoleBO roleBO = new RoleBO();
-    roleBO.setRoleId(userBO.getRoles().get(0).getRoleId());
-    roleBOS.add(roleBO);
-    userBO.setRoles(null);
-    userBO.setRoles(roleBOS);
-    userDao.add(userBO);
+    userDao.update(userBO);
     companyTO.setId(null);
-    companyTO.setCompanyDbDetail(null);
     CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
-    CompanyTO companyTO_return = modelConvertorService.map(companyDao.copyCompanyToTenant(companyBO), CompanyTO.class);
-    return companyTO_return;
+    return modelConvertorService.map(companyDao.copyCompanyToTenant(companyBO), CompanyTO.class);
   }
 
   @Override

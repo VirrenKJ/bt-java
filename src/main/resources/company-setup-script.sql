@@ -101,6 +101,8 @@ CREATE TABLE IF NOT EXISTS `user_role` (
 
 CREATE TABLE IF NOT EXISTS `company` (
    `id` int NOT NULL AUTO_INCREMENT,
+   `company_db_detail_id` int DEFAULT NULL,
+   `user_id` int DEFAULT NULL,
    `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
    `db_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
    `db_uuid` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
@@ -111,10 +113,10 @@ CREATE TABLE IF NOT EXISTS `company` (
    `state` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
    `city` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
    `delete_flag` tinyint(1) NOT NULL DEFAULT '0',
-   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-   `created_by` int DEFAULT NULL,
-   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-   `updated_by` int DEFAULT NULL,
+   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `created_by` int NOT NULL,
+   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updated_by` int NOT NULL,
    PRIMARY KEY (`id`)
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

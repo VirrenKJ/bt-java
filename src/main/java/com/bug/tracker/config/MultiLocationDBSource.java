@@ -76,4 +76,8 @@ public class MultiLocationDBSource {
       e.printStackTrace();
     }
   }
+
+  public void updateDriverManagerForNewCompany(String dbUUID, String url, String username, String password) {
+    ClientDBCache.driverManagerMap.put(dbUUID, getDataSource(url, username, password));
+  }
 }
