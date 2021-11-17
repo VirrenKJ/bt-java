@@ -3,7 +3,6 @@ package com.bug.tracker.company.dao;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.entity.CompanyBO;
-import com.bug.tracker.company.entity.CompanyDetailsNewTenantBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
