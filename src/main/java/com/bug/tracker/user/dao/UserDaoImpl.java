@@ -40,7 +40,8 @@ public class UserDaoImpl implements UserDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
     Root<UserBO> root = criteriaQuery.from(UserBO.class);
-    criteriaQuery.where(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    Predicate predicate = criteriaBuilder.equal(root.get("deleteFlag"), false);
+    criteriaQuery.where(predicate);
 
     //condition for search
     if (searchCriteriaObj.getSearchFieldsObj() != null) {
@@ -54,7 +55,11 @@ public class UserDaoImpl implements UserDao {
         Path<String> pathEmail = root.get("email");
         Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
         Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
-        criteriaQuery.where(predicateSearch);
+        criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate));
+        if (searchCriteriaObj.getSearchFieldsObj().getId() != null) {
+          Predicate predicateId = criteriaBuilder.notEqual(root.get("id"), searchCriteriaObj.getSearchFieldsObj().getId());
+          criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate, predicateId));
+        }
       }
     }
 
