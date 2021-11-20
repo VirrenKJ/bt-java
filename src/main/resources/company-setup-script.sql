@@ -133,9 +133,9 @@ CREATE TABLE IF NOT EXISTS `company_db_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS `company_employee` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `company_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--CREATE TABLE IF NOT EXISTS `company_employee` (
+--  `id` int NOT NULL AUTO_INCREMENT,
+--  `company_id` int NOT NULL,
+--  `user_id` int NOT NULL,
+--  PRIMARY KEY (`id`)
+--) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
