@@ -18,6 +18,7 @@ import java.util.List;
 @Table(name = "user")
 //Alternative to @JsonIgnoreProperties for bidirectional many to many mapping
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties("companies")
 public class UserBO implements UserDetails {
 
   private static final long serialVersionUID = -2700877336857161147L;
@@ -53,8 +54,7 @@ public class UserBO implements UserDetails {
           inverseJoinColumns = {@JoinColumn(name = "role_id", updatable = false, insertable = false)})
   private List<RoleBO> roles;
 
-  @ManyToMany(mappedBy="users")
-  @JsonIgnoreProperties("users")
+  @ManyToMany(mappedBy="users", fetch = FetchType.LAZY)
   private List<CompanyBO> companies = new ArrayList<>();
 
   @Override

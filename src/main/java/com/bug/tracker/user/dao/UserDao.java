@@ -14,7 +14,7 @@ public interface UserDao {
 
   CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj);
 
-  CommonListTO<UserBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj);
+//  CommonListTO<UserBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj);
 
   UserBO getById(Integer id);
 

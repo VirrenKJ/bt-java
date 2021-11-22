@@ -108,78 +108,78 @@ public class UserDaoImpl implements UserDao {
   JOIN company AS c ON ce.company_id = c.id
   WHERE c.id IN (28, 29, 32, 34, 35, 36)
   */
-  @Override
-  public CommonListTO<UserBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
-    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
-//    Join<CompanyBO, UserBO> lineJoin = root.join("users");
-//    criteriaQuery.select(root.get("name"));
-//    criteriaQuery.multiselect(lineJoin.get("firstName"), root.get("name"));
-    Predicate predicateIds = root.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
-    Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
-    criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
-
-    //condition for search
-    if (searchCriteriaObj.getSearchFieldsObj() != null) {
-      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
-        if (searchCriteriaObj.getSearchFieldsObj().getSearchFor().contains("\\")) {
-          searchCriteriaObj.getSearchFieldsObj().setSearchFor(
-                  searchCriteriaObj.getSearchFieldsObj().getSearchFor().replace("\\", "\\\\\\\\"));
-        }
-        Path<String> pathUsername = root.get("username");
-        Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        Path<String> pathEmail = root.get("email");
-        Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
-        criteriaQuery.where(predicateSearch);
-      }
-    }
-
-    // Condition for sorting.
-    Order order;
-    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
-      if (searchCriteriaObj.getSortType() == 2) {
-        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
-      } else {
-        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
-      }
-    } else {
-      order = criteriaBuilder.desc(root.get("id"));
-    }
-    criteriaQuery.orderBy(order);
-
-    // Adding Pagination total Count
-    CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
-    CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
-    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
-//    Join<CompanyBO, UserBO> lineJoin2 = root2.join("users");
-//    criteriaQuery.multiselect(lineJoin2.get("firstName"), root2.get("name"));
-//    criteriaQuery.select(root2.get("name"));
-    Predicate predicateIds2 = root2.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
-    Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
-    criteriaQuery2.where(criteriaBuilder.and(predicateIds2, predicateDelete2));
-    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
-    Long count = entityManager.createQuery(select).getSingleResult();
-    commonListTO.setTotalRow(count);
-    int size = count.intValue();
-    int limit = searchCriteriaObj.getLimit();
-    if (limit != 0) {
-      commonListTO.setPageCount((size + limit - 1) / limit);
-    } else {
-      commonListTO.setPageCount(1);
-    }
-
-    TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
-    // Condition for paging.
-    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
-      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
-      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
-    }
-    List<CompanyBO> list = typedQuery.getResultList();
-    commonListTO.setDataList(list);
-    return new CommonListTO<>();
-  }
+//  @Override
+//  public CommonListTO<UserBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
+//    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
+//    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
+////    Join<CompanyBO, UserBO> lineJoin = root.join("users");
+////    criteriaQuery.select(root.get("name"));
+////    criteriaQuery.multiselect(lineJoin.get("firstName"), root.get("name"));
+//    Predicate predicateIds = root.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+//    Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
+//    criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
+//
+//    //condition for search
+//    if (searchCriteriaObj.getSearchFieldsObj() != null) {
+//      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
+//        if (searchCriteriaObj.getSearchFieldsObj().getSearchFor().contains("\\")) {
+//          searchCriteriaObj.getSearchFieldsObj().setSearchFor(
+//                  searchCriteriaObj.getSearchFieldsObj().getSearchFor().replace("\\", "\\\\\\\\"));
+//        }
+//        Path<String> pathUsername = root.get("username");
+//        Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
+//        Path<String> pathEmail = root.get("email");
+//        Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
+//        Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
+//        criteriaQuery.where(predicateSearch);
+//      }
+//    }
+//
+//    // Condition for sorting.
+//    Order order;
+//    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
+//      if (searchCriteriaObj.getSortType() == 2) {
+//        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
+//      } else {
+//        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
+//      }
+//    } else {
+//      order = criteriaBuilder.desc(root.get("id"));
+//    }
+//    criteriaQuery.orderBy(order);
+//
+//    // Adding Pagination total Count
+//    CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
+//    CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
+//    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
+////    Join<CompanyBO, UserBO> lineJoin2 = root2.join("users");
+////    criteriaQuery.multiselect(lineJoin2.get("firstName"), root2.get("name"));
+////    criteriaQuery.select(root2.get("name"));
+//    Predicate predicateIds2 = root2.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+//    Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
+//    criteriaQuery2.where(criteriaBuilder.and(predicateIds2, predicateDelete2));
+//    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
+//    Long count = entityManager.createQuery(select).getSingleResult();
+//    commonListTO.setTotalRow(count);
+//    int size = count.intValue();
+//    int limit = searchCriteriaObj.getLimit();
+//    if (limit != 0) {
+//      commonListTO.setPageCount((size + limit - 1) / limit);
+//    } else {
+//      commonListTO.setPageCount(1);
+//    }
+//
+//    TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
+//    // Condition for paging.
+//    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
+//      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
+//      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
+//    }
+//    List<CompanyBO> list = typedQuery.getResultList();
+//    commonListTO.setDataList(list);
+//    return new CommonListTO<>();
+//  }
 
   @Override
   public UserBO getById(Integer id) {

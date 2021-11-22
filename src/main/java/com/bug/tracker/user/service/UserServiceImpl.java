@@ -58,26 +58,26 @@ public class UserServiceImpl implements UserService {
     searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
     return searchResponseTO;
   }
-
-  @Override
-  public SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
-    SearchCriteriaObj searchCriteriaObjCompany = new SearchCriteriaObj();
-    searchCriteriaObjCompany.setSearchFieldsObj(new SearchFieldsObj());
-    searchCriteriaObjCompany.getSearchFieldsObj().setId(searchCriteriaObj.getSearchFieldsObj().getId());
-    SearchResponseTO searchResponseTOCompany = companyService.getList(searchCriteriaObjCompany);
-    List<CompanyTO> companyTOS = (List<CompanyTO>) searchResponseTOCompany.getList();
-
-    searchCriteriaObj.getSearchFieldsObj().setIds(new ArrayList<>());
-    companyTOS.forEach(company -> searchCriteriaObj.getSearchFieldsObj().getIds().add(company.getId()));
-    SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<UserBO> commonListTO = userDao.getEmployeeList(searchCriteriaObj);
-    List<UserTO> userTOS = modelConvertorService.map(commonListTO.getDataList(), UserTO.class);
-
-    searchResponseTO.setList(userTOS);
-    searchResponseTO.setPageCount(commonListTO.getPageCount());
-    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
-    return searchResponseTO;
-  }
+//
+//  @Override
+//  public SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
+//    SearchCriteriaObj searchCriteriaObjCompany = new SearchCriteriaObj();
+//    searchCriteriaObjCompany.setSearchFieldsObj(new SearchFieldsObj());
+//    searchCriteriaObjCompany.getSearchFieldsObj().setId(searchCriteriaObj.getSearchFieldsObj().getId());
+//    SearchResponseTO searchResponseTOCompany = companyService.getList(searchCriteriaObjCompany);
+//    List<CompanyTO> companyTOS = (List<CompanyTO>) searchResponseTOCompany.getList();
+//
+//    searchCriteriaObj.getSearchFieldsObj().setIds(new ArrayList<>());
+//    companyTOS.forEach(company -> searchCriteriaObj.getSearchFieldsObj().getIds().add(company.getId()));
+//    SearchResponseTO searchResponseTO = new SearchResponseTO();
+//    CommonListTO<UserBO> commonListTO = userDao.getEmployeeList(searchCriteriaObj);
+//    List<UserTO> userTOS = modelConvertorService.map(commonListTO.getDataList(), UserTO.class);
+//
+//    searchResponseTO.setList(userTOS);
+//    searchResponseTO.setPageCount(commonListTO.getPageCount());
+//    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
+//    return searchResponseTO;
+//  }
 
   @Override
   public UserTO getById(Integer id) {
