@@ -11,6 +11,7 @@ import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.config.MultiLocationDBSource;
 import com.bug.tracker.config.UserSessionContext;
 import com.bug.tracker.user.dao.UserDao;
+import com.bug.tracker.user.dto.UserDetailTO;
 import com.bug.tracker.user.entity.UserBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -125,6 +126,11 @@ public class CompanyServiceImpl implements CompanyService {
     searchResponseTO.setPageCount(commonListTO.getPageCount());
     searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
     return searchResponseTO;
+  }
+
+  @Override
+  public List<CompanyTO> getListByEmployeeId(Integer id) {
+    return modelConvertorService.map(companyDao.getListByEmployeeId(id), CompanyTO.class);
   }
 
   @Override

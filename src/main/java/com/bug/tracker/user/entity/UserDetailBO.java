@@ -1,15 +1,13 @@
 package com.bug.tracker.user.entity;
 
 import com.bug.tracker.company.entity.CompanyBO;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -18,10 +16,10 @@ import java.util.List;
 @Table(name = "user")
 //Alternative to @JsonIgnoreProperties for bidirectional many to many mapping
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-//@JsonIgnoreProperties("companies")
-public class UserBO implements UserDetails {
+@JsonIgnoreProperties("companies")
+public class UserDetailBO implements Serializable {
 
-  private static final long serialVersionUID = -2700877336857161147L;
+  private static final long serialVersionUID = 1200297614127292483L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,32 +52,7 @@ public class UserBO implements UserDetails {
           inverseJoinColumns = {@JoinColumn(name = "role_id", updatable = false, insertable = false)})
   private List<RoleBO> roles;
 
-//  @ManyToMany(mappedBy="users", fetch = FetchType.LAZY)
-//  private List<CompanyBO> companies = new ArrayList<>();
+  @ManyToMany(mappedBy="userDetails", fetch = FetchType.LAZY)
+  private List<CompanyBO> companies = new ArrayList<>();
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<UserAuthority> userAuthorities = new ArrayList<>();
-    if (roles != null && !roles.isEmpty()) {
-      roles.forEach(role -> {
-        userAuthorities.add(new UserAuthority(role.getRoleName()));
-      });
-    }
-    return userAuthorities;
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
 }

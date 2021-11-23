@@ -22,7 +22,7 @@ public class UserTO {
     private boolean enabled = true;
     private boolean deleteFlag;
     private List<RoleTO> roles;
-    private List<CompanyTO> companies = new ArrayList<>();
+//    private List<CompanyTO> companies = new ArrayList<>();
     private String name;
 
     //UserDetails

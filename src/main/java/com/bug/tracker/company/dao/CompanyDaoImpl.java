@@ -3,6 +3,7 @@ package com.bug.tracker.company.dao;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.entity.CompanyBO;
+import com.bug.tracker.user.entity.UserDetailBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -122,6 +123,21 @@ public class CompanyDaoImpl implements CompanyDao {
       e.printStackTrace();
     }
     return companyBO;
+  }
+
+  @Override
+  public List<?> getListByEmployeeId(Integer id) {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<UserDetailBO> criteriaQuery = criteriaBuilder.createQuery(UserDetailBO.class);
+    Root<UserDetailBO> root = criteriaQuery.from(UserDetailBO.class);
+//    Join<CompanyBO, UserDetailBO> join = root.joinList("userDetails");
+
+    criteriaQuery.select(root.get("companies"));
+    Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
+    Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
+    Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
+    criteriaQuery.where(predicate);
+    return entityManager.createQuery(criteriaQuery).getResultList();
   }
 
   @Override

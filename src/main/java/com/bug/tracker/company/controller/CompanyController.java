@@ -7,6 +7,7 @@ import com.bug.tracker.common.object.ValidationErrorBuilder;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.service.CompanyService;
 import com.bug.tracker.master.dto.ResponseTO;
+import com.bug.tracker.user.dto.UserDetailTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +79,17 @@ public class CompanyController {
       return new ResponseEntity<>(response, HttpStatus.OK);
     }
     response = ResponseTO.responseBuilder(200, "BT003", "/company", "company", searchResponseTO);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @GetMapping("/employer-list/{id}")
+  public ResponseEntity<?> getListByEmployeeId(@PathVariable Integer id) {
+    List<CompanyTO> companyTOS = companyService.getListByEmployeeId(id);
+    if (companyTOS == null || companyTOS.isEmpty()) {
+      response = ResponseTO.responseBuilder(200, "BT006", "/company", "company", null);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    response = ResponseTO.responseBuilder(200, "BT004", "/company", "company", companyTOS);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
