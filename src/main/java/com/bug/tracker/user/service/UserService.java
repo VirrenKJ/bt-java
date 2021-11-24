@@ -14,7 +14,7 @@ public interface UserService {
 
   SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj);
 
-//  SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj);
+  List<?> getEmployeeList(SearchCriteriaObj searchCriteriaObj);
 
   UserTO getById(Integer id);
 

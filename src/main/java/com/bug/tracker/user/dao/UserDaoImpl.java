@@ -4,6 +4,7 @@ import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.user.entity.UserDetailBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -106,50 +107,50 @@ public class UserDaoImpl implements UserDao {
   SELECT u.*, c.name
   FROM user as u JOIN company_employee as ce ON u.id = ce.user_id
   JOIN company AS c ON ce.company_id = c.id
-  WHERE c.id IN (28, 29, 32, 34, 35, 36)
+  WHERE c.id IN (28, 29, 32, 34, 35, 36, 76, 87)
   */
-//  @Override
-//  public CommonListTO<UserBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
-//    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
-//    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
-////    Join<CompanyBO, UserBO> lineJoin = root.join("users");
-////    criteriaQuery.select(root.get("name"));
-////    criteriaQuery.multiselect(lineJoin.get("firstName"), root.get("name"));
-//    Predicate predicateIds = root.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
-//    Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
-//    criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
-//
-//    //condition for search
-//    if (searchCriteriaObj.getSearchFieldsObj() != null) {
-//      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
-//        if (searchCriteriaObj.getSearchFieldsObj().getSearchFor().contains("\\")) {
-//          searchCriteriaObj.getSearchFieldsObj().setSearchFor(
-//                  searchCriteriaObj.getSearchFieldsObj().getSearchFor().replace("\\", "\\\\\\\\"));
-//        }
-//        Path<String> pathUsername = root.get("username");
-//        Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-//        Path<String> pathEmail = root.get("email");
-//        Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-//        Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
-//        criteriaQuery.where(predicateSearch);
-//      }
-//    }
-//
-//    // Condition for sorting.
-//    Order order;
-//    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
-//      if (searchCriteriaObj.getSortType() == 2) {
-//        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
-//      } else {
-//        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
-//      }
-//    } else {
-//      order = criteriaBuilder.desc(root.get("id"));
-//    }
-//    criteriaQuery.orderBy(order);
-//
-//    // Adding Pagination total Count
+  @Override
+  public List<?> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
+    Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
+//    Join<CompanyBO, UserDetailBO> lineJoin = root.join("userDetails");
+    criteriaQuery.select(root.get("userDetails"));
+//    criteriaQuery.multiselect(root.get("userDetails"));
+    Predicate predicateIds = root.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+    Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
+    criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
+
+    //condition for search
+    if (searchCriteriaObj.getSearchFieldsObj() != null) {
+      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
+        if (searchCriteriaObj.getSearchFieldsObj().getSearchFor().contains("\\")) {
+          searchCriteriaObj.getSearchFieldsObj().setSearchFor(
+                  searchCriteriaObj.getSearchFieldsObj().getSearchFor().replace("\\", "\\\\\\\\"));
+        }
+        Path<String> pathUsername = root.get("username");
+        Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
+        Path<String> pathEmail = root.get("email");
+        Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
+        Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
+        criteriaQuery.where(predicateSearch);
+      }
+    }
+
+    // Condition for sorting.
+    Order order;
+    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
+      if (searchCriteriaObj.getSortType() == 2) {
+        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
+      } else {
+        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
+      }
+    } else {
+      order = criteriaBuilder.desc(root.get("id"));
+    }
+    criteriaQuery.orderBy(order);
+
+    // Adding Pagination total Count
 //    CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
 //    CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
 //    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
@@ -178,8 +179,8 @@ public class UserDaoImpl implements UserDao {
 //    }
 //    List<CompanyBO> list = typedQuery.getResultList();
 //    commonListTO.setDataList(list);
-//    return new CommonListTO<>();
-//  }
+    return entityManager.createQuery(criteriaQuery).getResultList();
+  }
 
   @Override
   public UserBO getById(Integer id) {

@@ -69,16 +69,17 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-//  @PostMapping("/employee-list")
-//  public ResponseEntity<?> getEmployeeList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
+  @PostMapping("/employee-list")
+  public ResponseEntity<?> getEmployeeList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
 //    SearchResponseTO searchResponseTO = userService.getEmployeeList(searchCriteriaObj);
+    List<?> searchResponseTO = userService.getEmployeeList(searchCriteriaObj);
 //    if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
 //      response = ResponseTO.responseBuilder(200, "BT006", "/employee-list", "user", searchResponseTO);
 //      return new ResponseEntity<>(response, HttpStatus.OK);
 //    }
-//    response = ResponseTO.responseBuilder(200, "BT003", "/employee-list", "user", searchResponseTO);
-//    return new ResponseEntity<>(response, HttpStatus.OK);
-//  }
+    response = ResponseTO.responseBuilder(200, "BT003", "/employee-list", "user", searchResponseTO);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
 
   @GetMapping("/{id}")
   public ResponseEntity<?> getById(@PathVariable Integer id) {

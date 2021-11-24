@@ -130,7 +130,6 @@ public class CompanyDaoImpl implements CompanyDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserDetailBO> criteriaQuery = criteriaBuilder.createQuery(UserDetailBO.class);
     Root<UserDetailBO> root = criteriaQuery.from(UserDetailBO.class);
-//    Join<CompanyBO, UserDetailBO> join = root.joinList("userDetails");
 
     criteriaQuery.select(root.get("companies"));
     Predicate predicateForId = criteriaBuilder.equal(root.get("id"), id);
