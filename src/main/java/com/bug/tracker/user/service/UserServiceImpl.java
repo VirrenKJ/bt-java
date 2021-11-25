@@ -8,8 +8,10 @@ import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.service.CompanyService;
 import com.bug.tracker.user.dao.UserDao;
+import com.bug.tracker.user.dto.UserDetailTO;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.user.entity.UserDetailBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,23 +62,22 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<?> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
     SearchCriteriaObj searchCriteriaObjCompany = new SearchCriteriaObj();
     searchCriteriaObjCompany.setSearchFieldsObj(new SearchFieldsObj());
     searchCriteriaObjCompany.getSearchFieldsObj().setId(searchCriteriaObj.getSearchFieldsObj().getId());
     SearchResponseTO searchResponseTOCompany = companyService.getList(searchCriteriaObjCompany);
     List<CompanyTO> companyTOS = (List<CompanyTO>) searchResponseTOCompany.getList();
-
     searchCriteriaObj.getSearchFieldsObj().setIds(new ArrayList<>());
     companyTOS.forEach(company -> searchCriteriaObj.getSearchFieldsObj().getIds().add(company.getId()));
-//    SearchResponseTO searchResponseTO = new SearchResponseTO();
-//    CommonListTO<UserBO> commonListTO = userDao.getEmployeeList(searchCriteriaObj);
-//    List<UserTO> userTOS = modelConvertorService.map(commonListTO.getDataList(), UserTO.class);
-//
-//    searchResponseTO.setList(userTOS);
-//    searchResponseTO.setPageCount(commonListTO.getPageCount());
-//    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
-    return userDao.getEmployeeList(searchCriteriaObj);
+
+    SearchResponseTO searchResponseTO = new SearchResponseTO();
+    CommonListTO<UserDetailBO> commonListTO = userDao.getEmployeeList(searchCriteriaObj);
+    List<UserTO> userDetailTOS = modelConvertorService.map(commonListTO.getDataListUnknownType(), UserTO.class);
+    searchResponseTO.setList(userDetailTOS);
+    searchResponseTO.setPageCount(commonListTO.getPageCount());
+    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
+    return searchResponseTO;
   }
 
   @Override

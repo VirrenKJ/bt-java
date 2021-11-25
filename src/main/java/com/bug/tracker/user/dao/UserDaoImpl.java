@@ -10,7 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
 
@@ -110,13 +113,11 @@ public class UserDaoImpl implements UserDao {
   WHERE c.id IN (28, 29, 32, 34, 35, 36, 76, 87)
   */
   @Override
-  public List<?> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
+  public CommonListTO<UserDetailBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
     Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
-//    Join<CompanyBO, UserDetailBO> lineJoin = root.join("userDetails");
-    criteriaQuery.select(root.get("userDetails"));
-//    criteriaQuery.multiselect(root.get("userDetails"));
+    criteriaQuery.select(root.get("userDetails")).distinct(true);
     Predicate predicateIds = root.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
     Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
     criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
@@ -150,36 +151,35 @@ public class UserDaoImpl implements UserDao {
     }
     criteriaQuery.orderBy(order);
 
-    // Adding Pagination total Count
-//    CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
-//    CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
-//    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
-////    Join<CompanyBO, UserBO> lineJoin2 = root2.join("users");
-////    criteriaQuery.multiselect(lineJoin2.get("firstName"), root2.get("name"));
-////    criteriaQuery.select(root2.get("name"));
-//    Predicate predicateIds2 = root2.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
-//    Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
-//    criteriaQuery2.where(criteriaBuilder.and(predicateIds2, predicateDelete2));
-//    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
-//    Long count = entityManager.createQuery(select).getSingleResult();
-//    commonListTO.setTotalRow(count);
-//    int size = count.intValue();
-//    int limit = searchCriteriaObj.getLimit();
-//    if (limit != 0) {
-//      commonListTO.setPageCount((size + limit - 1) / limit);
-//    } else {
-//      commonListTO.setPageCount(1);
-//    }
-//
-//    TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
-//    // Condition for paging.
-//    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
-//      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
-//      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
-//    }
-//    List<CompanyBO> list = typedQuery.getResultList();
-//    commonListTO.setDataList(list);
-    return entityManager.createQuery(criteriaQuery).getResultList();
+//     Adding Pagination total Count
+    CommonListTO<UserDetailBO> commonListTO = new CommonListTO<>();
+    CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
+    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
+    Join<CompanyBO, UserDetailBO> lineJoin2 = root2.join("userDetails");
+    Predicate predicateIds2 = root2.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+    Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
+    criteriaQuery2.where(criteriaBuilder.and(predicateIds2, predicateDelete2));
+    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.countDistinct(lineJoin2));
+//    select.distinct(true);
+    Long count = entityManager.createQuery(select).getSingleResult();
+    commonListTO.setTotalRow(count);
+    int size = count.intValue();
+    int limit = searchCriteriaObj.getLimit();
+    if (limit != 0) {
+      commonListTO.setPageCount((size + limit - 1) / limit);
+    } else {
+      commonListTO.setPageCount(1);
+    }
+
+    TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
+    // Condition for paging.
+    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
+      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
+      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
+    }
+    List<?> list = typedQuery.getResultList();
+    commonListTO.setDataListUnknownType(list);
+    return commonListTO;
   }
 
   @Override

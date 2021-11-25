@@ -7,11 +7,14 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CommonListTO<T>  {
+public class CommonListTO<T> {
 
-    private Long totalRow;
+  private Long totalRow;
 
-    private Integer pageCount;
+  private Integer pageCount;
 
-    private List<T> dataList;
+  private List<T> dataList;
+
+  private List<?> dataListUnknownType;
+
 }

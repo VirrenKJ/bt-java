@@ -3,6 +3,7 @@ package com.bug.tracker.user.dao;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.user.entity.UserDetailBO;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface UserDao {
 
   CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj);
 
-  List<?> getEmployeeList(SearchCriteriaObj searchCriteriaObj);
+  CommonListTO<UserDetailBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj);
 
   UserBO getById(Integer id);
 
