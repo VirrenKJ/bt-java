@@ -73,7 +73,8 @@ public class UserServiceImpl implements UserService {
 
     SearchResponseTO searchResponseTO = new SearchResponseTO();
     CommonListTO<UserDetailBO> commonListTO = userDao.getEmployeeList(searchCriteriaObj);
-    List<UserTO> userDetailTOS = modelConvertorService.map(commonListTO.getDataListUnknownType(), UserTO.class);
+    List<UserDetailTO> userDetailTOS = modelConvertorService.map(commonListTO.getDataListUnknownType(), UserDetailTO.class);
+
     searchResponseTO.setList(userDetailTOS);
     searchResponseTO.setPageCount(commonListTO.getPageCount());
     searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
