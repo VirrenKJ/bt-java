@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -21,14 +20,6 @@ import java.util.List;
 public class CompanyBO extends Audit {
 
   private static final long serialVersionUID = 5552166560392622180L;
-
-  public CompanyBO() {
-  }
-
-  public CompanyBO(Collection<?> userDetails, String name) {
-    this.name = name;
-    this.userDetails = (List<UserDetailBO>) userDetails;
-  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

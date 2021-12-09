@@ -49,14 +49,14 @@ CREATE TABLE IF NOT EXISTS `project` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `role` (
-  `role_id` int NOT NULL AUTO_INCREMENT,
+  `role_id` int NOT NULL,
   `role_name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `delete_flag` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` int NOT NULL,
+  `created_by` int NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` int NOT NULL,
+  `updated_by` int NULL,
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 INSERT INTO `role` (`role_id`, `role_name`, `description`, `delete_flag`, `created_by`, `updated_by`) VALUES
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `system_profile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `company` (
-   `id` int NOT NULL AUTO_INCREMENT,
+   `id` int NOT NULL,
    `company_db_detail_id` int DEFAULT NULL,
    `user_id` int DEFAULT NULL,
    `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `company` (
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `company_db_detail` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `db_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `db_username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `db_password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,

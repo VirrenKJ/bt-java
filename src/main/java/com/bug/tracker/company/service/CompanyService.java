@@ -3,7 +3,6 @@ package com.bug.tracker.company.service;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.company.dto.CompanyTO;
-import com.bug.tracker.user.dto.UserDetailTO;
 
 import java.sql.SQLException;
 import java.util.List;

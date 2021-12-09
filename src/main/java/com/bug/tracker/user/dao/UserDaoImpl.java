@@ -4,6 +4,7 @@ import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.user.entity.UserCustomBO;
 import com.bug.tracker.user.entity.UserDetailBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,13 @@ public class UserDaoImpl implements UserDao {
     entityManager.persist(userBO);
     logger.info("User has added successfully, User details=" + userBO);
     return userBO;
+  }
+
+  @Override
+  public UserCustomBO copyUserToTenant(UserCustomBO userCustomBO) {
+    entityManager.persist(userCustomBO);
+    logger.info("User has copied successfully, User details=" + userCustomBO);
+    return userCustomBO;
   }
 
   @Override

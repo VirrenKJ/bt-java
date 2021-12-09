@@ -13,7 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @Table(name = "role")
-public class RoleBO extends Audit implements Serializable {
+public class RoleBO extends Audit {
 
     private static final long serialVersionUID = -4857844478191178785L;
 

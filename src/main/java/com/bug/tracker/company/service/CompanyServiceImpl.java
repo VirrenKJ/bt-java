@@ -8,11 +8,13 @@ import com.bug.tracker.company.dao.CompanyDao;
 import com.bug.tracker.company.dto.CompanyDbDetailTO;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.entity.CompanyBO;
+import com.bug.tracker.company.entity.CompanyCustomBO;
 import com.bug.tracker.config.MultiLocationDBSource;
 import com.bug.tracker.config.UserSessionContext;
 import com.bug.tracker.user.dao.UserDao;
 import com.bug.tracker.user.dto.UserDetailTO;
 import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.user.entity.UserCustomBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -107,10 +109,9 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Override
   public CompanyTO copyCompanyToTenant(CompanyTO companyTO) {
-    UserBO userBO = UserSessionContext.getCurrentTenant();
-    userDao.update(userBO);
-    companyTO.setId(null);
-    CompanyBO companyBO = modelConvertorService.map(companyTO, CompanyBO.class);
+    UserCustomBO userCustomBO = modelConvertorService.map(UserSessionContext.getCurrentTenant(), UserCustomBO.class);
+    userDao.copyUserToTenant(userCustomBO);
+    CompanyCustomBO companyBO = modelConvertorService.map(companyTO, CompanyCustomBO.class);
     return modelConvertorService.map(companyDao.copyCompanyToTenant(companyBO), CompanyTO.class);
   }
 

@@ -3,6 +3,7 @@ package com.bug.tracker.company.dao;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.entity.CompanyBO;
+import com.bug.tracker.company.entity.CompanyCustomBO;
 import com.bug.tracker.user.entity.UserDetailBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +40,9 @@ public class CompanyDaoImpl implements CompanyDao {
   }
 
   @Override
-  public CompanyBO copyCompanyToTenant(CompanyBO companyBO) {
-    entityManager.merge(companyBO);
-    logger.info("Company has added successfully, Company details=" + companyBO);
+  public CompanyCustomBO copyCompanyToTenant(CompanyCustomBO companyBO) {
+    entityManager.persist(companyBO);
+    logger.info("Company has copied successfully, Company details=" + companyBO);
     return companyBO;
   }
 
