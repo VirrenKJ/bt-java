@@ -3,9 +3,7 @@ package com.bug.tracker.category.validator;
 import com.bug.tracker.category.controller.GlobalCategoryController;
 import com.bug.tracker.category.dto.GlobalCategoryTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
-import com.bug.tracker.common.service.APP_MSG;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 

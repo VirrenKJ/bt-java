@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface RoleService {
 
-    RoleTO add(RoleTO roleTO);
+    RoleTO addRole(RoleTO roleTO);
 
-    RoleTO update(RoleTO roleTO);
+    RoleTO updateRole(RoleTO roleTO);
 
-    List<RoleTO> getList(SearchCriteriaObj searchCriteriaObj);
+    List<RoleTO> getRoleList(SearchCriteriaObj searchCriteriaObj);
 
-    RoleTO getById(Integer id);
+    RoleTO getRoleById(Integer id);
 
-    void delete(List<Integer> id);
+    void deleteRole(List<Integer> id);
 
 }

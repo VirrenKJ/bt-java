@@ -4,7 +4,7 @@ import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.user.entity.UserBO;
-import com.bug.tracker.user.entity.UserCustomBO;
+import com.bug.tracker.user.entity.UserBasicBO;
 import com.bug.tracker.user.entity.UserDetailBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,28 +27,28 @@ public class UserDaoImpl implements UserDao {
   private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
   @Override
-  public UserBO add(UserBO userBO) {
+  public UserBO addUser(UserBO userBO) {
     entityManager.persist(userBO);
     logger.info("User has added successfully, User details=" + userBO);
     return userBO;
   }
 
   @Override
-  public UserCustomBO copyUserToTenant(UserCustomBO userCustomBO) {
-    entityManager.persist(userCustomBO);
-    logger.info("User has copied successfully, User details=" + userCustomBO);
-    return userCustomBO;
+  public UserBasicBO copyUserToTenant(UserBasicBO userBasicBO) {
+    entityManager.persist(userBasicBO);
+    logger.info("User has copied successfully, User details=" + userBasicBO);
+    return userBasicBO;
   }
 
   @Override
-  public UserBO update(UserBO userBO) {
+  public UserBO updateUser(UserBO userBO) {
     entityManager.merge(userBO);
     logger.info("User has updated successfully, User details=" + userBO);
     return userBO;
   }
 
   @Override
-  public CommonListTO<UserBO> getList(SearchCriteriaObj searchCriteriaObj) {
+  public CommonListTO<UserBO> getUserList(SearchCriteriaObj searchCriteriaObj) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
     Root<UserBO> root = criteriaQuery.from(UserBO.class);
@@ -191,7 +191,7 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public UserBO getById(Integer id) {
+  public UserBO getUserById(Integer id) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
 
@@ -210,7 +210,7 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public UserBO getByUsername(String username) throws Exception {
+  public UserBO getUserByUsername(String username) throws Exception {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
 
@@ -229,7 +229,7 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public void delete(List<Integer> id) {
+  public void deleteUser(List<Integer> id) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaUpdate<UserBO> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(UserBO.class);
     Root<UserBO> root = criteriaUpdate.from(UserBO.class);

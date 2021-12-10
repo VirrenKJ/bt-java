@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface GlobalCategoryDao {
 
-    GlobalCategoryBO add(GlobalCategoryBO globalCategoryBO);
+    GlobalCategoryBO addGlobalCategory(GlobalCategoryBO globalCategoryBO);
 
-    GlobalCategoryBO update(GlobalCategoryBO globalCategoryBO);
+    GlobalCategoryBO updateGlobalCategory(GlobalCategoryBO globalCategoryBO);
 
-    CommonListTO<GlobalCategoryBO> getList(SearchCriteriaObj searchCriteriaObj);
+    CommonListTO<GlobalCategoryBO> getGlobalCategoryList(SearchCriteriaObj searchCriteriaObj);
 
-    GlobalCategoryBO getById(Integer id);
+    GlobalCategoryBO getGlobalCategoryById(Integer id);
 
-    void delete(List<Integer> id);
+    void deleteGlobalCategory(List<Integer> id);
 }

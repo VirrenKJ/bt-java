@@ -37,30 +37,30 @@ public class UserController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> add(@Valid @RequestBody UserTO userTO, Errors errors) {
+  public ResponseEntity<?> addUser(@Valid @RequestBody UserTO userTO, Errors errors) {
     if (errors.hasErrors()) {
       ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
-    UserTO userTO_return = userService.add(userTO);
+    UserTO userTO_return = userService.addUser(userTO);
     response = ResponseTO.responseBuilder(200, "BT001", "/user", "user", userTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/update")
-  public ResponseEntity<?> update(@Valid @RequestBody UserTO userTO, Errors errors) {
+  public ResponseEntity<?> updateUser(@Valid @RequestBody UserTO userTO, Errors errors) {
     if (errors.hasErrors()) {
       ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
-    UserTO userTO_return = userService.update(userTO);
+    UserTO userTO_return = userService.updateUser(userTO);
     response = ResponseTO.responseBuilder(200, "BT002", "/user", "user", userTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/list")
-  public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    SearchResponseTO searchResponseTO = userService.getList(searchCriteriaObj);
+  public ResponseEntity<?> getUserList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
+    SearchResponseTO searchResponseTO = userService.getUserList(searchCriteriaObj);
     if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -81,8 +81,8 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getById(@PathVariable Integer id) {
-    UserTO userTO = userService.getById(id);
+  public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+    UserTO userTO = userService.getUserById(id);
     if (userTO == null) {
       response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", null);
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -92,8 +92,8 @@ public class UserController {
   }
 
   @GetMapping("/username")
-  public ResponseEntity<?> getByUsername(@RequestParam(name = "username") String username) throws Exception {
-    UserTO userTO = userService.getByUsername(username);
+  public ResponseEntity<?> getUserByUsername(@RequestParam(name = "username") String username) throws Exception {
+    UserTO userTO = userService.getUserByUsername(username);
     if (userTO == null) {
       response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", null);
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -103,8 +103,8 @@ public class UserController {
   }
 
   @DeleteMapping("/delete")
-  public ResponseEntity<?> delete(@RequestParam(name = "id") List<Integer> id) {
-    userService.delete(id);
+  public ResponseEntity<?> deleteUser(@RequestParam(name = "id") List<Integer> id) {
+    userService.deleteUser(id);
     response = ResponseTO.responseBuilder(200, "BT005", "/user", "user", id);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }

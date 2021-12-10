@@ -37,22 +37,22 @@ public class UserServiceImpl implements UserService {
   private PasswordEncoder passwordEncoder;
 
   @Override
-  public UserTO add(UserTO userTO) {
+  public UserTO addUser(UserTO userTO) {
     userTO.setPassword(passwordEncoder.encode(userTO.getPassword()));
     UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
-    return modelConvertorService.map(userDao.add(userBO), UserTO.class);
+    return modelConvertorService.map(userDao.addUser(userBO), UserTO.class);
   }
 
   @Override
-  public UserTO update(UserTO userTO) {
+  public UserTO updateUser(UserTO userTO) {
     UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
-    return modelConvertorService.map(userDao.update(userBO), UserTO.class);
+    return modelConvertorService.map(userDao.updateUser(userBO), UserTO.class);
   }
 
   @Override
-  public SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getUserList(SearchCriteriaObj searchCriteriaObj) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<UserBO> commonListTO = userDao.getList(searchCriteriaObj);
+    CommonListTO<UserBO> commonListTO = userDao.getUserList(searchCriteriaObj);
     List<UserTO> userTOS = modelConvertorService.map(commonListTO.getDataList(), UserTO.class);
 
     searchResponseTO.setList(userTOS);
@@ -82,19 +82,19 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserTO getById(Integer id) {
-    UserTO userTO = modelConvertorService.map(userDao.getById(id), UserTO.class);
+  public UserTO getUserById(Integer id) {
+    UserTO userTO = modelConvertorService.map(userDao.getUserById(id), UserTO.class);
     return userTO;
   }
 
   @Override
-  public UserTO getByUsername(String username) throws Exception {
-    UserTO userTO = modelConvertorService.map(userDao.getByUsername(username), UserTO.class);
+  public UserTO getUserByUsername(String username) throws Exception {
+    UserTO userTO = modelConvertorService.map(userDao.getUserByUsername(username), UserTO.class);
     return userTO;
   }
 
   @Override
-  public void delete(List<Integer> id) {
-    userDao.delete(id);
+  public void deleteUser(List<Integer> id) {
+    userDao.deleteUser(id);
   }
 }

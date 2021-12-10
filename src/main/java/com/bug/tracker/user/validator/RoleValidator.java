@@ -1,11 +1,9 @@
 package com.bug.tracker.user.validator;
 
 import com.bug.tracker.common.object.SearchCriteriaObj;
-import com.bug.tracker.common.service.APP_MSG;
 import com.bug.tracker.user.controller.RoleController;
 import com.bug.tracker.user.dto.RoleTO;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 

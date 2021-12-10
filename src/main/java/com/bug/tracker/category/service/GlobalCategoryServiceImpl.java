@@ -14,42 +14,42 @@ import java.util.List;
 
 @Service
 @Transactional
-public class GlobalCategoryServiceImpl implements GlobalCategoryService{
+public class GlobalCategoryServiceImpl implements GlobalCategoryService {
 
-    @Autowired
-    private GlobalCategoryDao globalCategoryDao;
+  @Autowired
+  private GlobalCategoryDao globalCategoryDao;
 
-    @Autowired
-    private ModelConvertorService modelConvertorService;
+  @Autowired
+  private ModelConvertorService modelConvertorService;
 
-    @Override
-    public GlobalCategoryTO add(GlobalCategoryTO globalCategoryTO) {
-        GlobalCategoryBO globalCategoryBO = modelConvertorService.map(globalCategoryTO, GlobalCategoryBO.class);
-        return modelConvertorService.map(globalCategoryDao.add(globalCategoryBO), GlobalCategoryTO.class);
-    }
+  @Override
+  public GlobalCategoryTO addGlobalCategory(GlobalCategoryTO globalCategoryTO) {
+    GlobalCategoryBO globalCategoryBO = modelConvertorService.map(globalCategoryTO, GlobalCategoryBO.class);
+    return modelConvertorService.map(globalCategoryDao.addGlobalCategory(globalCategoryBO), GlobalCategoryTO.class);
+  }
 
-    @Override
-    public GlobalCategoryTO update(GlobalCategoryTO globalCategoryTO) {
-        GlobalCategoryBO globalCategoryBO = modelConvertorService.map(globalCategoryTO, GlobalCategoryBO.class);
-        return modelConvertorService.map(globalCategoryDao.update(globalCategoryBO), GlobalCategoryTO.class);
-    }
+  @Override
+  public GlobalCategoryTO updateGlobalCategory(GlobalCategoryTO globalCategoryTO) {
+    GlobalCategoryBO globalCategoryBO = modelConvertorService.map(globalCategoryTO, GlobalCategoryBO.class);
+    return modelConvertorService.map(globalCategoryDao.updateGlobalCategory(globalCategoryBO), GlobalCategoryTO.class);
+  }
 
-    @Override
-    public List<GlobalCategoryTO> getList(SearchCriteriaObj searchCriteriaObj) {
-        CommonListTO<GlobalCategoryBO> commonListTO = globalCategoryDao.getList(searchCriteriaObj);
-        List<GlobalCategoryBO> globalCategoryBOs = commonListTO.getDataList();
-        List<GlobalCategoryTO> globalCategoryTOs = modelConvertorService.map(globalCategoryBOs, GlobalCategoryTO.class);
-        return globalCategoryTOs;
-    }
+  @Override
+  public List<GlobalCategoryTO> getGlobalCategoryList(SearchCriteriaObj searchCriteriaObj) {
+    CommonListTO<GlobalCategoryBO> commonListTO = globalCategoryDao.getGlobalCategoryList(searchCriteriaObj);
+    List<GlobalCategoryBO> globalCategoryBOs = commonListTO.getDataList();
+    List<GlobalCategoryTO> globalCategoryTOs = modelConvertorService.map(globalCategoryBOs, GlobalCategoryTO.class);
+    return globalCategoryTOs;
+  }
 
-    @Override
-    public GlobalCategoryTO getById(Integer id) {
-        GlobalCategoryTO globalCategoryTO = modelConvertorService.map(globalCategoryDao.getById(id), GlobalCategoryTO.class);
-        return globalCategoryTO;
-    }
+  @Override
+  public GlobalCategoryTO getGlobalCategoryById(Integer id) {
+    GlobalCategoryTO globalCategoryTO = modelConvertorService.map(globalCategoryDao.getGlobalCategoryById(id), GlobalCategoryTO.class);
+    return globalCategoryTO;
+  }
 
-    @Override
-    public void delete(List<Integer> id) {
-        globalCategoryDao.delete(id);
-    }
+  @Override
+  public void deleteGlobalCategory(List<Integer> id) {
+    globalCategoryDao.deleteGlobalCategory(id);
+  }
 }

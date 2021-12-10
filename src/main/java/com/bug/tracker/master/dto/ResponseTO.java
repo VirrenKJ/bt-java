@@ -1,6 +1,6 @@
 package com.bug.tracker.master.dto;
 
-import com.bug.tracker.common.service.APP_MSG;
+import com.bug.tracker.common.object.APP_MSG;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.validation.FieldError;

@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface RoleDao {
 
-    RoleBO add(RoleBO roleBO);
+    RoleBO addRole(RoleBO roleBO);
 
-    RoleBO update(RoleBO roleBO);
+    RoleBO updateRole(RoleBO roleBO);
 
-    CommonListTO<RoleBO> getList(SearchCriteriaObj searchCriteriaObj);
+    CommonListTO<RoleBO> getRoleList(SearchCriteriaObj searchCriteriaObj);
 
-    RoleBO getById(Integer id);
+    RoleBO getRoleById(Integer id);
 
-    void delete(List<Integer> id);
+    void deleteRole(List<Integer> id);
 
 }

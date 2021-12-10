@@ -1,6 +1,5 @@
 package com.bug.tracker.common.object;
 
-import com.bug.tracker.common.service.APP_MSG;
 import org.springframework.validation.Errors;
 
 public class ValidationErrorBuilder {

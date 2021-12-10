@@ -8,18 +8,18 @@ import java.util.List;
 
 public interface UserService {
 
-  UserTO add(UserTO userTO);
+  UserTO addUser(UserTO userTO);
 
-  UserTO update(UserTO userTO);
+  UserTO updateUser(UserTO userTO);
 
-  SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getUserList(SearchCriteriaObj searchCriteriaObj);
 
   SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj);
 
-  UserTO getById(Integer id);
+  UserTO getUserById(Integer id);
 
-  UserTO getByUsername(String username) throws Exception;
+  UserTO getUserByUsername(String username) throws Exception;
 
-  void delete(List<Integer> id);
+  void deleteUser(List<Integer> id);
 
 }

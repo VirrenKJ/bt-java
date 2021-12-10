@@ -36,30 +36,30 @@ public class RoleController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> add(@Valid @RequestBody RoleTO roleTO, Errors errors) {
+  public ResponseEntity<?> addRole(@Valid @RequestBody RoleTO roleTO, Errors errors) {
     if (errors.hasErrors()) {
       ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
-    RoleTO roleTO_return = roleService.add(roleTO);
+    RoleTO roleTO_return = roleService.addRole(roleTO);
     response = ResponseTO.responseBuilder(200, "BT001", "/role", "role", roleTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/update")
-  public ResponseEntity<?> update(@Valid @RequestBody RoleTO roleTO, Errors errors) {
+  public ResponseEntity<?> updateRole(@Valid @RequestBody RoleTO roleTO, Errors errors) {
     if (errors.hasErrors()) {
       ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
-    RoleTO roleTO_return = roleService.update(roleTO);
+    RoleTO roleTO_return = roleService.updateRole(roleTO);
     response = ResponseTO.responseBuilder(200, "BT002", "/role", "role", roleTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/list")
-  public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    List<RoleTO> roleTOS = roleService.getList(searchCriteriaObj);
+  public ResponseEntity<?> getRoleList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
+    List<RoleTO> roleTOS = roleService.getRoleList(searchCriteriaObj);
     if (roleTOS == null || roleTOS.isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/role", "role", roleTOS);
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -69,8 +69,8 @@ public class RoleController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getById(@PathVariable Integer id) {
-    RoleTO roleTO = roleService.getById(id);
+  public ResponseEntity<?> getRoleById(@PathVariable Integer id) {
+    RoleTO roleTO = roleService.getRoleById(id);
     if (roleTO == null) {
       response = ResponseTO.responseBuilder(200, "BT006", "/role", "role", null);
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -80,8 +80,8 @@ public class RoleController {
   }
 
   @DeleteMapping("/delete")
-  public ResponseEntity<?> delete(@RequestParam(name = "id") List<Integer> id) {
-    roleService.delete(id);
+  public ResponseEntity<?> deleteRole(@RequestParam(name = "id") List<Integer> id) {
+    roleService.deleteRole(id);
     response = ResponseTO.responseBuilder(200, "BT005", "/role", "role", id);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }

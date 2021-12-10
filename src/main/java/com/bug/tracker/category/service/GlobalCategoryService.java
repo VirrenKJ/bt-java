@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface GlobalCategoryService {
 
-    GlobalCategoryTO add(GlobalCategoryTO globalCategoryTO);
+    GlobalCategoryTO addGlobalCategory(GlobalCategoryTO globalCategoryTO);
 
-    GlobalCategoryTO update(GlobalCategoryTO globalCategoryTO);
+    GlobalCategoryTO updateGlobalCategory(GlobalCategoryTO globalCategoryTO);
 
-    List<GlobalCategoryTO> getList(SearchCriteriaObj searchCriteriaObj);
+    List<GlobalCategoryTO> getGlobalCategoryList(SearchCriteriaObj searchCriteriaObj);
 
-    GlobalCategoryTO getById(Integer id);
+    GlobalCategoryTO getGlobalCategoryById(Integer id);
 
-    void delete(List<Integer> id);
+    void deleteGlobalCategory(List<Integer> id);
 }
