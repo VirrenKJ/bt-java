@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "global_category")
-public class GlobalCategoryBO extends Audit implements Serializable {
+public class GlobalCategoryBO extends Audit {
 
     private static final long serialVersionUID = -5803214131709345860L;
 
