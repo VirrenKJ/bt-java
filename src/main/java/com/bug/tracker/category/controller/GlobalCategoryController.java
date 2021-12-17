@@ -3,6 +3,7 @@ package com.bug.tracker.category.controller;
 import com.bug.tracker.category.dto.GlobalCategoryTO;
 import com.bug.tracker.category.service.GlobalCategoryService;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.master.dto.ResponseTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,8 @@ public class GlobalCategoryController {
       ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
-    GlobalCategoryTO globalCategoryTO2 = globalCategoryService.addGlobalCategory(globalCategoryTO);
-    response = ResponseTO.responseBuilder(200, "BT001", "/category", "globalCategory", globalCategoryTO2);
+    GlobalCategoryTO globalCategoryTO_return = globalCategoryService.addGlobalCategory(globalCategoryTO);
+    response = ResponseTO.responseBuilder(200, "BT001", "/category", "globalCategory", globalCategoryTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
@@ -50,19 +51,19 @@ public class GlobalCategoryController {
       ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
-    GlobalCategoryTO globalCategoryTO2 = globalCategoryService.updateGlobalCategory(globalCategoryTO);
-    response = ResponseTO.responseBuilder(200, "BT002", "/category", "globalCategory", globalCategoryTO2);
+    GlobalCategoryTO globalCategoryTO_return = globalCategoryService.updateGlobalCategory(globalCategoryTO);
+    response = ResponseTO.responseBuilder(200, "BT002", "/category", "globalCategory", globalCategoryTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/list")
   public ResponseEntity<?> getGlobalCategoryList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    List<GlobalCategoryTO> globalCategoryTOs = globalCategoryService.getGlobalCategoryList(searchCriteriaObj);
-    if (globalCategoryTOs == null || globalCategoryTOs.isEmpty()) {
-      response = ResponseTO.responseBuilder(200, "BT006", "/category", "globalCategory", globalCategoryTOs);
+    SearchResponseTO searchResponseTO = globalCategoryService.getGlobalCategoryList(searchCriteriaObj);
+    if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
+      response = ResponseTO.responseBuilder(200, "BT006", "/category", "globalCategory", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    response = ResponseTO.responseBuilder(200, "BT003", "/category", "globalCategory", globalCategoryTOs);
+    response = ResponseTO.responseBuilder(200, "BT003", "/category", "globalCategory", searchResponseTO);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 

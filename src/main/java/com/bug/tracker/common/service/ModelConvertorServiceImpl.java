@@ -11,26 +11,26 @@ import java.util.List;
 @Service("modelConvertorService")
 public class ModelConvertorServiceImpl implements ModelConvertorService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired
+  private ModelMapper modelMapper;
 
-    @Override
-    public <D, T> D map(final T entity, Class<D> outClass) {
-        if (entity != null) {
-            return modelMapper.map(entity, outClass);
-        }
-        return null;
+  @Override
+  public <D, T> D map(final T entity, Class<D> outClass) {
+    if (entity != null) {
+      return modelMapper.map(entity, outClass);
     }
+    return null;
+  }
 
-    @Override
-    public <D, T> List<D> map(final Collection<T> entityList, Class<D> outCLass) {
-        List<D> objectTOList = new ArrayList<>();
-        if (entityList != null && entityList.size() > 0) {
-            for (T entityListObject : entityList) {
-                objectTOList.add(map(entityListObject, outCLass));
-            }
-        }
-        return objectTOList;
+  @Override
+  public <D, T> List<D> map(final Collection<T> entityList, Class<D> outCLass) {
+    List<D> objectTOList = new ArrayList<>();
+    if (entityList != null && entityList.size() > 0) {
+      for (T entityListObject : entityList) {
+        objectTOList.add(map(entityListObject, outCLass));
+      }
     }
+    return objectTOList;
+  }
 
 }

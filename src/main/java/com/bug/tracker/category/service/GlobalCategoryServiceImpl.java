@@ -5,6 +5,7 @@ import com.bug.tracker.category.dto.GlobalCategoryTO;
 import com.bug.tracker.category.entity.GlobalCategoryBO;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,22 @@ public class GlobalCategoryServiceImpl implements GlobalCategoryService {
   }
 
   @Override
-  public List<GlobalCategoryTO> getGlobalCategoryList(SearchCriteriaObj searchCriteriaObj) {
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
+  public SearchResponseTO getGlobalCategoryList(SearchCriteriaObj searchCriteriaObj) {
+    SearchResponseTO searchResponseTO = new SearchResponseTO();
     CommonListTO<GlobalCategoryBO> commonListTO = globalCategoryDao.getGlobalCategoryList(searchCriteriaObj);
+
     List<GlobalCategoryBO> globalCategoryBOs = commonListTO.getDataList();
     List<GlobalCategoryTO> globalCategoryTOs = modelConvertorService.map(globalCategoryBOs, GlobalCategoryTO.class);
-    return globalCategoryTOs;
+
+    searchResponseTO.setList(globalCategoryTOs);
+    searchResponseTO.setPageCount(commonListTO.getPageCount());
+    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
+    return searchResponseTO;
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public GlobalCategoryTO getGlobalCategoryById(Integer id) {
     GlobalCategoryTO globalCategoryTO = modelConvertorService.map(globalCategoryDao.getGlobalCategoryById(id), GlobalCategoryTO.class);
     return globalCategoryTO;

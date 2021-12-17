@@ -3,7 +3,6 @@ package com.bug.tracker.category.dao;
 import com.bug.tracker.category.entity.GlobalCategoryBO;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.SearchCriteriaObj;
-import com.bug.tracker.user.entity.RoleBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -92,7 +91,6 @@ public class GlobalCategoryDaoImpl implements GlobalCategoryDao {
     }
     commonListTO.setDataList(typedQuery.getResultList());
     return commonListTO;
-
   }
 
   @Override

@@ -114,6 +114,7 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
     CommonListTO<CompanyBO> commonListTO = companyDao.getList(searchCriteriaObj);
@@ -128,11 +129,13 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public List<CompanyTO> getListByEmployeeId(Integer id) {
     return modelConvertorService.map(companyDao.getListByEmployeeId(id), CompanyTO.class);
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public CompanyTO getById(Integer id) {
     return modelConvertorService.map(companyDao.getById(id), CompanyTO.class);
   }

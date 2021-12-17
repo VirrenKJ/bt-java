@@ -35,6 +35,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public List<RoleTO> getRoleList(SearchCriteriaObj searchCriteriaObj) {
     CommonListTO<RoleBO> commonListTO = roleDao.getRoleList(searchCriteriaObj);
     List<RoleBO> roleBOS = commonListTO.getDataList();
@@ -43,6 +44,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public RoleTO getRoleById(Integer id) {
     RoleTO roleTO = modelConvertorService.map(roleDao.getRoleById(id), RoleTO.class);
     return roleTO;

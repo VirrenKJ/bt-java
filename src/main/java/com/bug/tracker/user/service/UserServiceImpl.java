@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public SearchResponseTO getUserList(SearchCriteriaObj searchCriteriaObj) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
     CommonListTO<UserBO> commonListTO = userDao.getUserList(searchCriteriaObj);
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
     SearchCriteriaObj searchCriteriaObjCompany = new SearchCriteriaObj();
     searchCriteriaObjCompany.setSearchFieldsObj(new SearchFieldsObj());
@@ -82,12 +84,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public UserTO getUserById(Integer id) {
     UserTO userTO = modelConvertorService.map(userDao.getUserById(id), UserTO.class);
     return userTO;
   }
 
   @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public UserTO getUserByUsername(String username) throws Exception {
     UserTO userTO = modelConvertorService.map(userDao.getUserByUsername(username), UserTO.class);
     return userTO;
