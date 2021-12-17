@@ -3,7 +3,6 @@ package com.bug.tracker.user.controller;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
-import com.bug.tracker.common.object.ValidationErrorBuilder;
 import com.bug.tracker.master.dto.ResponseTO;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.service.UserService;
@@ -39,7 +38,7 @@ public class UserController {
   @PostMapping("/add")
   public ResponseEntity<?> addUser(@Valid @RequestBody UserTO userTO, Errors errors) {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     UserTO userTO_return = userService.addUser(userTO);
@@ -50,7 +49,7 @@ public class UserController {
   @PostMapping("/update")
   public ResponseEntity<?> updateUser(@Valid @RequestBody UserTO userTO, Errors errors) {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     UserTO userTO_return = userService.updateUser(userTO);

@@ -3,11 +3,9 @@ package com.bug.tracker.company.controller;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
-import com.bug.tracker.common.object.ValidationErrorBuilder;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.service.CompanyService;
 import com.bug.tracker.master.dto.ResponseTO;
-import com.bug.tracker.user.dto.UserDetailTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +39,7 @@ public class CompanyController {
   @PostMapping("/add")
   public ResponseEntity<?> add(@Valid @RequestBody CompanyTO companyTO, Errors errors) throws SQLException {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     CompanyTO companyTO_return = companyService.add(companyTO);
@@ -52,7 +50,7 @@ public class CompanyController {
   @PostMapping("/update")
   public ResponseEntity<?> update(@Valid @RequestBody CompanyTO companyTO, Errors errors) {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     CompanyTO companyTO_return = companyService.update(companyTO);
@@ -63,7 +61,7 @@ public class CompanyController {
   @PostMapping("/copy-company")
   public ResponseEntity<?> copyCompanyToTenant(@Valid @RequestBody CompanyTO companyTO, Errors errors) throws SQLException {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     CompanyTO companyTO_return = companyService.copyCompanyToTenant(companyTO);

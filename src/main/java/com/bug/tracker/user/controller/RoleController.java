@@ -2,7 +2,6 @@ package com.bug.tracker.user.controller;
 
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.object.ValidationError;
-import com.bug.tracker.common.object.ValidationErrorBuilder;
 import com.bug.tracker.master.dto.ResponseTO;
 import com.bug.tracker.user.dto.RoleTO;
 import com.bug.tracker.user.service.RoleService;
@@ -38,7 +37,7 @@ public class RoleController {
   @PostMapping("/add")
   public ResponseEntity<?> addRole(@Valid @RequestBody RoleTO roleTO, Errors errors) {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     RoleTO roleTO_return = roleService.addRole(roleTO);
@@ -49,7 +48,7 @@ public class RoleController {
   @PostMapping("/update")
   public ResponseEntity<?> updateRole(@Valid @RequestBody RoleTO roleTO, Errors errors) {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     RoleTO roleTO_return = roleService.updateRole(roleTO);

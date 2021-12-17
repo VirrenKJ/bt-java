@@ -31,7 +31,7 @@ public class ResponseTO {
         ResponseTO response = new ResponseTO();
         response.setStatus(status);
         response.setPath(path);
-        response.setMessage(APP_MSG.MESSAGE.get(code));
+        response.setMessage(APP_MSG.RESPONSE.get(code));
         response.setCode(code);
         response.putData(key, data);
         return response;

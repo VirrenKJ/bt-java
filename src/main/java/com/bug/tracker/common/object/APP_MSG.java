@@ -5,37 +5,21 @@ import java.util.Map;
 
 public class APP_MSG {
 
-    private APP_MSG() {
-        // private constructor
-    }
+  private APP_MSG() {
+    // private constructor
+  }
 
-    public static final Map<String, String> MESSAGE = new HashMap<>();
+  public static final Map<String, String> RESPONSE = new HashMap<>();
 
-    static {
-        MESSAGE.put("BT001", "Created successfully!");
-        MESSAGE.put("BT002", "Updated successfully!");
-        MESSAGE.put("BT003", "Fetched List!");
-        MESSAGE.put("BT004", "Selected section!");
-        MESSAGE.put("BT005", "Deleted successfully!");
-        MESSAGE.put("BT006", "Empty!");
-        MESSAGE.put("BT007", "Invalid argument!");
-        MESSAGE.put("BT001E", "Required Field!");
-        MESSAGE.put("BT002E", "Must be unique!");
-    }
-
-//    public static String getMessage(String moduleName, String fieldName, String messageCode) {
-//        String messageStr = MESSAGE.get(messageCode);
-//        String returnMessage = "";
-//        if (messageStr == null) {
-//            messageStr = "Invalid Message Code";
-//        }
-//        if (moduleName != null && !moduleName.trim().isEmpty()) {
-//            returnMessage = moduleName.trim() + " ";
-//        }
-//        if (fieldName != null && !fieldName.trim().isEmpty()) {
-//            returnMessage += fieldName.trim() + " ";
-//        }
-//        returnMessage += messageStr;
-//        return returnMessage;
-//    }
+  static {
+    RESPONSE.put("BT001", "Created successfully!");
+    RESPONSE.put("BT002", "Updated successfully!");
+    RESPONSE.put("BT003", "Fetched List!");
+    RESPONSE.put("BT004", "Selected section!");
+    RESPONSE.put("BT005", "Deleted successfully!");
+    RESPONSE.put("BT006", "Empty!");
+    RESPONSE.put("BT007", "Invalid argument!");
+    RESPONSE.put("BT001E", "Required Field!");
+    RESPONSE.put("BT002E", "Must be unique!");
+  }
 }

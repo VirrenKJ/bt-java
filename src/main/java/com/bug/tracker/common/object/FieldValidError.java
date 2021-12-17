@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FieldError {
+public class FieldValidError {
     private String fieldName;
     private String message;
 }

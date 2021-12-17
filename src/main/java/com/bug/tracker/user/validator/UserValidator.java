@@ -34,11 +34,11 @@ public class UserValidator implements Validator {
         UserTO userTO = (UserTO) o;
 
         if (userTO.getUsername() == null) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "BT001E", APP_MSG.MESSAGE.get("BT001E"));
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
         }else{
             UserTO user = userService.getUserByUsername(userTO.getUsername());
             if (user != null && user.getId() == null) {
-                errors.rejectValue("username", "BT002E", APP_MSG.MESSAGE.get("BT002E"));
+                errors.rejectValue("username", "BT002E", APP_MSG.RESPONSE.get("BT002E"));
             }
         }
     }

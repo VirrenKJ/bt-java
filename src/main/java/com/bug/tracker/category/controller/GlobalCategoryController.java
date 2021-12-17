@@ -4,7 +4,6 @@ import com.bug.tracker.category.dto.GlobalCategoryTO;
 import com.bug.tracker.category.service.GlobalCategoryService;
 import com.bug.tracker.common.object.SearchCriteriaObj;
 import com.bug.tracker.common.object.ValidationError;
-import com.bug.tracker.common.object.ValidationErrorBuilder;
 import com.bug.tracker.master.dto.ResponseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +36,7 @@ public class GlobalCategoryController {
   @PostMapping("/add")
   public ResponseEntity<?> addGlobalCategory(@Valid @RequestBody GlobalCategoryTO globalCategoryTO, Errors errors) {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     GlobalCategoryTO globalCategoryTO2 = globalCategoryService.addGlobalCategory(globalCategoryTO);
@@ -48,7 +47,7 @@ public class GlobalCategoryController {
   @PostMapping("/update")
   public ResponseEntity<?> updateGlobalCategory(@Valid @RequestBody GlobalCategoryTO globalCategoryTO, Errors errors) {
     if (errors.hasErrors()) {
-      ValidationError validationError = ValidationErrorBuilder.fromBindingErrors(errors);
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     GlobalCategoryTO globalCategoryTO2 = globalCategoryService.updateGlobalCategory(globalCategoryTO);
