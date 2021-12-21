@@ -69,7 +69,7 @@ INSERT INTO `role` (`role_id`, `role_name`, `description`, `delete_flag`, `creat
 CREATE TABLE IF NOT EXISTS `system_profile` (
   `id` int NOT NULL AUTO_INCREMENT,
   `platform` varchar(255) NOT NULL,
-  `os` varchar(255) NOT NULL,
+  `os_name` varchar(255) NOT NULL,
   `os_version` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `delete_flag` tinyint(1) NOT NULL DEFAULT '0',

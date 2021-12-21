@@ -2,7 +2,6 @@ package com.bug.tracker.user.service;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.PaginationCriteria;
-import com.bug.tracker.common.object.SearchFieldsObj;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.company.dto.CompanyTO;
