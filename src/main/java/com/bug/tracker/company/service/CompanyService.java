@@ -1,6 +1,6 @@
 package com.bug.tracker.company.service;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.company.dto.CompanyTO;
 
@@ -15,7 +15,7 @@ public interface CompanyService {
 
   CompanyTO copyCompanyToTenant(CompanyTO companyTO) throws SQLException;
 
-  SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getList(PaginationCriteria paginationCriteria);
 
   List<CompanyTO> getListByEmployeeId(Integer id);
 

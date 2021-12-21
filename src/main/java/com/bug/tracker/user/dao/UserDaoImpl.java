@@ -1,7 +1,7 @@
 package com.bug.tracker.user.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.user.entity.UserBO;
 import com.bug.tracker.user.entity.UserBasicBO;
@@ -48,7 +48,7 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public CommonListTO<UserBO> getUserList(SearchCriteriaObj searchCriteriaObj) {
+  public CommonListTO<UserBO> getUserList(PaginationCriteria paginationCriteria) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
     Root<UserBO> root = criteriaQuery.from(UserBO.class);
@@ -56,32 +56,30 @@ public class UserDaoImpl implements UserDao {
     criteriaQuery.where(predicate);
 
     //condition for search
-    if (searchCriteriaObj.getSearchFieldsObj() != null) {
-      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
-        if (searchCriteriaObj.getSearchFieldsObj().getSearchFor().contains("\\")) {
-          searchCriteriaObj.getSearchFieldsObj().setSearchFor(
-                  searchCriteriaObj.getSearchFieldsObj().getSearchFor().replace("\\", "\\\\\\\\"));
-        }
-        Path<String> pathUsername = root.get("username");
-        Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        Path<String> pathEmail = root.get("email");
-        Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
-        criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate));
-        if (searchCriteriaObj.getSearchFieldsObj().getId() != null) {
-          Predicate predicateId = criteriaBuilder.notEqual(root.get("id"), searchCriteriaObj.getSearchFieldsObj().getId());
-          criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate, predicateId));
-        }
+    if (paginationCriteria.getSearchFor() != null) {
+      if (paginationCriteria.getSearchFor().contains("\\")) {
+        paginationCriteria.setSearchFor(
+                paginationCriteria.getSearchFor().replace("\\", "\\\\\\\\"));
+      }
+      Path<String> pathUsername = root.get("username");
+      Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + paginationCriteria.getSearchFor() + "%");
+      Path<String> pathEmail = root.get("email");
+      Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + paginationCriteria.getSearchFor() + "%");
+      Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
+      criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate));
+      if (paginationCriteria.getId() != null) {
+        Predicate predicateId = criteriaBuilder.notEqual(root.get("id"), paginationCriteria.getId());
+        criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate, predicateId));
       }
     }
 
     // Condition for sorting.
     Order order;
-    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
-      if (searchCriteriaObj.getSortType() == 2) {
-        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
+    if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
+      if (paginationCriteria.getSortType() == 2) {
+        order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
       } else {
-        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
+        order = criteriaBuilder.asc(root.get(paginationCriteria.getSortField()));
       }
     } else {
       order = criteriaBuilder.desc(root.get("id"));
@@ -97,7 +95,7 @@ public class UserDaoImpl implements UserDao {
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
     int size = count.intValue();
-    int limit = searchCriteriaObj.getLimit();
+    int limit = paginationCriteria.getLimit();
     if (limit != 0) {
       commonListTO.setPageCount((size + limit - 1) / limit);
     } else {
@@ -106,9 +104,9 @@ public class UserDaoImpl implements UserDao {
 
     TypedQuery<UserBO> typedQuery = entityManager.createQuery(criteriaQuery);
     // Condition for paging.
-    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
-      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
-      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
+    if (paginationCriteria.getPage() != 0 && paginationCriteria.getLimit() > 0) {
+      typedQuery.setFirstResult((paginationCriteria.getPage() - 1) * paginationCriteria.getLimit());
+      typedQuery.setMaxResults(paginationCriteria.getLimit());
     }
     commonListTO.setDataList(typedQuery.getResultList());
     return commonListTO;
@@ -121,38 +119,36 @@ public class UserDaoImpl implements UserDao {
   WHERE c.id IN (28, 29, 32, 34, 35, 36, 76, 87)
   */
   @Override
-  public CommonListTO<UserDetailBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
+  public CommonListTO<UserDetailBO> getEmployeeList(PaginationCriteria paginationCriteria) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
     Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
     criteriaQuery.select(root.get("userDetails")).distinct(true);
-    Predicate predicateIds = root.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+    Predicate predicateIds = root.get("id").in(paginationCriteria.getIds());
     Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
     criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
 
     //condition for search
-    if (searchCriteriaObj.getSearchFieldsObj() != null) {
-      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
-        if (searchCriteriaObj.getSearchFieldsObj().getSearchFor().contains("\\")) {
-          searchCriteriaObj.getSearchFieldsObj().setSearchFor(
-                  searchCriteriaObj.getSearchFieldsObj().getSearchFor().replace("\\", "\\\\\\\\"));
-        }
-        Path<String> pathUsername = root.get("username");
-        Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        Path<String> pathEmail = root.get("email");
-        Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
-        criteriaQuery.where(predicateSearch);
+    if (paginationCriteria.getSearchFor() != null) {
+      if (paginationCriteria.getSearchFor().contains("\\")) {
+        paginationCriteria.setSearchFor(
+                paginationCriteria.getSearchFor().replace("\\", "\\\\\\\\"));
       }
+      Path<String> pathUsername = root.get("username");
+      Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + paginationCriteria.getSearchFor() + "%");
+      Path<String> pathEmail = root.get("email");
+      Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + paginationCriteria.getSearchFor() + "%");
+      Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
+      criteriaQuery.where(predicateSearch);
     }
 
     // Condition for sorting.
     Order order;
-    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
-      if (searchCriteriaObj.getSortType() == 2) {
-        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
+    if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
+      if (paginationCriteria.getSortType() == 2) {
+        order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
       } else {
-        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
+        order = criteriaBuilder.asc(root.get(paginationCriteria.getSortField()));
       }
     } else {
       order = criteriaBuilder.desc(root.get("id"));
@@ -164,7 +160,7 @@ public class UserDaoImpl implements UserDao {
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
     Join<CompanyBO, UserDetailBO> lineJoin2 = root2.join("userDetails");
-    Predicate predicateIds2 = root2.get("id").in(searchCriteriaObj.getSearchFieldsObj().getIds());
+    Predicate predicateIds2 = root2.get("id").in(paginationCriteria.getIds());
     Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
     criteriaQuery2.where(criteriaBuilder.and(predicateIds2, predicateDelete2));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.countDistinct(lineJoin2));
@@ -172,7 +168,7 @@ public class UserDaoImpl implements UserDao {
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
     int size = count.intValue();
-    int limit = searchCriteriaObj.getLimit();
+    int limit = paginationCriteria.getLimit();
     if (limit != 0) {
       commonListTO.setPageCount((size + limit - 1) / limit);
     } else {
@@ -181,9 +177,9 @@ public class UserDaoImpl implements UserDao {
 
     TypedQuery<CompanyBO> typedQuery = entityManager.createQuery(criteriaQuery);
     // Condition for paging.
-    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
-      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
-      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
+    if (paginationCriteria.getPage() != 0 && paginationCriteria.getLimit() > 0) {
+      typedQuery.setFirstResult((paginationCriteria.getPage() - 1) * paginationCriteria.getLimit());
+      typedQuery.setMaxResults(paginationCriteria.getLimit());
     }
     List<?> list = typedQuery.getResultList();
     commonListTO.setDataListUnknownType(list);

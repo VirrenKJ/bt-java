@@ -1,6 +1,6 @@
 package com.bug.tracker.user.controller;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.master.dto.ResponseTO;
@@ -58,8 +58,8 @@ public class UserController {
   }
 
   @PostMapping("/list")
-  public ResponseEntity<?> getUserList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    SearchResponseTO searchResponseTO = userService.getUserList(searchCriteriaObj);
+  public ResponseEntity<?> getUserList(@RequestBody PaginationCriteria paginationCriteria) {
+    SearchResponseTO searchResponseTO = userService.getUserList(paginationCriteria);
     if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);
@@ -69,8 +69,8 @@ public class UserController {
   }
 
   @PostMapping("/employee-list")
-  public ResponseEntity<?> getEmployeeList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    SearchResponseTO searchResponseTO = userService.getEmployeeList(searchCriteriaObj);
+  public ResponseEntity<?> getEmployeeList(@RequestBody PaginationCriteria paginationCriteria) {
+    SearchResponseTO searchResponseTO = userService.getEmployeeList(paginationCriteria);
     if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/employee-list", "user", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);

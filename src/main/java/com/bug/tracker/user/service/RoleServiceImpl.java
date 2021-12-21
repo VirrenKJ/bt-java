@@ -1,7 +1,7 @@
 package com.bug.tracker.user.service;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.user.dao.RoleDao;
 import com.bug.tracker.user.dto.RoleTO;
@@ -36,8 +36,8 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
-  public List<RoleTO> getRoleList(SearchCriteriaObj searchCriteriaObj) {
-    CommonListTO<RoleBO> commonListTO = roleDao.getRoleList(searchCriteriaObj);
+  public List<RoleTO> getRoleList(PaginationCriteria paginationCriteria) {
+    CommonListTO<RoleBO> commonListTO = roleDao.getRoleList(paginationCriteria);
     List<RoleBO> roleBOS = commonListTO.getDataList();
     List<RoleTO> roleTOS = modelConvertorService.map(roleBOS, RoleTO.class);
     return roleTOS;

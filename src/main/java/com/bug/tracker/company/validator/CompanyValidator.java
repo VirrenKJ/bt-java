@@ -1,6 +1,6 @@
 package com.bug.tracker.company.validator;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.company.dto.CompanyTO;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -13,7 +13,7 @@ public class CompanyValidator implements Validator {
   public boolean supports(Class<?> aClass) {
     boolean support = CompanyTO.class.equals(aClass);
     if (!support) {
-      support = SearchCriteriaObj.class.equals(aClass);
+      support = PaginationCriteria.class.equals(aClass);
     }
     return support;
   }

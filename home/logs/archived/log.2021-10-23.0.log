@@ -2465,7 +2465,7 @@ Unconditional classes:
 2021-10-23PM 19:59:52 - POST "/role/list", parameters={}
 2021-10-23PM 19:59:52 - Mapped to com.bug.tracker.user.controller.RoleController#getList(SearchCriteriaObj)
 2021-10-23PM 19:59:52 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2021-10-23PM 19:59:52 - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public org.springframework.http.ResponseEntity<?> com.bug.tracker.user.controller.RoleController.getList(com.bug.tracker.common.object.SearchCriteriaObj)]
+2021-10-23PM 19:59:52 - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public org.springframework.http.ResponseEntity<?> com.bug.tracker.user.controller.RoleController.getList(com.bug.tracker.common.object.PaginationCriteria)]
 2021-10-23PM 19:59:52 - Closing JPA EntityManager in OpenEntityManagerInViewInterceptor
 2021-10-23PM 19:59:52 - Completed 400 BAD_REQUEST
 2021-10-23PM 19:59:52 - Cleared SecurityContextHolder to complete request

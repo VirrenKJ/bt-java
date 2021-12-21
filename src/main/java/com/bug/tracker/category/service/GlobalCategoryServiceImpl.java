@@ -4,7 +4,7 @@ import com.bug.tracker.category.dao.GlobalCategoryDao;
 import com.bug.tracker.category.dto.GlobalCategoryTO;
 import com.bug.tracker.category.entity.GlobalCategoryBO;
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +37,9 @@ public class GlobalCategoryServiceImpl implements GlobalCategoryService {
 
   @Override
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
-  public SearchResponseTO getGlobalCategoryList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getGlobalCategoryList(PaginationCriteria paginationCriteria) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<GlobalCategoryBO> commonListTO = globalCategoryDao.getGlobalCategoryList(searchCriteriaObj);
+    CommonListTO<GlobalCategoryBO> commonListTO = globalCategoryDao.getGlobalCategoryList(paginationCriteria);
 
     List<GlobalCategoryBO> globalCategoryBOs = commonListTO.getDataList();
     List<GlobalCategoryTO> globalCategoryTOs = modelConvertorService.map(globalCategoryBOs, GlobalCategoryTO.class);

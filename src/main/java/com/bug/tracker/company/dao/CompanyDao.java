@@ -1,7 +1,7 @@
 package com.bug.tracker.company.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.company.entity.CompanyBO;
 import com.bug.tracker.company.entity.CompanyCustomBO;
 
@@ -15,7 +15,7 @@ public interface CompanyDao {
 
   CompanyCustomBO copyCompanyToTenant(CompanyCustomBO companyBO);
 
-  CommonListTO<CompanyBO> getList(SearchCriteriaObj searchCriteriaObj);
+  CommonListTO<CompanyBO> getList(PaginationCriteria paginationCriteria);
 
   CompanyBO getById(Integer id);
 

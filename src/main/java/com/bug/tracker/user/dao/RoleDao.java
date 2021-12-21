@@ -1,7 +1,7 @@
 package com.bug.tracker.user.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.user.entity.RoleBO;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public interface RoleDao {
 
     RoleBO updateRole(RoleBO roleBO);
 
-    CommonListTO<RoleBO> getRoleList(SearchCriteriaObj searchCriteriaObj);
+    CommonListTO<RoleBO> getRoleList(PaginationCriteria paginationCriteria);
 
     RoleBO getRoleById(Integer id);
 

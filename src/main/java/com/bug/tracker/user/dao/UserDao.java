@@ -1,7 +1,7 @@
 package com.bug.tracker.user.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.user.entity.UserBO;
 import com.bug.tracker.user.entity.UserBasicBO;
 import com.bug.tracker.user.entity.UserDetailBO;
@@ -16,9 +16,9 @@ public interface UserDao {
 
   UserBO updateUser(UserBO userBO);
 
-  CommonListTO<UserBO> getUserList(SearchCriteriaObj searchCriteriaObj);
+  CommonListTO<UserBO> getUserList(PaginationCriteria paginationCriteria);
 
-  CommonListTO<UserDetailBO> getEmployeeList(SearchCriteriaObj searchCriteriaObj);
+  CommonListTO<UserDetailBO> getEmployeeList(PaginationCriteria paginationCriteria);
 
   UserBO getUserById(Integer id);
 

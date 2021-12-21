@@ -6,11 +6,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
 @ToString
-public class SearchCriteriaObj implements Serializable {
+public class PaginationCriteria implements Serializable {
 
   private static final long serialVersionUID = 9080407426651168569L;
 
@@ -26,6 +27,10 @@ public class SearchCriteriaObj implements Serializable {
 
   private String sortField;
 
-  private SearchFieldsObj searchFieldsObj = null;
+  private String searchFor;
+
+  private Integer id;
+
+  private List<Integer> ids;
 
 }

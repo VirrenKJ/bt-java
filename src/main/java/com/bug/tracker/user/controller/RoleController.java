@@ -1,6 +1,6 @@
 package com.bug.tracker.user.controller;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.master.dto.ResponseTO;
 import com.bug.tracker.user.dto.RoleTO;
@@ -57,8 +57,8 @@ public class RoleController {
   }
 
   @PostMapping("/list")
-  public ResponseEntity<?> getRoleList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    List<RoleTO> roleTOS = roleService.getRoleList(searchCriteriaObj);
+  public ResponseEntity<?> getRoleList(@RequestBody PaginationCriteria paginationCriteria) {
+    List<RoleTO> roleTOS = roleService.getRoleList(paginationCriteria);
     if (roleTOS == null || roleTOS.isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/role", "role", roleTOS);
       return new ResponseEntity<>(response, HttpStatus.OK);

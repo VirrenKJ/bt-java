@@ -1,6 +1,6 @@
 package com.bug.tracker.user.validator;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.user.controller.RoleController;
 import com.bug.tracker.user.dto.RoleTO;
 import org.springframework.validation.Errors;
@@ -13,7 +13,7 @@ public class RoleValidator implements Validator {
     public boolean supports(Class<?> aClass) {
         boolean support = RoleTO.class.equals(aClass);
         if (!support) {
-            support = SearchCriteriaObj.class.equals(aClass);
+            support = PaginationCriteria.class.equals(aClass);
         }
         return support;
     }

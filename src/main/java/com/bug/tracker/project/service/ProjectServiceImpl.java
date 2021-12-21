@@ -1,7 +1,7 @@
 package com.bug.tracker.project.service;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.project.dao.ProjectDao;
@@ -37,9 +37,9 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
-  public SearchResponseTO getProjectList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getProjectList(PaginationCriteria paginationCriteria) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<ProjectBO> commonListTO = projectDao.getProjectList(searchCriteriaObj);
+    CommonListTO<ProjectBO> commonListTO = projectDao.getProjectList(paginationCriteria);
     
     List<ProjectBO> projectBOS = commonListTO.getDataList();
     List<ProjectTO> projectTOS = modelConvertorService.map(projectBOS, ProjectTO.class);

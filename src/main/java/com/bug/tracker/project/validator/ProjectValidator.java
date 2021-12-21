@@ -1,7 +1,7 @@
 package com.bug.tracker.project.validator;
 
 import com.bug.tracker.category.dto.GlobalCategoryTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.project.controller.ProjectController;
 import com.bug.tracker.project.dto.ProjectTO;
 import org.springframework.validation.Errors;
@@ -15,7 +15,7 @@ public class ProjectValidator implements Validator {
   public boolean supports(Class<?> aClass) {
     boolean support = GlobalCategoryTO.class.equals(aClass);
     if (!support) {
-      support = SearchCriteriaObj.class.equals(aClass);
+      support = PaginationCriteria.class.equals(aClass);
     }
     return support;
   }

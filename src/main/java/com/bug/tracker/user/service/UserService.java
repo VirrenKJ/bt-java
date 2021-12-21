@@ -1,6 +1,6 @@
 package com.bug.tracker.user.service;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.user.dto.UserTO;
 
@@ -12,9 +12,9 @@ public interface UserService {
 
   UserTO updateUser(UserTO userTO);
 
-  SearchResponseTO getUserList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getUserList(PaginationCriteria paginationCriteria);
 
-  SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getEmployeeList(PaginationCriteria paginationCriteria);
 
   UserTO getUserById(Integer id);
 

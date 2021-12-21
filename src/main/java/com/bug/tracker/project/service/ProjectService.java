@@ -1,6 +1,6 @@
 package com.bug.tracker.project.service;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.project.dto.ProjectTO;
 
@@ -12,7 +12,7 @@ public interface ProjectService {
 
   ProjectTO updateProject(ProjectTO projectTO);
 
-  SearchResponseTO getProjectList(SearchCriteriaObj searchCriteriaObj);
+  SearchResponseTO getProjectList(PaginationCriteria paginationCriteria);
 
   ProjectTO getProjectId(Integer id);
 

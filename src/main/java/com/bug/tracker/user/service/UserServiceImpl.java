@@ -1,7 +1,7 @@
 package com.bug.tracker.user.service;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchFieldsObj;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
@@ -51,9 +51,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
-  public SearchResponseTO getUserList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getUserList(PaginationCriteria paginationCriteria) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<UserBO> commonListTO = userDao.getUserList(searchCriteriaObj);
+    CommonListTO<UserBO> commonListTO = userDao.getUserList(paginationCriteria);
     List<UserTO> userTOS = modelConvertorService.map(commonListTO.getDataList(), UserTO.class);
 
     searchResponseTO.setList(userTOS);
@@ -64,17 +64,16 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
-  public SearchResponseTO getEmployeeList(SearchCriteriaObj searchCriteriaObj) {
-    SearchCriteriaObj searchCriteriaObjCompany = new SearchCriteriaObj();
-    searchCriteriaObjCompany.setSearchFieldsObj(new SearchFieldsObj());
-    searchCriteriaObjCompany.getSearchFieldsObj().setId(searchCriteriaObj.getSearchFieldsObj().getId());
-    SearchResponseTO searchResponseTOCompany = companyService.getList(searchCriteriaObjCompany);
+  public SearchResponseTO getEmployeeList(PaginationCriteria paginationCriteria) {
+    PaginationCriteria paginationCriteriaCompany = new PaginationCriteria();
+    paginationCriteriaCompany.setId(paginationCriteria.getId());
+    SearchResponseTO searchResponseTOCompany = companyService.getList(paginationCriteriaCompany);
     List<CompanyTO> companyTOS = (List<CompanyTO>) searchResponseTOCompany.getList();
-    searchCriteriaObj.getSearchFieldsObj().setIds(new ArrayList<>());
-    companyTOS.forEach(company -> searchCriteriaObj.getSearchFieldsObj().getIds().add(company.getId()));
+    paginationCriteria.setIds(new ArrayList<>());
+    companyTOS.forEach(company -> paginationCriteria.getIds().add(company.getId()));
 
     SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<UserDetailBO> commonListTO = userDao.getEmployeeList(searchCriteriaObj);
+    CommonListTO<UserDetailBO> commonListTO = userDao.getEmployeeList(paginationCriteria);
     List<UserDetailTO> userDetailTOS = modelConvertorService.map(commonListTO.getDataListUnknownType(), UserDetailTO.class);
 
     searchResponseTO.setList(userDetailTOS);

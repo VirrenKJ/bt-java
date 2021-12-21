@@ -1,6 +1,6 @@
 package com.bug.tracker.user.validator;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.APP_MSG;
 import com.bug.tracker.user.controller.UserController;
 import com.bug.tracker.user.dto.UserTO;
@@ -22,7 +22,7 @@ public class UserValidator implements Validator {
     public boolean supports(Class<?> aClass) {
         boolean support = UserTO.class.equals(aClass);
         if (!support) {
-            support = SearchCriteriaObj.class.equals(aClass);
+            support = PaginationCriteria.class.equals(aClass);
         }
         return support;
     }

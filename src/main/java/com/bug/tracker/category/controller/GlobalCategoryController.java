@@ -2,7 +2,7 @@ package com.bug.tracker.category.controller;
 
 import com.bug.tracker.category.dto.GlobalCategoryTO;
 import com.bug.tracker.category.service.GlobalCategoryService;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.master.dto.ResponseTO;
@@ -57,8 +57,8 @@ public class GlobalCategoryController {
   }
 
   @PostMapping("/list")
-  public ResponseEntity<?> getGlobalCategoryList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    SearchResponseTO searchResponseTO = globalCategoryService.getGlobalCategoryList(searchCriteriaObj);
+  public ResponseEntity<?> getGlobalCategoryList(@RequestBody PaginationCriteria paginationCriteria) {
+    SearchResponseTO searchResponseTO = globalCategoryService.getGlobalCategoryList(paginationCriteria);
     if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/category", "globalCategory", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);

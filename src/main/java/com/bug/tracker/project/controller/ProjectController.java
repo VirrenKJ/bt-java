@@ -1,6 +1,6 @@
 package com.bug.tracker.project.controller;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.master.dto.ResponseTO;
@@ -57,8 +57,8 @@ public class ProjectController {
   }
 
   @PostMapping("/list")
-  public ResponseEntity<?> getProjectList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    SearchResponseTO searchResponseTO = projectService.getProjectList(searchCriteriaObj);
+  public ResponseEntity<?> getProjectList(@RequestBody PaginationCriteria paginationCriteria) {
+    SearchResponseTO searchResponseTO = projectService.getProjectList(paginationCriteria);
     if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/project", "project", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);

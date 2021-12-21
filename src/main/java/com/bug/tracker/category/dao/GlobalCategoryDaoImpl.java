@@ -2,7 +2,7 @@ package com.bug.tracker.category.dao;
 
 import com.bug.tracker.category.entity.GlobalCategoryBO;
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -38,28 +38,26 @@ public class GlobalCategoryDaoImpl implements GlobalCategoryDao {
   }
 
   @Override
-  public CommonListTO<GlobalCategoryBO> getGlobalCategoryList(SearchCriteriaObj searchCriteriaObj) {
+  public CommonListTO<GlobalCategoryBO> getGlobalCategoryList(PaginationCriteria paginationCriteria) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<GlobalCategoryBO> criteriaQuery = criteriaBuilder.createQuery(GlobalCategoryBO.class);
     Root<GlobalCategoryBO> root = criteriaQuery.from(GlobalCategoryBO.class);
     criteriaQuery.where(criteriaBuilder.equal(root.get("deleteFlag"), false));
 
     //condition for search
-    if (searchCriteriaObj.getSearchFieldsObj() != null) {
-      if (searchCriteriaObj.getSearchFieldsObj().getSearchFor() != null) {
-        Path<String> pathName = root.get("name");
-        Predicate predicateForName = criteriaBuilder.like(pathName, "%" + searchCriteriaObj.getSearchFieldsObj().getSearchFor() + "%");
-        criteriaQuery.where(predicateForName);
-      }
+    if (paginationCriteria.getSearchFor() != null) {
+      Path<String> pathName = root.get("name");
+      Predicate predicateForName = criteriaBuilder.like(pathName, "%" + paginationCriteria.getSearchFor() + "%");
+      criteriaQuery.where(predicateForName);
     }
 
     // Condition for sorting.
-    if (searchCriteriaObj.getSortField() != null && !searchCriteriaObj.getSortField().isEmpty()) {
+    if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
       Order order = null;
-      if (searchCriteriaObj.getSortType() == 2) {
-        order = criteriaBuilder.desc(root.get(searchCriteriaObj.getSortField()));
+      if (paginationCriteria.getSortType() == 2) {
+        order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
       } else {
-        order = criteriaBuilder.asc(root.get(searchCriteriaObj.getSortField()));
+        order = criteriaBuilder.asc(root.get(paginationCriteria.getSortField()));
       }
       criteriaQuery.orderBy(order);
     } else {
@@ -76,7 +74,7 @@ public class GlobalCategoryDaoImpl implements GlobalCategoryDao {
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
     int size = count.intValue();
-    int limit = searchCriteriaObj.getLimit();
+    int limit = paginationCriteria.getLimit();
     if (limit != 0) {
       commonListTO.setPageCount(((size + limit - 1) / limit));
     } else {
@@ -85,9 +83,9 @@ public class GlobalCategoryDaoImpl implements GlobalCategoryDao {
 
     TypedQuery<GlobalCategoryBO> typedQuery = entityManager.createQuery(criteriaQuery);
     // Condition for paging.
-    if (searchCriteriaObj.getPage() != 0 && searchCriteriaObj.getLimit() > 0) {
-      typedQuery.setFirstResult((searchCriteriaObj.getPage() - 1) * searchCriteriaObj.getLimit());
-      typedQuery.setMaxResults(searchCriteriaObj.getLimit());
+    if (paginationCriteria.getPage() != 0 && paginationCriteria.getLimit() > 0) {
+      typedQuery.setFirstResult((paginationCriteria.getPage() - 1) * paginationCriteria.getLimit());
+      typedQuery.setMaxResults(paginationCriteria.getLimit());
     }
     commonListTO.setDataList(typedQuery.getResultList());
     return commonListTO;

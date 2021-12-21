@@ -1,7 +1,7 @@
 package com.bug.tracker.company.service;
 
 import com.bug.tracker.common.object.CommonListTO;
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.company.dao.CompanyDao;
@@ -115,9 +115,9 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Override
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
-  public SearchResponseTO getList(SearchCriteriaObj searchCriteriaObj) {
+  public SearchResponseTO getList(PaginationCriteria paginationCriteria) {
     SearchResponseTO searchResponseTO = new SearchResponseTO();
-    CommonListTO<CompanyBO> commonListTO = companyDao.getList(searchCriteriaObj);
+    CommonListTO<CompanyBO> commonListTO = companyDao.getList(paginationCriteria);
 
     List<CompanyBO> companyBOS = commonListTO.getDataList();
     List<CompanyTO> companyTOS = modelConvertorService.map(companyBOS, CompanyTO.class);

@@ -1,6 +1,6 @@
 package com.bug.tracker.company.controller;
 
-import com.bug.tracker.common.object.SearchCriteriaObj;
+import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.company.dto.CompanyTO;
@@ -70,8 +70,8 @@ public class CompanyController {
   }
 
   @PostMapping("/list")
-  public ResponseEntity<?> getList(@RequestBody SearchCriteriaObj searchCriteriaObj) {
-    SearchResponseTO searchResponseTO = companyService.getList(searchCriteriaObj);
+  public ResponseEntity<?> getList(@RequestBody PaginationCriteria paginationCriteria) {
+    SearchResponseTO searchResponseTO = companyService.getList(paginationCriteria);
     if (searchResponseTO.getList() == null || searchResponseTO.getList().isEmpty()) {
       response = ResponseTO.responseBuilder(200, "BT006", "/company", "company", searchResponseTO);
       return new ResponseEntity<>(response, HttpStatus.OK);
