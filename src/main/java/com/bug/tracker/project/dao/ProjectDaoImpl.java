@@ -53,7 +53,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
     // Condition for sorting.
     if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
-      Order order = null;
+      Order order;
       if (paginationCriteria.getSortType() == 2) {
         order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
       } else {
