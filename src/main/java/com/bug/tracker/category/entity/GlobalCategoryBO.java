@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -13,20 +12,20 @@ import java.io.Serializable;
 @Table(name = "global_category")
 public class GlobalCategoryBO extends Audit {
 
-    private static final long serialVersionUID = -5803214131709345860L;
+  private static final long serialVersionUID = -5803214131709345860L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Integer id;
 
-    @Column(name = "name")
-    private String name;
+  @Column(name = "name")
+  private String name;
 
-    @Column(name = "assigned_id")
-    private Integer assignedId;
+  @Column(name = "assigned_id")
+  private Integer assignedId;
 
-    @Column(name = "delete_flag")
-    private boolean deleteFlag;
+  @Column(name = "delete_flag")
+  private boolean deleteFlag;
 
 }
