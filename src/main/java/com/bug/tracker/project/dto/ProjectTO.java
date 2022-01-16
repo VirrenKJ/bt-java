@@ -10,9 +10,9 @@ public class ProjectTO extends AuditTO {
 
   private Integer id;
   private String name;
-  private Integer statusId;
+  private String status;
   private boolean inheritCategoryFlag;
-  private Integer viewStatusId;
+  private String viewStatus;
   private String description;
   private boolean deleteFlag;
 }

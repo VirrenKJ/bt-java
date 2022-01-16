@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
-  `global_categories` tinyint(1) NOT NULL,
+  `inherit_category_flag` tinyint(1) NOT NULL DEFAULT '0',
   `view_status` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `delete_flag` tinyint(1) NOT NULL DEFAULT '0',

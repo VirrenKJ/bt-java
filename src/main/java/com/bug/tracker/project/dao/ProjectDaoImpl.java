@@ -87,7 +87,13 @@ public class ProjectDaoImpl implements ProjectDao {
       typedQuery.setFirstResult((paginationCriteria.getPage() - 1) * paginationCriteria.getLimit());
       typedQuery.setMaxResults(paginationCriteria.getLimit());
     }
-    commonListTO.setDataList(typedQuery.getResultList());
+    List<ProjectBO> list = null;
+    try {
+      list = typedQuery.getResultList();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    commonListTO.setDataList(list);
     return commonListTO;
   }
 

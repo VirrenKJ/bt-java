@@ -22,14 +22,14 @@ public class ProjectBO extends Audit {
   @Column(name = "name")
   private String name;
 
-  @Column(name = "status_id")
-  private Integer statusId;
+  @Column(name = "status")
+  private String status;
 
   @Column(name = "inherit_category_flag")
   private boolean inheritCategoryFlag;
 
-  @Column(name = "view_status_id")
-  private Integer viewStatusId;
+  @Column(name = "view_status")
+  private String viewStatus;
 
   @Column(name = "description")
   private String description;
