@@ -7,6 +7,7 @@ import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.service.ModelConvertorService;
+import com.bug.tracker.project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class GlobalCategoryServiceImpl implements GlobalCategoryService {
 
   @Autowired
   private GlobalCategoryDao globalCategoryDao;
+
+  @Autowired
+  private ProjectService projectService;
 
   @Autowired
   private ModelConvertorService modelConvertorService;
@@ -44,6 +48,11 @@ public class GlobalCategoryServiceImpl implements GlobalCategoryService {
     List<GlobalCategoryBO> globalCategoryBOs = commonListTO.getDataList();
     List<GlobalCategoryTO> globalCategoryTOs = modelConvertorService.map(globalCategoryBOs, GlobalCategoryTO.class);
 
+    if (globalCategoryTOs != null && !globalCategoryBOs.isEmpty()) {
+      for (GlobalCategoryTO globalCategoryTO : globalCategoryTOs) {
+        globalCategoryTO.setAssignedName(projectService.getProjectId(globalCategoryTO.getAssignedId()).getName());
+      }
+    }
     searchResponseTO.setList(globalCategoryTOs);
     searchResponseTO.setPageCount(commonListTO.getPageCount());
     searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
