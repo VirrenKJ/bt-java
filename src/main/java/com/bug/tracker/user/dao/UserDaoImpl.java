@@ -187,6 +187,80 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
+  public CommonListTO<UserDetailBO> getEmployeeListByCompany(PaginationCriteria paginationCriteria) {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<UserDetailBO> criteriaQuery = criteriaBuilder.createQuery(UserDetailBO.class);
+    Root<UserDetailBO> root = criteriaQuery.from(UserDetailBO.class);
+    
+    Join<UserDetailBO, CompanyBO> lineJoin = root.join("companies");
+    Predicate predicateCompany = criteriaBuilder.equal(lineJoin.get("id"), paginationCriteria.getId());
+    Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
+    Predicate predicate = criteriaBuilder.and(predicateCompany, predicateDelete);
+    criteriaQuery.where(predicate);
+
+    //condition for search
+    if (paginationCriteria.getSearchFor() != null) {
+      if (paginationCriteria.getSearchFor().contains("\\")) {
+        paginationCriteria.setSearchFor(
+                paginationCriteria.getSearchFor().replace("\\", "\\\\\\\\"));
+      }
+      Path<String> pathUsername = root.get("username");
+      Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + paginationCriteria.getSearchFor() + "%");
+      Path<String> pathEmail = root.get("email");
+      Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + paginationCriteria.getSearchFor() + "%");
+      Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
+      criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate));
+      if (paginationCriteria.getId() != null) {
+        Predicate predicateId = criteriaBuilder.notEqual(root.get("id"), paginationCriteria.getId());
+        criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate, predicateId));
+      }
+    }
+
+    // Condition for sorting.
+    Order order;
+    if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
+      if (paginationCriteria.getSortType() == 2) {
+        order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
+      } else {
+        order = criteriaBuilder.asc(root.get(paginationCriteria.getSortField()));
+      }
+    } else {
+      order = criteriaBuilder.desc(root.get("id"));
+    }
+    criteriaQuery.orderBy(order);
+
+    // Adding Pagination total Count
+    CommonListTO<UserDetailBO> commonListTO = new CommonListTO<>();
+    CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
+    Root<UserDetailBO> root2 = criteriaQuery2.from(UserDetailBO.class);
+
+    Join<UserDetailBO, CompanyBO> lineJoin2 = root2.join("companies");
+    Predicate predicateCompany2 = criteriaBuilder.equal(lineJoin2.get("id"), paginationCriteria.getId());
+    Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
+    criteriaQuery2.where(criteriaBuilder.and(predicateCompany2, predicateDelete2));
+
+    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
+    Long count = entityManager.createQuery(select).getSingleResult();
+    commonListTO.setTotalRow(count);
+    int size = count.intValue();
+    int limit = paginationCriteria.getLimit();
+    if (limit != 0) {
+      commonListTO.setPageCount((size + limit - 1) / limit);
+    } else {
+      commonListTO.setPageCount(1);
+    }
+
+    TypedQuery<UserDetailBO> typedQuery = entityManager.createQuery(criteriaQuery);
+    // Condition for paging.
+    if (paginationCriteria.getPage() != 0 && paginationCriteria.getLimit() > 0) {
+      typedQuery.setFirstResult((paginationCriteria.getPage() - 1) * paginationCriteria.getLimit());
+      typedQuery.setMaxResults(paginationCriteria.getLimit());
+    }
+    commonListTO.setDataList(typedQuery.getResultList());
+    return commonListTO;
+  }
+
+  @Override
   public UserBO getUserById(Integer id) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
@@ -206,7 +280,7 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public UserBO getUserByUsername(String username) throws Exception {
+  public UserBO getUserByUsername(String username) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
 

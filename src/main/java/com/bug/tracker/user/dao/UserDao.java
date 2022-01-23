@@ -20,6 +20,8 @@ public interface UserDao {
 
   CommonListTO<UserDetailBO> getEmployeeList(PaginationCriteria paginationCriteria);
 
+  CommonListTO<UserDetailBO> getEmployeeListByCompany(PaginationCriteria paginationCriteria);
+
   UserBO getUserById(Integer id);
 
   UserBO getUserByUsername(String username) throws Exception;
