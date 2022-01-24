@@ -16,6 +16,8 @@ public interface UserService {
 
   SearchResponseTO getEmployeeList(PaginationCriteria paginationCriteria);
 
+  SearchResponseTO getEmployeeListByCompany(PaginationCriteria paginationCriteria);
+
   UserTO getUserById(Integer id);
 
   UserTO getUserByUsername(String username) throws Exception;

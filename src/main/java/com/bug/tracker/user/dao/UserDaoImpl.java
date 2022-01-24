@@ -159,10 +159,12 @@ public class UserDaoImpl implements UserDao {
     CommonListTO<UserDetailBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
+
     Join<CompanyBO, UserDetailBO> lineJoin2 = root2.join("userDetails");
     Predicate predicateIds2 = root2.get("id").in(paginationCriteria.getIds());
     Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
     criteriaQuery2.where(criteriaBuilder.and(predicateIds2, predicateDelete2));
+
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.countDistinct(lineJoin2));
 //    select.distinct(true);
     Long count = entityManager.createQuery(select).getSingleResult();
@@ -191,7 +193,7 @@ public class UserDaoImpl implements UserDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserDetailBO> criteriaQuery = criteriaBuilder.createQuery(UserDetailBO.class);
     Root<UserDetailBO> root = criteriaQuery.from(UserDetailBO.class);
-    
+
     Join<UserDetailBO, CompanyBO> lineJoin = root.join("companies");
     Predicate predicateCompany = criteriaBuilder.equal(lineJoin.get("id"), paginationCriteria.getId());
     Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
@@ -232,14 +234,14 @@ public class UserDaoImpl implements UserDao {
     // Adding Pagination total Count
     CommonListTO<UserDetailBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
-    Root<UserDetailBO> root2 = criteriaQuery2.from(UserDetailBO.class);
+    Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
 
-    Join<UserDetailBO, CompanyBO> lineJoin2 = root2.join("companies");
-    Predicate predicateCompany2 = criteriaBuilder.equal(lineJoin2.get("id"), paginationCriteria.getId());
+    Join<CompanyBO, UserDetailBO> lineJoin2 = root2.join("userDetails");
+    Predicate predicateCompany2 = criteriaBuilder.equal(root2.get("id"), paginationCriteria.getId());
     Predicate predicateDelete2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
     criteriaQuery2.where(criteriaBuilder.and(predicateCompany2, predicateDelete2));
 
-    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
+    CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.countDistinct(lineJoin2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
     int size = count.intValue();
@@ -256,7 +258,13 @@ public class UserDaoImpl implements UserDao {
       typedQuery.setFirstResult((paginationCriteria.getPage() - 1) * paginationCriteria.getLimit());
       typedQuery.setMaxResults(paginationCriteria.getLimit());
     }
-    commonListTO.setDataList(typedQuery.getResultList());
+    List<UserDetailBO> list = null;
+    try {
+      list = typedQuery.getResultList();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    commonListTO.setDataList(list);
     return commonListTO;
   }
 

@@ -83,6 +83,19 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
+  public SearchResponseTO getEmployeeListByCompany(PaginationCriteria paginationCriteria) {
+    SearchResponseTO searchResponseTO = new SearchResponseTO();
+    CommonListTO<UserDetailBO> commonListTO = userDao.getEmployeeListByCompany(paginationCriteria);
+    List<UserDetailTO> userDetailTOS = modelConvertorService.map(commonListTO.getDataListUnknownType(), UserDetailTO.class);
+
+    searchResponseTO.setList(userDetailTOS);
+    searchResponseTO.setPageCount(commonListTO.getPageCount());
+    searchResponseTO.setTotalRowCount(commonListTO.getTotalRow().intValue());
+    return searchResponseTO;
+  }
+
+  @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public UserTO getUserById(Integer id) {
     UserTO userTO = modelConvertorService.map(userDao.getUserById(id), UserTO.class);
     return userTO;
