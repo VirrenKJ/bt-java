@@ -83,7 +83,12 @@ public class CompanyDaoImpl implements CompanyDao {
     CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
-    criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
+    Predicate predicate2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
+    if (paginationCriteria.getId() != null) {
+      Predicate predicateId = criteriaBuilder.equal(root2.get("userId"), paginationCriteria.getId());
+      predicate2 = criteriaBuilder.and(predicate2, predicateId);
+    }
+    criteriaQuery2.where(predicate2);
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);

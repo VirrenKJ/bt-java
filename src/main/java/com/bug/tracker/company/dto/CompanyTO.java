@@ -2,6 +2,7 @@ package com.bug.tracker.company.dto;
 
 import com.bug.tracker.common.object.AuditTO;
 import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.user.entity.UserDetailBO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,5 +26,5 @@ public class CompanyTO extends AuditTO {
   private String city;
   private boolean deleteFlag;
   private CompanyDbDetailTO companyDbDetail;
-  private List<UserBO> users;
+  private List<UserDetailBO> userDetails;
 }
