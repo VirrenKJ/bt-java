@@ -7,9 +7,11 @@ import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.service.CompanyService;
 import com.bug.tracker.user.dao.UserDao;
+import com.bug.tracker.user.dto.UserBasicTO;
 import com.bug.tracker.user.dto.UserDetailTO;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.entity.UserBO;
+import com.bug.tracker.user.entity.UserBasicBO;
 import com.bug.tracker.user.entity.UserDetailBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,6 +42,12 @@ public class UserServiceImpl implements UserService {
     userTO.setPassword(passwordEncoder.encode(userTO.getPassword()));
     UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
     return modelConvertorService.map(userDao.addUser(userBO), UserTO.class);
+  }
+
+  @Override
+  public UserBasicTO copyUserToTenant(UserBasicTO userBasicTO) {
+    UserBasicBO userBasicBO = modelConvertorService.map(userBasicTO, UserBasicBO.class);
+    return modelConvertorService.map(userDao.copyUserToTenant(userBasicBO), UserBasicTO.class);
   }
 
   @Override

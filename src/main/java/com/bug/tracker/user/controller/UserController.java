@@ -4,6 +4,7 @@ import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.master.dto.ResponseTO;
+import com.bug.tracker.user.dto.UserBasicTO;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,17 @@ public class UserController {
     }
     UserTO userTO_return = userService.addUser(userTO);
     response = ResponseTO.responseBuilder(200, "BT001", "/user", "user", userTO_return);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @PostMapping("/copy-user")
+  public ResponseEntity<?> copyUserToTenant(@Valid @RequestBody UserBasicTO userBasicTO, Errors errors) {
+    if (errors.hasErrors()) {
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
+      return new ResponseEntity<>(validationError, HttpStatus.OK);
+    }
+    UserBasicTO userBasicTO_return = userService.copyUserToTenant(userBasicTO);
+    response = ResponseTO.responseBuilder(200, "BT001", "/user", "user", userBasicTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
