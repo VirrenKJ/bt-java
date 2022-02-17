@@ -13,6 +13,8 @@ public interface UserService {
 
   UserBasicTO copyUserToTenant(UserBasicTO userBasicTO);
 
+  UserBasicTO updateUserToTenant(UserBasicTO userBasicTO);
+
   UserTO updateUser(UserTO userTO);
 
   SearchResponseTO getUserList(PaginationCriteria paginationCriteria);

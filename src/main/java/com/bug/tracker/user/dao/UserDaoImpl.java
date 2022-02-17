@@ -41,6 +41,13 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
+  public UserBasicBO updateUserToTenant(UserBasicBO userBasicBO) {
+    entityManager.persist(userBasicBO);
+    logger.info("User has updated successfully, User details=" + userBasicBO);
+    return userBasicBO;
+  }
+
+  @Override
   public UserBO updateUser(UserBO userBO) {
     entityManager.merge(userBO);
     logger.info("User has updated successfully, User details=" + userBO);

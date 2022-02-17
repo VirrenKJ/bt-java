@@ -54,7 +54,18 @@ public class UserController {
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
     UserBasicTO userBasicTO_return = userService.copyUserToTenant(userBasicTO);
-    response = ResponseTO.responseBuilder(200, "BT001", "/user", "user", userBasicTO_return);
+    response = ResponseTO.responseBuilder(200, "BT001", "/copy-user", "user", userBasicTO_return);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @PostMapping("/update-user")
+  public ResponseEntity<?> updateUserToTenant(@Valid @RequestBody UserBasicTO userBasicTO, Errors errors) {
+    if (errors.hasErrors()) {
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
+      return new ResponseEntity<>(validationError, HttpStatus.OK);
+    }
+    UserBasicTO userBasicTO_return = userService.updateUserToTenant(userBasicTO);
+    response = ResponseTO.responseBuilder(200, "BT001", "/update-user", "user", userBasicTO_return);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 

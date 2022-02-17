@@ -51,6 +51,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public UserBasicTO updateUserToTenant(UserBasicTO userBasicTO) {
+    UserBasicBO userBasicBO = modelConvertorService.map(userBasicTO, UserBasicBO.class);
+    return modelConvertorService.map(userDao.updateUserToTenant(userBasicBO), UserBasicTO.class);
+  }
+
+  @Override
   public UserTO updateUser(UserTO userTO) {
     UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
     return modelConvertorService.map(userDao.updateUser(userBO), UserTO.class);

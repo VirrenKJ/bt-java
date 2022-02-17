@@ -14,6 +14,8 @@ public interface UserDao {
 
   UserBasicBO copyUserToTenant(UserBasicBO userBasicBO);
 
+  UserBasicBO updateUserToTenant(UserBasicBO userBasicBO);
+
   UserBO updateUser(UserBO userBO);
 
   CommonListTO<UserBO> getUserList(PaginationCriteria paginationCriteria);
