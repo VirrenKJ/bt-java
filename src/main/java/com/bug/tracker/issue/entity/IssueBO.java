@@ -25,14 +25,14 @@ public class IssueBO extends Audit {
   @Column(name = "category_id")
   private Integer categoryId;
 
-  @Column(name = "reproducibility_id")
-  private Integer reproducibilityId;
+  @Column(name = "reproducibility")
+  private String reproducibility;
 
-  @Column(name = "severity_id")
-  private Integer severityId;
+  @Column(name = "severity")
+  private String severity;
 
-  @Column(name = "priority_id")
-  private Integer priorityId;
+  @Column(name = "priority")
+  private String priority;
 
   @Column(name = "profile_id")
   private Integer profileId;

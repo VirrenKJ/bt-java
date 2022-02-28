@@ -11,9 +11,9 @@ public class IssueTO extends AuditTO {
   private Integer id;
   private Integer projectId;
   private Integer categoryId;
-  private Integer reproducibilityId;
-  private Integer severityId;
-  private Integer priorityId;
+  private String reproducibility;
+  private String severity;
+  private String priority;
   private Integer profileId;
   private Integer assignedId;
   private String summary;
