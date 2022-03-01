@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "project")
+@Table(name = "issue")
 public class IssueBO extends Audit {
 
   private static final long serialVersionUID = -4125598754816033077L;
