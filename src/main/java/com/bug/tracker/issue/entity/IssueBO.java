@@ -40,6 +40,9 @@ public class IssueBO extends Audit {
   @Column(name = "assigned_id")
   private Integer assignedId;
 
+  @Column(name = "reported_by_id")
+  private Integer reportedById;
+
   @Column(name = "summary")
   private String summary;
 

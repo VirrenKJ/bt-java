@@ -1,7 +1,5 @@
 package com.bug.tracker.user.entity;
 
-import com.bug.tracker.company.entity.CompanyBO;
-import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

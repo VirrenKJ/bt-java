@@ -46,7 +46,7 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Override
   public CompanyTO add(CompanyTO companyTO) throws SQLException {
-    companyTO.setDbName(companyTO.getName().toLowerCase().replace(" ", "_"));
+    companyTO.setDbName("bt_" + companyTO.getName().toLowerCase().replace(" ", "_"));
     companyTO.setDbUuid(UUID.randomUUID().toString());
     companyTO.setUserId(UserSessionContext.getCurrentTenant().getId());
     companyDbDetail(companyTO);

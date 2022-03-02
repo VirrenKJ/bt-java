@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `issue` (
   `priority` varchar(255) NOT NULL,
   `profile_id` int NOT NULL,
   `assigned_id` int NOT NULL,
+  `reported_by_id` int NOT NULL,
   `summary` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `steps_to_reproduce` text DEFAULT NULL,
