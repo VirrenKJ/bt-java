@@ -78,10 +78,10 @@ public class IssueServiceImpl implements IssueService {
           issue.setAssignedFirstName(userService.getUserById(issue.getAssignedId()).getFirstName());
           issue.setAssignedUsername(userService.getUserById(issue.getAssignedId()).getUsername());
         }
-//        if (issue.getReportedById() != null) {
-//          issue.setReportedByFirstName(userService.getUserById(issue.getReportedById()).getFirstName());
-//          issue.setReportedByUsername(userService.getUserById(issue.getReportedById()).getUsername());
-//        }
+        if (issue.getReportedById() != null) {
+          issue.setReportedByFirstName(userService.getUserById(issue.getReportedById()).getFirstName());
+          issue.setReportedByUsername(userService.getUserById(issue.getReportedById()).getUsername());
+        }
         issueTOS.add(issue);
       }
     }
