@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -42,7 +43,15 @@ public class IssueDaoImpl implements IssueDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<IssueBO> criteriaQuery = criteriaBuilder.createQuery(IssueBO.class);
     Root<IssueBO> root = criteriaQuery.from(IssueBO.class);
-    criteriaQuery.where(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    ArrayList<Predicate> predicates = new ArrayList<>();
+    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    if (paginationCriteria.getAssignedId() != null) {
+      predicates.add(criteriaBuilder.equal(root.get("assignedId"), paginationCriteria.getAssignedId()));
+    }
+    if (paginationCriteria.getReportedById() != null) {
+      predicates.add(criteriaBuilder.equal(root.get("reportedById"), paginationCriteria.getReportedById()));
+    }
+    criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
     //condition for search
     if (paginationCriteria.getSearchFor() != null) {
