@@ -21,5 +21,6 @@ public class APP_MSG {
     RESPONSE.put("BT007", "Invalid argument!");
     RESPONSE.put("BT001E", "Required Field!");
     RESPONSE.put("BT002E", "Must be unique!");
+    RESPONSE.put("BT003E", "Password Mismatch");
   }
 }

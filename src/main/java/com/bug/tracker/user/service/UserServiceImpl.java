@@ -7,6 +7,7 @@ import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.service.CompanyService;
 import com.bug.tracker.user.dao.UserDao;
+import com.bug.tracker.user.dto.PasswordResetTO;
 import com.bug.tracker.user.dto.UserBasicTO;
 import com.bug.tracker.user.dto.UserDetailTO;
 import com.bug.tracker.user.dto.UserTO;
@@ -60,6 +61,18 @@ public class UserServiceImpl implements UserService {
   public UserTO updateUser(UserTO userTO) {
     UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
     return modelConvertorService.map(userDao.updateUser(userBO), UserTO.class);
+  }
+
+  @Override
+  public boolean resetPassword(PasswordResetTO passwordResetTO) {
+    UserTO userTO = getUserById(passwordResetTO.getUserId());
+    if (passwordEncoder.matches(userTO.getPassword(), passwordResetTO.getOldPassword())) {
+      userTO.setPassword(passwordEncoder.encode(passwordResetTO.getNewPassword()));
+      updateUser(userTO);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
