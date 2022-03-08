@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public boolean resetPassword(PasswordResetTO passwordResetTO) {
     UserTO userTO = getUserById(passwordResetTO.getUserId());
-    if (passwordEncoder.matches(userTO.getPassword(), passwordResetTO.getOldPassword())) {
+    if (passwordEncoder.matches(passwordResetTO.getCurrentPassword(), userTO.getPassword())) {
       userTO.setPassword(passwordEncoder.encode(passwordResetTO.getNewPassword()));
       updateUser(userTO);
       return true;

@@ -8,7 +8,7 @@ import lombok.Setter;
 public class PasswordResetTO {
 
   private Integer userId;
-  private String oldPassword;
+  private String currentPassword;
   private String newPassword;
   private String confirmNewPassword;
 }
