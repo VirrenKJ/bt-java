@@ -16,6 +16,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -59,26 +60,7 @@ public class UserDaoImpl implements UserDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
     Root<UserBO> root = criteriaQuery.from(UserBO.class);
-    Predicate predicate = criteriaBuilder.equal(root.get("deleteFlag"), false);
-    criteriaQuery.where(predicate);
-
-    //condition for search
-    if (paginationCriteria.getSearchFor() != null) {
-      if (paginationCriteria.getSearchFor().contains("\\")) {
-        paginationCriteria.setSearchFor(
-                paginationCriteria.getSearchFor().replace("\\", "\\\\\\\\"));
-      }
-      Path<String> pathUsername = root.get("username");
-      Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + paginationCriteria.getSearchFor() + "%");
-      Path<String> pathEmail = root.get("email");
-      Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + paginationCriteria.getSearchFor() + "%");
-      Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
-      criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate));
-      if (paginationCriteria.getId() != null) {
-        Predicate predicateId = criteriaBuilder.notEqual(root.get("id"), paginationCriteria.getId());
-        criteriaQuery.where(criteriaBuilder.and(predicateSearch, predicate, predicateId));
-      }
-    }
+    criteriaQuery.where(searchPredicates(criteriaBuilder, root, paginationCriteria).toArray(new Predicate[0]));
 
     // Condition for sorting.
     Order order;
@@ -97,7 +79,7 @@ public class UserDaoImpl implements UserDao {
     CommonListTO<UserBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<UserBO> root2 = criteriaQuery2.from(UserBO.class);
-    criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
+    criteriaQuery2.where(searchPredicates(criteriaBuilder,root2,paginationCriteria).toArray(new Predicate[0]));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
@@ -119,6 +101,25 @@ public class UserDaoImpl implements UserDao {
     return commonListTO;
   }
 
+  private ArrayList<Predicate> searchPredicates(CriteriaBuilder criteriaBuilder, Root<UserBO> root, PaginationCriteria paginationCriteria) {
+    ArrayList<Predicate> predicates = new ArrayList<>();
+    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    if (paginationCriteria.getSearchFor() != null) {
+      if (paginationCriteria.getSearchFor().contains("\\")) {
+        paginationCriteria.setSearchFor(
+                paginationCriteria.getSearchFor().replace("\\", "\\\\\\\\"));
+      }
+      Predicate predicateUsername = criteriaBuilder.like(root.get("username"), "%" + paginationCriteria.getSearchFor() + "%");
+      Predicate predicateEmail = criteriaBuilder.like(root.get("email"), "%" + paginationCriteria.getSearchFor() + "%");
+      Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
+      predicates.add(predicateSearch);
+      if (paginationCriteria.getId() != null) {
+        predicates.add(criteriaBuilder.notEqual(root.get("id"), paginationCriteria.getId()));
+      }
+    }
+    return predicates;
+  }
+
   /*
   SELECT u.*, c.name
   FROM user as u JOIN company_employee as ce ON u.id = ce.user_id
@@ -131,9 +132,12 @@ public class UserDaoImpl implements UserDao {
     CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
     Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
     criteriaQuery.select(root.get("userDetails")).distinct(true);
-    Predicate predicateIds = root.get("id").in(paginationCriteria.getIds());
-    Predicate predicateDelete = criteriaBuilder.equal(root.get("deleteFlag"), false);
-    criteriaQuery.where(criteriaBuilder.and(predicateIds, predicateDelete));
+
+    Join<CompanyBO, UserDetailBO> lineJoin = root.join("userDetails");
+    ArrayList<Predicate> predicates = new ArrayList<>();
+    predicates.add(root.get("id").in(paginationCriteria.getIds()));
+    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
     //condition for search
     if (paginationCriteria.getSearchFor() != null) {
@@ -141,12 +145,12 @@ public class UserDaoImpl implements UserDao {
         paginationCriteria.setSearchFor(
                 paginationCriteria.getSearchFor().replace("\\", "\\\\\\\\"));
       }
-      Path<String> pathUsername = root.get("username");
+      Path<String> pathUsername = lineJoin.get("username");
       Predicate predicateUsername = criteriaBuilder.like(pathUsername, "%" + paginationCriteria.getSearchFor() + "%");
-      Path<String> pathEmail = root.get("email");
+      Path<String> pathEmail = lineJoin.get("email");
       Predicate predicateEmail = criteriaBuilder.like(pathEmail, "%" + paginationCriteria.getSearchFor() + "%");
-      Predicate predicateSearch = criteriaBuilder.or(predicateUsername, predicateEmail);
-      criteriaQuery.where(predicateSearch);
+      predicates.add(criteriaBuilder.or(predicateUsername, predicateEmail));
+      criteriaQuery.where(predicates.toArray(new Predicate[0]));
     }
 
     // Condition for sorting.

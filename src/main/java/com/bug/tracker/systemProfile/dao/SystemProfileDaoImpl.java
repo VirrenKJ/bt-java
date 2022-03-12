@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -42,34 +43,26 @@ public class SystemProfileDaoImpl implements SystemProfileDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<SystemProfileBO> criteriaQuery = criteriaBuilder.createQuery(SystemProfileBO.class);
     Root<SystemProfileBO> root = criteriaQuery.from(SystemProfileBO.class);
-    criteriaQuery.where(criteriaBuilder.equal(root.get("deleteFlag"), false));
-
-    //condition for search
-    if (paginationCriteria.getSearchFor() != null) {
-      Path<String> pathName = root.get("name");
-      Predicate predicateForName = criteriaBuilder.like(pathName, "%" + paginationCriteria.getSearchFor() + "%");
-      criteriaQuery.where(predicateForName);
-    }
+    criteriaQuery.where(searchPredicates(criteriaBuilder, root, paginationCriteria).toArray(new Predicate[0]));
 
     // Condition for sorting.
+    Order order;
     if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
-      Order order = null;
       if (paginationCriteria.getSortType() == 2) {
         order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
       } else {
         order = criteriaBuilder.asc(root.get(paginationCriteria.getSortField()));
       }
-      criteriaQuery.orderBy(order);
     } else {
-      Order order = criteriaBuilder.desc(root.get("id"));
-      criteriaQuery.orderBy(order);
+      order = criteriaBuilder.desc(root.get("id"));
     }
+    criteriaQuery.orderBy(order);
 
     // Adding Pagination total Count
     CommonListTO<SystemProfileBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<SystemProfileBO> root2 = criteriaQuery2.from(SystemProfileBO.class);
-    criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
+    criteriaQuery2.where(searchPredicates(criteriaBuilder, root2, paginationCriteria).toArray(new Predicate[0]));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
@@ -89,6 +82,15 @@ public class SystemProfileDaoImpl implements SystemProfileDao {
     }
     commonListTO.setDataList(typedQuery.getResultList());
     return commonListTO;
+  }
+
+  private ArrayList<Predicate> searchPredicates(CriteriaBuilder criteriaBuilder, Root<SystemProfileBO> root, PaginationCriteria paginationCriteria) {
+    ArrayList<Predicate> predicates = new ArrayList<>();
+    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    if (paginationCriteria.getSearchFor() != null) {
+      predicates.add(criteriaBuilder.like(root.get("osName"), "%" + paginationCriteria.getSearchFor() + "%"));
+    }
+    return predicates;
   }
 
   @Override

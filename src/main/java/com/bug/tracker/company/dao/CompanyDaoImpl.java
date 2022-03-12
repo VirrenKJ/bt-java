@@ -15,6 +15,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -51,20 +52,7 @@ public class CompanyDaoImpl implements CompanyDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<CompanyBO> criteriaQuery = criteriaBuilder.createQuery(CompanyBO.class);
     Root<CompanyBO> root = criteriaQuery.from(CompanyBO.class);
-    Predicate predicate = criteriaBuilder.equal(root.get("deleteFlag"), false);
-
-    if (paginationCriteria.getId() != null) {
-      Predicate predicateId = criteriaBuilder.equal(root.get("userId"), paginationCriteria.getId());
-      predicate = criteriaBuilder.and(predicate, predicateId);
-    }
-    criteriaQuery.where(predicate);
-
-    //condition for search
-    if (paginationCriteria.getSearchFor() != null) {
-      Path<String> pathName = root.get("name");
-      Predicate predicateForName = criteriaBuilder.like(pathName, "%" + paginationCriteria.getSearchFor() + "%");
-      criteriaQuery.where(predicateForName);
-    }
+    criteriaQuery.where(searchPredicates(criteriaBuilder, root, paginationCriteria).toArray(new Predicate[0]));
 
     // Condition for sorting.
     Order order;
@@ -83,12 +71,7 @@ public class CompanyDaoImpl implements CompanyDao {
     CommonListTO<CompanyBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<CompanyBO> root2 = criteriaQuery2.from(CompanyBO.class);
-    Predicate predicate2 = criteriaBuilder.equal(root2.get("deleteFlag"), false);
-    if (paginationCriteria.getId() != null) {
-      Predicate predicateId = criteriaBuilder.equal(root2.get("userId"), paginationCriteria.getId());
-      predicate2 = criteriaBuilder.and(predicate2, predicateId);
-    }
-    criteriaQuery2.where(predicate2);
+    criteriaQuery2.where(searchPredicates(criteriaBuilder, root2, paginationCriteria).toArray(new Predicate[0]));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
@@ -108,6 +91,19 @@ public class CompanyDaoImpl implements CompanyDao {
     }
     commonListTO.setDataList(typedQuery.getResultList());
     return commonListTO;
+  }
+
+  private ArrayList<Predicate> searchPredicates(CriteriaBuilder criteriaBuilder, Root<CompanyBO> root, PaginationCriteria paginationCriteria) {
+    ArrayList<Predicate> predicates = new ArrayList<>();
+    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    if (paginationCriteria.getId() != null) {
+      predicates.add(criteriaBuilder.equal(root.get("userId"), paginationCriteria.getId()));
+    }
+    if (paginationCriteria.getSearchFor() != null) {
+      Path<String> pathName = root.get("name");
+      predicates.add(criteriaBuilder.like(pathName, "%" + paginationCriteria.getSearchFor() + "%"));
+    }
+    return predicates;
   }
 
   @Override

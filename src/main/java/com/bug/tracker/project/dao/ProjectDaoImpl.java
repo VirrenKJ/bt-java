@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -42,14 +43,7 @@ public class ProjectDaoImpl implements ProjectDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<ProjectBO> criteriaQuery = criteriaBuilder.createQuery(ProjectBO.class);
     Root<ProjectBO> root = criteriaQuery.from(ProjectBO.class);
-    criteriaQuery.where(criteriaBuilder.equal(root.get("deleteFlag"), false));
-
-    //condition for search
-    if (paginationCriteria.getSearchFor() != null) {
-      Path<String> pathName = root.get("name");
-      Predicate predicateForName = criteriaBuilder.like(pathName, "%" + paginationCriteria.getSearchFor() + "%");
-      criteriaQuery.where(predicateForName);
-    }
+    criteriaQuery.where(searchPredicates(criteriaBuilder, root, paginationCriteria).toArray(new Predicate[0]));
 
     // Condition for sorting.
     if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
@@ -69,7 +63,7 @@ public class ProjectDaoImpl implements ProjectDao {
     CommonListTO<ProjectBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<ProjectBO> root2 = criteriaQuery2.from(ProjectBO.class);
-    criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
+    criteriaQuery2.where(searchPredicates(criteriaBuilder, root2, paginationCriteria).toArray(new Predicate[0]));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
@@ -95,6 +89,16 @@ public class ProjectDaoImpl implements ProjectDao {
     }
     commonListTO.setDataList(list);
     return commonListTO;
+  }
+
+  private ArrayList<Predicate> searchPredicates(CriteriaBuilder criteriaBuilder, Root<ProjectBO> root, PaginationCriteria paginationCriteria) {
+    ArrayList<Predicate> predicates = new ArrayList<>();
+    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    if (paginationCriteria.getSearchFor() != null) {
+      Path<String> pathName = root.get("name");
+      predicates.add(criteriaBuilder.like(pathName, "%" + paginationCriteria.getSearchFor() + "%"));
+    }
+    return predicates;
   }
 
   @Override

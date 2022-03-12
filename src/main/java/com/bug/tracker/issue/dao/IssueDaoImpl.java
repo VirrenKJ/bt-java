@@ -43,42 +43,27 @@ public class IssueDaoImpl implements IssueDao {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<IssueBO> criteriaQuery = criteriaBuilder.createQuery(IssueBO.class);
     Root<IssueBO> root = criteriaQuery.from(IssueBO.class);
-    ArrayList<Predicate> predicates = new ArrayList<>();
-    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
-    if (paginationCriteria.getAssignedId() != null) {
-      predicates.add(criteriaBuilder.equal(root.get("assignedId"), paginationCriteria.getAssignedId()));
-    }
-    if (paginationCriteria.getReportedById() != null) {
-      predicates.add(criteriaBuilder.equal(root.get("reportedById"), paginationCriteria.getReportedById()));
-    }
+    ArrayList<Predicate> predicates = searchPredicates(criteriaBuilder, root, paginationCriteria);
     criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-    //condition for search
-    if (paginationCriteria.getSearchFor() != null) {
-      Path<String> pathName = root.get("name");
-      Predicate predicateForName = criteriaBuilder.like(pathName, "%" + paginationCriteria.getSearchFor() + "%");
-      criteriaQuery.where(predicateForName);
-    }
-
     // Condition for sorting.
+    Order order;
     if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
-      Order order = null;
       if (paginationCriteria.getSortType() == 2) {
         order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
       } else {
         order = criteriaBuilder.asc(root.get(paginationCriteria.getSortField()));
       }
-      criteriaQuery.orderBy(order);
     } else {
-      Order order = criteriaBuilder.desc(root.get("id"));
-      criteriaQuery.orderBy(order);
+      order = criteriaBuilder.desc(root.get("id"));
     }
+    criteriaQuery.orderBy(order);
 
     // Adding Pagination total Count
     CommonListTO<IssueBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<IssueBO> root2 = criteriaQuery2.from(IssueBO.class);
-    criteriaQuery2.where(criteriaBuilder.equal(root2.get("deleteFlag"), false));
+    criteriaQuery2.where(searchPredicates(criteriaBuilder, root2, paginationCriteria).toArray(new Predicate[0]));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
@@ -98,6 +83,22 @@ public class IssueDaoImpl implements IssueDao {
     }
     commonListTO.setDataList(typedQuery.getResultList());
     return commonListTO;
+  }
+
+  private ArrayList<Predicate> searchPredicates(CriteriaBuilder criteriaBuilder, Root<IssueBO> root, PaginationCriteria paginationCriteria) {
+    ArrayList<Predicate> predicates = new ArrayList<>();
+    predicates.add(criteriaBuilder.equal(root.get("deleteFlag"), false));
+    if (paginationCriteria.getAssignedId() != null) {
+      predicates.add(criteriaBuilder.equal(root.get("assignedId"), paginationCriteria.getAssignedId()));
+    }
+    if (paginationCriteria.getReportedById() != null) {
+      predicates.add(criteriaBuilder.equal(root.get("reportedById"), paginationCriteria.getReportedById()));
+    }
+    if (paginationCriteria.getSearchFor() != null) {
+      Path<String> summary = root.get("summary");
+      predicates.add(criteriaBuilder.like(summary, "%" + paginationCriteria.getSearchFor() + "%"));
+    }
+    return predicates;
   }
 
   @Override
