@@ -1,10 +1,12 @@
 package com.bug.tracker.project.validator;
 
 import com.bug.tracker.category.dto.GlobalCategoryTO;
+import com.bug.tracker.common.object.APP_MSG;
 import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.project.controller.ProjectController;
 import com.bug.tracker.project.dto.ProjectTO;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
@@ -24,6 +26,9 @@ public class ProjectValidator implements Validator {
   public void validate(Object o, Errors errors) {
     ProjectTO projectTO = (ProjectTO) o;
 
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "BT001E", APP_MSG.MESSAGE.get("BT001E"));
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "status", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "viewStatus", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+
   }
 }

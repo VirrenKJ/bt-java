@@ -15,31 +15,34 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @ControllerAdvice(assignableTypes = UserController.class)
 public class UserValidator implements Validator {
 
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private UserService userService;
 
-    @Override
-    public boolean supports(Class<?> aClass) {
-        boolean support = UserTO.class.equals(aClass);
-        if (!support) {
-            support = PaginationCriteria.class.equals(aClass);
-        }
-        return support;
+  @Override
+  public boolean supports(Class<?> aClass) {
+    boolean support = UserTO.class.equals(aClass);
+    if (!support) {
+      support = PaginationCriteria.class.equals(aClass);
     }
+    return support;
+  }
 
-    @SneakyThrows
-    @Override
-    public void validate(Object o, Errors errors) {
+  @SneakyThrows
+  @Override
+  public void validate(Object o, Errors errors) {
+    UserTO userTO = (UserTO) o;
 
-        UserTO userTO = (UserTO) o;
-
-        if (userTO.getUsername() == null) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
-        }else{
-            UserTO user = userService.getUserByUsername(userTO.getUsername());
-            if (user != null && user.getId() == null) {
-                errors.rejectValue("username", "BT002E", APP_MSG.RESPONSE.get("BT002E"));
-            }
-        }
+    if (userTO.getUsername() == null) {
+      errors.rejectValue("username", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+    } else {
+      UserTO user = userService.getUserByUsername(userTO.getUsername());
+      if (user != null && userTO.getId() == null) {
+        errors.rejectValue("username", "BT002E", APP_MSG.RESPONSE.get("BT002E"));
+      }
     }
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "BT001E", APP_MSG.RESPONSE.get("BT001E"));
+  }
 }
