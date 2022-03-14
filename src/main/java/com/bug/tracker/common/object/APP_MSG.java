@@ -12,6 +12,10 @@ public class APP_MSG {
   public static final Map<String, String> RESPONSE = new HashMap<>();
 
   static {
+    RESPONSE.put("GEX001", "Database Error");
+    RESPONSE.put("GEX002", "No Data");
+    RESPONSE.put("GEX003", "Entry already exist");
+
     RESPONSE.put("BT001", "Created successfully!");
     RESPONSE.put("BT002", "Updated successfully!");
     RESPONSE.put("BT003", "Fetched List!");
@@ -23,4 +27,7 @@ public class APP_MSG {
     RESPONSE.put("BT002E", "Must be unique!");
     RESPONSE.put("BT003E", "Password Mismatch");
   }
+
+  public static String HELP = "Help link";
+
 }

@@ -16,6 +16,6 @@ public class ErrorMessage implements Serializable {
   private int status;
   private String code;
   private String message;
-  private String document;
+  private String help;
 
 }

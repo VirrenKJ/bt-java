@@ -52,18 +52,17 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     // Condition for sorting.
+    Order order;
     if (paginationCriteria.getSortField() != null && !paginationCriteria.getSortField().isEmpty()) {
-      Order order = null;
       if (paginationCriteria.getSortType() == 2) {
         order = criteriaBuilder.desc(root.get(paginationCriteria.getSortField()));
       } else {
         order = criteriaBuilder.asc(root.get(paginationCriteria.getSortField()));
       }
-      criteriaQuery.orderBy(order);
     } else {
-      Order order = criteriaBuilder.desc(root.get("roleId"));
-      criteriaQuery.orderBy(order);
+      order = criteriaBuilder.desc(root.get("roleId"));
     }
+    criteriaQuery.orderBy(order);
 
     // Adding Pagination total Count
     CommonListTO<RoleBO> commonListTO = new CommonListTO<>();
