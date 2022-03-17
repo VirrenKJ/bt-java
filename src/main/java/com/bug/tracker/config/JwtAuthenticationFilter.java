@@ -21,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -38,6 +39,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   @NotNull HttpServletResponse httpServletResponse,
                                   @NotNull FilterChain filterChain) throws ServletException, IOException {
     final String requestTokenHeader = httpServletRequest.getHeader("Authorization");
+    final String userId = httpServletRequest.getHeader("user-id");
+//    if (id != null) {
+//      final Integer userId = Integer.valueOf(id);
+//    }
+    final String role = httpServletRequest.getHeader("role");
+
     logger.warn("**********" + requestTokenHeader + "**********");
 
     String username = null;
@@ -64,7 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       // Setting User into UserSessionContext
       UserSessionContext.setCurrentTenant((UserBO) userDetails);
 
-      if (jwtUtil.validateToken(jwt, userDetails)) {
+      if (jwtUtil.validateToken(jwt, userDetails) && checkUserRole((UserBO) userDetails, userId, role)) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
@@ -79,5 +86,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     filterChain.doFilter(httpServletRequest, httpServletResponse);
+  }
+
+  private boolean checkUserRole(UserBO userBO, String userId, String role) {
+    Integer id = null;
+    if (userId != null) {
+      id = Integer.valueOf(userId);
+    }
+    if (id != null && role != null) {
+      if (Objects.equals(userBO.getId(), id) && userBO.getRoles().get(0).getRoleName().equals(role)) {
+        return true;
+      }
+      logger.error("User id or Role Does not match");
+      return false;
+    }
+    logger.error("User id or Role is null");
+    return false;
   }
 }
