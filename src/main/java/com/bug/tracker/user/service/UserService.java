@@ -2,7 +2,7 @@ package com.bug.tracker.user.service;
 
 import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
-import com.bug.tracker.user.dto.PasswordResetTO;
+import com.bug.tracker.user.dto.PasswordChangeTO;
 import com.bug.tracker.user.dto.UserBasicTO;
 import com.bug.tracker.user.dto.UserTO;
 
@@ -18,7 +18,7 @@ public interface UserService {
 
   UserTO updateUser(UserTO userTO);
 
-  boolean resetPassword(PasswordResetTO passwordResetTO);
+  boolean changePassword(PasswordChangeTO passwordChangeTO);
 
   SearchResponseTO getUserList(PaginationCriteria paginationCriteria);
 

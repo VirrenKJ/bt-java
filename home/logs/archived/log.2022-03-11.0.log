@@ -6958,7 +6958,7 @@ java.lang.Exception: Bad credentials
 2022-03-11AM 09:15:56 - POST "/user/reset-password", parameters={}
 2022-03-11AM 09:15:56 - Mapped to com.bug.tracker.user.controller.UserController#resetPassword(PasswordResetTO, Errors)
 2022-03-11AM 09:15:56 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2022-03-11AM 09:15:56 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordResetTO@79dfc623]
+2022-03-11AM 09:15:56 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordChangeTO@79dfc623]
 2022-03-11AM 09:15:56 - Found thread-bound EntityManager [SessionImpl(927837859<open>)] for JPA transaction
 2022-03-11AM 09:15:56 - Creating new transaction with name [com.bug.tracker.user.service.UserServiceImpl.resetPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 2022-03-11AM 09:15:56 - *************************deff6ea4-8090-4742-bf4a-dd1aa7989a7e*********************
@@ -10224,7 +10224,7 @@ Unconditional classes:
 2022-03-11AM 09:37:29 - POST "/user/reset-password", parameters={}
 2022-03-11AM 09:37:29 - Mapped to com.bug.tracker.user.controller.UserController#resetPassword(PasswordResetTO, Errors)
 2022-03-11AM 09:37:29 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2022-03-11AM 09:37:29 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordResetTO@2d87c5ff]
+2022-03-11AM 09:37:29 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordChangeTO@2d87c5ff]
 2022-03-11AM 09:37:29 - Found thread-bound EntityManager [SessionImpl(498019114<open>)] for JPA transaction
 2022-03-11AM 09:37:29 - Creating new transaction with name [com.bug.tracker.user.service.UserServiceImpl.resetPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 2022-03-11AM 09:37:29 - *************************deff6ea4-8090-4742-bf4a-dd1aa7989a7e*********************
@@ -12388,7 +12388,7 @@ Unconditional classes:
 2022-03-11AM 09:54:37 - POST "/user/reset-password", parameters={}
 2022-03-11AM 09:54:37 - Mapped to com.bug.tracker.user.controller.UserController#resetPassword(PasswordResetTO, Errors)
 2022-03-11AM 09:54:37 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2022-03-11AM 09:54:37 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordResetTO@6f10b5d4]
+2022-03-11AM 09:54:37 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordChangeTO@6f10b5d4]
 2022-03-11AM 09:54:37 - Found thread-bound EntityManager [SessionImpl(1290852977<open>)] for JPA transaction
 2022-03-11AM 09:54:37 - Creating new transaction with name [com.bug.tracker.user.service.UserServiceImpl.resetPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 2022-03-11AM 09:54:37 - *************************deff6ea4-8090-4742-bf4a-dd1aa7989a7e*********************
@@ -12529,7 +12529,7 @@ Unconditional classes:
 2022-03-11AM 09:54:37 - POST "/user/reset-password", parameters={}
 2022-03-11AM 09:54:37 - Mapped to com.bug.tracker.user.controller.UserController#resetPassword(PasswordResetTO, Errors)
 2022-03-11AM 09:54:37 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2022-03-11AM 09:54:37 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordResetTO@477efbf5]
+2022-03-11AM 09:54:37 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordChangeTO@477efbf5]
 2022-03-11AM 09:54:37 - Found thread-bound EntityManager [SessionImpl(475595680<open>)] for JPA transaction
 2022-03-11AM 09:54:37 - Creating new transaction with name [com.bug.tracker.user.service.UserServiceImpl.resetPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 2022-03-11AM 09:54:37 - *************************default*********************
@@ -15168,7 +15168,7 @@ Unconditional classes:
 2022-03-11AM 10:01:41 - POST "/user/reset-password", parameters={}
 2022-03-11AM 10:01:41 - Mapped to com.bug.tracker.user.controller.UserController#resetPassword(PasswordResetTO, Errors)
 2022-03-11AM 10:01:41 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2022-03-11AM 10:01:41 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordResetTO@484bf56c]
+2022-03-11AM 10:01:41 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordChangeTO@484bf56c]
 2022-03-11AM 10:01:41 - Found thread-bound EntityManager [SessionImpl(1706523469<open>)] for JPA transaction
 2022-03-11AM 10:01:41 - Creating new transaction with name [com.bug.tracker.user.service.UserServiceImpl.resetPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 2022-03-11AM 10:01:41 - *************************deff6ea4-8090-4742-bf4a-dd1aa7989a7e*********************
@@ -15309,7 +15309,7 @@ Unconditional classes:
 2022-03-11AM 10:01:41 - POST "/user/reset-password", parameters={}
 2022-03-11AM 10:01:41 - Mapped to com.bug.tracker.user.controller.UserController#resetPassword(PasswordResetTO, Errors)
 2022-03-11AM 10:01:41 - Opening JPA EntityManager in OpenEntityManagerInViewInterceptor
-2022-03-11AM 10:01:41 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordResetTO@39a84503]
+2022-03-11AM 10:01:41 - Read "application/json;charset=UTF-8" to [com.bug.tracker.user.dto.PasswordChangeTO@39a84503]
 2022-03-11AM 10:01:41 - Found thread-bound EntityManager [SessionImpl(453478642<open>)] for JPA transaction
 2022-03-11AM 10:01:41 - Creating new transaction with name [com.bug.tracker.user.service.UserServiceImpl.resetPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 2022-03-11AM 10:01:41 - *************************default*********************

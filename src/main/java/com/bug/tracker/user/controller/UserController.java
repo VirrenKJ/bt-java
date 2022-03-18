@@ -4,7 +4,7 @@ import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
 import com.bug.tracker.master.dto.ResponseTO;
-import com.bug.tracker.user.dto.PasswordResetTO;
+import com.bug.tracker.user.dto.PasswordChangeTO;
 import com.bug.tracker.user.dto.UserBasicTO;
 import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.service.UserService;
@@ -81,17 +81,17 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PostMapping("/reset-password")
-  public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordResetTO passwordResetTO, Errors errors) {
+  @PostMapping("/change-password")
+  public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordChangeTO passwordChangeTO, Errors errors) {
     if (errors.hasErrors()) {
       ValidationError validationError = ValidationError.fromBindingErrors(errors);
       return new ResponseEntity<>(validationError, HttpStatus.OK);
     }
-    boolean passwordReset = userService.resetPassword(passwordResetTO);
-    if (passwordReset) {
-      response = ResponseTO.responseBuilder(200, "BT002", "/reset-password", "passwordReset", true);
+    boolean passwordChange = userService.changePassword(passwordChangeTO);
+    if (passwordChange) {
+      response = ResponseTO.responseBuilder(200, "BT002", "/change-password", "passwordChange", true);
     } else {
-      response = ResponseTO.responseBuilder(400, "BT003E", "/reset-password", "passwordReset", false);
+      response = ResponseTO.responseBuilder(400, "BT003E", "/change-password", "passwordChange", false);
     }
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
