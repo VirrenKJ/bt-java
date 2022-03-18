@@ -3,7 +3,10 @@ package com.bug.tracker.user.controller;
 import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
+import com.bug.tracker.common.service.EmailService;
+import com.bug.tracker.exception.UserNotFoundException;
 import com.bug.tracker.master.dto.ResponseTO;
+import com.bug.tracker.user.dto.ForgotPasswordTO;
 import com.bug.tracker.user.dto.PasswordChangeTO;
 import com.bug.tracker.user.dto.UserBasicTO;
 import com.bug.tracker.user.dto.UserTO;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -96,6 +100,39 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
+  @PostMapping("/send-token")
+  public ResponseEntity<?> sendToken(@RequestParam("email") String userEmail) throws Exception {
+    userService.sendToken(userEmail);
+    response = ResponseTO.responseBuilder(200, "BT002", "/send-token", "tokenSend", true);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @GetMapping("/validate-token")
+  public ResponseEntity<?> validatePasswordResetToken(@RequestParam(name = "token") String token) throws Exception {
+    String result = userService.validatePasswordResetToken(token);
+    if (result != null) {
+      response = ResponseTO.responseBuilder(400, "BT004E", "/validate-token", "validateToken", result);
+    } else {
+      response = ResponseTO.responseBuilder(200, "BT004", "/validate-token", "validateToken", null);
+    }
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @PostMapping("/reset-password")
+  public ResponseEntity<?> resetPassword(@Valid @RequestBody ForgotPasswordTO forgotPasswordTO, Errors errors) {
+    if (errors.hasErrors()) {
+      ValidationError validationError = ValidationError.fromBindingErrors(errors);
+      return new ResponseEntity<>(validationError, HttpStatus.OK);
+    }
+    UserTO userTO = userService.resetPassword(forgotPasswordTO);
+    if (userTO != null) {
+      response = ResponseTO.responseBuilder(200, "BT002", "/reset-password", "resetPassword", true);
+    } else {
+      response = ResponseTO.responseBuilder(400, "BT003E", "/reset-password", "resetPassword", false);
+    }
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
   @PostMapping("/list")
   public ResponseEntity<?> getUserList(@RequestBody PaginationCriteria paginationCriteria) {
     SearchResponseTO searchResponseTO = userService.getUserList(paginationCriteria);
@@ -143,6 +180,17 @@ public class UserController {
   @GetMapping("/username")
   public ResponseEntity<?> getUserByUsername(@RequestParam(name = "username") String username) throws Exception {
     UserTO userTO = userService.getUserByUsername(username);
+    if (userTO == null) {
+      response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", null);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    response = ResponseTO.responseBuilder(200, "BT004", "/user", "user", userTO);
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @GetMapping("/email")
+  public ResponseEntity<?> getUserByEmail(@RequestParam(name = "email") String email) throws Exception {
+    UserTO userTO = userService.getUserByEmail(email);
     if (userTO == null) {
       response = ResponseTO.responseBuilder(200, "BT006", "/user", "user", null);
       return new ResponseEntity<>(response, HttpStatus.OK);

@@ -23,9 +23,12 @@ public class APP_MSG {
     RESPONSE.put("BT005", "Deleted successfully!");
     RESPONSE.put("BT006", "Empty!");
     RESPONSE.put("BT007", "Invalid argument!");
+    RESPONSE.put("BT008", "Token Verified");
     RESPONSE.put("BT001E", "Required Field!");
     RESPONSE.put("BT002E", "Must be unique!");
     RESPONSE.put("BT003E", "Password Mismatch");
+    RESPONSE.put("BT004E", "Unable to Verify. Please try again.");
+    RESPONSE.put("BT005E", "No User Found.");
   }
 
   public static String HELP = "Help link";

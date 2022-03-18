@@ -1,5 +1,6 @@
 package com.bug.tracker.config;
 
+import com.bug.tracker.common.object.APP_CONST;
 import com.bug.tracker.user.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +44,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
             .disable()
             .authorizeRequests()
-            .antMatchers("/authenticate", "/user/username", "/user/add", "/role/list").permitAll()
+            .antMatchers(APP_CONST.ALLOWED_ENDPOINTS).permitAll()
             .antMatchers(HttpMethod.OPTIONS).permitAll()
             .anyRequest().authenticated()
             .and()

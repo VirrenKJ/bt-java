@@ -69,4 +69,13 @@ public class GlobalExceptionHandler {
             APP_MSG.RESPONSE.get("GEX003"), APP_MSG.HELP);
     return new ResponseEntity<>(message, HttpStatus.OK);
   }
+
+  @ExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<ErrorMessage> handleUserNotFoundException(HttpServletRequest request, Exception ex) {
+    logger.error("UserNotFoundException handler executed ******************************************** :: " + ex.getMessage());
+
+    ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "GEX002",
+            ex.getMessage(), APP_MSG.HELP);
+    return new ResponseEntity<>(message, HttpStatus.OK);
+  }
 }

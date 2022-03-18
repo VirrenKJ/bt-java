@@ -1,30 +1,37 @@
 package com.bug.tracker.user.service;
 
+import com.bug.tracker.common.object.APP_CONST;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
+import com.bug.tracker.common.service.EmailService;
 import com.bug.tracker.common.service.ModelConvertorService;
 import com.bug.tracker.company.dto.CompanyTO;
 import com.bug.tracker.company.service.CompanyService;
+import com.bug.tracker.exception.UserNotFoundException;
 import com.bug.tracker.user.dao.UserDao;
-import com.bug.tracker.user.dto.PasswordChangeTO;
-import com.bug.tracker.user.dto.UserBasicTO;
-import com.bug.tracker.user.dto.UserDetailTO;
-import com.bug.tracker.user.dto.UserTO;
+import com.bug.tracker.user.dto.*;
+import com.bug.tracker.user.entity.PasswordResetTokenBO;
 import com.bug.tracker.user.entity.UserBO;
 import com.bug.tracker.user.entity.UserBasicBO;
 import com.bug.tracker.user.entity.UserDetailBO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+  private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   @Autowired
   private UserDao userDao;
@@ -37,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private EmailService emailService;
 
   @Override
   public UserTO addUser(UserTO userTO) {
@@ -73,6 +83,63 @@ public class UserServiceImpl implements UserService {
     } else {
       return false;
     }
+  }
+
+  @Override
+  public void sendToken(String userEmail) throws Exception {
+    UserTO userTO = getUserByEmail(userEmail);
+    if (userTO == null) {
+      throw new UserNotFoundException();
+    }
+    String token = UUID.randomUUID().toString();
+    createPasswordResetTokenForUser(userTO, token);
+    String url = APP_CONST.BASE_URL_BACKEND + "/user/reset-password?token=" + token;
+    String text = "This URL will only be valid for one hour.";
+    emailService.sendSimpleMessage(userTO.getEmail(), "Reset Password", text + " \r\n" + url);
+    logger.info("*************************  Email Sent   *************************");
+  }
+
+  private void createPasswordResetTokenForUser(UserTO userTO, String token) {
+    UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
+    userBO.setRoles(null);
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.HOUR, 1);
+    PasswordResetTokenBO passwordResetTokenBO = new PasswordResetTokenBO(token, userBO, cal.getTime());
+    modelConvertorService.map(userDao.createPasswordResetTokenForUser(passwordResetTokenBO), PasswordResetTokenTO.class);
+  }
+
+  @Override
+  public String validatePasswordResetToken(String token) {
+    final PasswordResetTokenBO resetToken = userDao.getPasswordResetToken(token);
+
+    return !isTokenFound(resetToken) ? "Invalid Token"
+            : isTokenExpired(resetToken) ? "Token Expired"
+            : null;
+  }
+
+  private boolean isTokenFound(PasswordResetTokenBO resetToken) {
+    return resetToken != null;
+  }
+
+  private boolean isTokenExpired(PasswordResetTokenBO resetToken) {
+    final Calendar cal = Calendar.getInstance();
+    return resetToken.getExpiryDate().before(cal.getTime());
+  }
+
+  public UserTO resetPassword(ForgotPasswordTO forgotPasswordTO) {
+    UserTO userTO = getUserByPasswordResetToken(forgotPasswordTO.getToken());
+    UserTO userTO_return = null;
+    if (userTO != null) {
+      userTO.setPassword(passwordEncoder.encode(forgotPasswordTO.getNewPassword()));
+      UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
+      userTO_return = modelConvertorService.map(userDao.addUser(userBO), UserTO.class);
+    }
+    return userTO_return;
+  }
+
+  private UserTO getUserByPasswordResetToken(String token) {
+    PasswordResetTokenTO passwordResetTokenTO = modelConvertorService.map(userDao.getPasswordResetToken(token), PasswordResetTokenTO.class);
+    return passwordResetTokenTO.getUser();
   }
 
   @Override
@@ -132,6 +199,13 @@ public class UserServiceImpl implements UserService {
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
   public UserTO getUserByUsername(String username) throws Exception {
     UserTO userTO = modelConvertorService.map(userDao.getUserByUsername(username), UserTO.class);
+    return userTO;
+  }
+
+  @Override
+  @Transactional(Transactional.TxType.NOT_SUPPORTED)
+  public UserTO getUserByEmail(String email) throws Exception {
+    UserTO userTO = modelConvertorService.map(userDao.getUserByEmail(email), UserTO.class);
     return userTO;
   }
 

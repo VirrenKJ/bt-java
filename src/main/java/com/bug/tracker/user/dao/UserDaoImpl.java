@@ -3,6 +3,7 @@ package com.bug.tracker.user.dao;
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.company.entity.CompanyBO;
+import com.bug.tracker.user.entity.PasswordResetTokenBO;
 import com.bug.tracker.user.entity.UserBO;
 import com.bug.tracker.user.entity.UserBasicBO;
 import com.bug.tracker.user.entity.UserDetailBO;
@@ -56,6 +57,29 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
+  public PasswordResetTokenBO createPasswordResetTokenForUser(PasswordResetTokenBO passwordResetTokenBO) {
+    entityManager.merge(passwordResetTokenBO);
+    logger.info("Password Reset Token has added successfully, Password Reset Token=" + passwordResetTokenBO);
+    return passwordResetTokenBO;
+  }
+
+  @Override
+  public PasswordResetTokenBO getPasswordResetToken(String token) {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<PasswordResetTokenBO> criteriaQuery = criteriaBuilder.createQuery(PasswordResetTokenBO.class);
+
+    Root<PasswordResetTokenBO> root = criteriaQuery.from(PasswordResetTokenBO.class);
+    criteriaQuery.where(criteriaBuilder.equal(root.get("token"), token));
+    PasswordResetTokenBO passwordResetTokenBO = null;
+    try {
+      passwordResetTokenBO = entityManager.createQuery(criteriaQuery).getSingleResult();
+    } catch (EmptyResultDataAccessException | NoResultException e) {
+      e.printStackTrace();
+    }
+    return passwordResetTokenBO;
+  }
+
+  @Override
   public CommonListTO<UserBO> getUserList(PaginationCriteria paginationCriteria) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
@@ -79,7 +103,7 @@ public class UserDaoImpl implements UserDao {
     CommonListTO<UserBO> commonListTO = new CommonListTO<>();
     CriteriaQuery<Long> criteriaQuery2 = criteriaBuilder.createQuery(Long.class);
     Root<UserBO> root2 = criteriaQuery2.from(UserBO.class);
-    criteriaQuery2.where(searchPredicates(criteriaBuilder,root2,paginationCriteria).toArray(new Predicate[0]));
+    criteriaQuery2.where(searchPredicates(criteriaBuilder, root2, paginationCriteria).toArray(new Predicate[0]));
     CriteriaQuery<Long> select = criteriaQuery2.select(criteriaBuilder.count(root2));
     Long count = entityManager.createQuery(select).getSingleResult();
     commonListTO.setTotalRow(count);
@@ -305,6 +329,25 @@ public class UserDaoImpl implements UserDao {
 
     Root<UserBO> root = criteriaQuery.from(UserBO.class);
     Predicate predicateForId = criteriaBuilder.equal(root.get("username"), username);
+    Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
+    Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
+    criteriaQuery.where(predicate);
+    UserBO userBO = null;
+    try {
+      userBO = entityManager.createQuery(criteriaQuery).getSingleResult();
+    } catch (EmptyResultDataAccessException | NoResultException e) {
+      e.printStackTrace();
+    }
+    return userBO;
+  }
+
+  @Override
+  public UserBO getUserByEmail(String email) {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<UserBO> criteriaQuery = criteriaBuilder.createQuery(UserBO.class);
+
+    Root<UserBO> root = criteriaQuery.from(UserBO.class);
+    Predicate predicateForId = criteriaBuilder.equal(root.get("email"), email);
     Predicate predicateForDeleteFlag = criteriaBuilder.equal(root.get("deleteFlag"), false);
     Predicate predicate = criteriaBuilder.and(predicateForId, predicateForDeleteFlag);
     criteriaQuery.where(predicate);

@@ -85,9 +85,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL UNIQUE,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `delete_flag` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)

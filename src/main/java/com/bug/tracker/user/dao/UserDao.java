@@ -2,6 +2,7 @@ package com.bug.tracker.user.dao;
 
 import com.bug.tracker.common.object.CommonListTO;
 import com.bug.tracker.common.object.PaginationCriteria;
+import com.bug.tracker.user.entity.PasswordResetTokenBO;
 import com.bug.tracker.user.entity.UserBO;
 import com.bug.tracker.user.entity.UserBasicBO;
 import com.bug.tracker.user.entity.UserDetailBO;
@@ -18,6 +19,10 @@ public interface UserDao {
 
   UserBO updateUser(UserBO userBO);
 
+  PasswordResetTokenBO createPasswordResetTokenForUser(PasswordResetTokenBO passwordResetTokenBO);
+
+  PasswordResetTokenBO getPasswordResetToken(String token);
+
   CommonListTO<UserBO> getUserList(PaginationCriteria paginationCriteria);
 
   CommonListTO<UserDetailBO> getEmployeeList(PaginationCriteria paginationCriteria);
@@ -27,6 +32,8 @@ public interface UserDao {
   UserBO getUserById(Integer id);
 
   UserBO getUserByUsername(String username) throws Exception;
+
+  UserBO getUserByEmail(String email) throws Exception;
 
   void deleteUser(List<Integer> id);
 }
