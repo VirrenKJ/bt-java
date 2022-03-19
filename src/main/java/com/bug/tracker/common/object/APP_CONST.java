@@ -4,7 +4,8 @@ public class APP_CONST {
 
   public static final String BASE_URL_BACKEND = "http://localhost:8080";
   public static final String BASE_URL_FRONTEND = "http://localhost:4200";
-  public static final String ALLOWED_ENDPOINTS[] = {"/authenticate", "/user/username", "/user/add", "/user/send-token", "/user/validate-token", "/user/reset-password", "/role/list"};
+  public static final String[] ALLOWED_ENDPOINTS = {"/authenticate", "/user/username", "/user/add", "/user/send-token",
+          "/user/validate-token", "/user/reset-password", "/role/list", "/user/email"};
 
   public static final class HEADER {
 
