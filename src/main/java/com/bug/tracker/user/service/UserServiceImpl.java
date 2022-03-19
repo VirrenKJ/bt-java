@@ -11,10 +11,7 @@ import com.bug.tracker.company.service.CompanyService;
 import com.bug.tracker.exception.UserNotFoundException;
 import com.bug.tracker.user.dao.UserDao;
 import com.bug.tracker.user.dto.*;
-import com.bug.tracker.user.entity.PasswordResetTokenBO;
-import com.bug.tracker.user.entity.UserBO;
-import com.bug.tracker.user.entity.UserBasicBO;
-import com.bug.tracker.user.entity.UserDetailBO;
+import com.bug.tracker.user.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
     String token = UUID.randomUUID().toString();
     createPasswordResetTokenForUser(userTO, token);
-    String url = APP_CONST.BASE_URL_BACKEND + "/user/reset-password?token=" + token;
+    String url = APP_CONST.BASE_URL_FRONTEND + "/user/reset-password/" + token;
     String text = "This URL will only be valid for one hour.";
     emailService.sendSimpleMessage(userTO.getEmail(), "Reset Password", text + " \r\n" + url);
     logger.info("*************************  Email Sent   *************************");
@@ -132,7 +129,12 @@ public class UserServiceImpl implements UserService {
     if (userTO != null) {
       userTO.setPassword(passwordEncoder.encode(forgotPasswordTO.getNewPassword()));
       UserBO userBO = modelConvertorService.map(userTO, UserBO.class);
-      userTO_return = modelConvertorService.map(userDao.addUser(userBO), UserTO.class);
+      RoleBO role = new RoleBO();
+      role.setRoleId(1);
+      List<RoleBO> roleBOList = new ArrayList<>();
+      roleBOList.add(role);
+      userBO.setRoles(roleBOList);
+      userTO_return = modelConvertorService.map(userDao.updateUser(userBO), UserTO.class);
     }
     return userTO_return;
   }

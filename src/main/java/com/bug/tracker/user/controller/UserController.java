@@ -3,8 +3,6 @@ package com.bug.tracker.user.controller;
 import com.bug.tracker.common.object.PaginationCriteria;
 import com.bug.tracker.common.object.SearchResponseTO;
 import com.bug.tracker.common.object.ValidationError;
-import com.bug.tracker.common.service.EmailService;
-import com.bug.tracker.exception.UserNotFoundException;
 import com.bug.tracker.master.dto.ResponseTO;
 import com.bug.tracker.user.dto.ForgotPasswordTO;
 import com.bug.tracker.user.dto.PasswordChangeTO;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -100,7 +97,7 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PostMapping("/send-token")
+  @GetMapping("/send-token")
   public ResponseEntity<?> sendToken(@RequestParam("email") String userEmail) throws Exception {
     userService.sendToken(userEmail);
     response = ResponseTO.responseBuilder(200, "BT002", "/send-token", "tokenSend", true);
@@ -108,7 +105,7 @@ public class UserController {
   }
 
   @GetMapping("/validate-token")
-  public ResponseEntity<?> validatePasswordResetToken(@RequestParam(name = "token") String token) throws Exception {
+  public ResponseEntity<?> validatePasswordResetToken(@RequestParam(name = "token") String token) {
     String result = userService.validatePasswordResetToken(token);
     if (result != null) {
       response = ResponseTO.responseBuilder(400, "BT004E", "/validate-token", "validateToken", result);
