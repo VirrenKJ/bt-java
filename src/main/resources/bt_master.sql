@@ -58,6 +58,12 @@ CREATE TABLE `role` (
   `updated_by` int NOT NULL,
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `role` (`role_id`, `role_name`, `description`, `delete_flag`, `created_by`, `updated_by`) VALUES
+(1, 'Admin', NULL, 0, 0, 0),
+(2, 'Manager', NULL, 0, 0, 0),
+(3, 'Developer', NULL, 0, 0, 0),
+(4, 'Tester', NULL, 0, 0, 0),
+(5, 'Viewer', NULL, 0, 0, 0);
 
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,

@@ -16,6 +16,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
   public void commence(HttpServletRequest httpServletRequest,
                        HttpServletResponse httpServletResponse,
                        AuthenticationException e) throws IOException, ServletException {
-    httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+    httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "User does not exist.");
   }
 }
