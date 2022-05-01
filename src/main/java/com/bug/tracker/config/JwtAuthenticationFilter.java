@@ -1,9 +1,7 @@
 package com.bug.tracker.config;
 
 import com.bug.tracker.config.tenantConfig.TenantContext;
-import com.bug.tracker.user.dto.UserTO;
 import com.bug.tracker.user.entity.UserBO;
-import com.bug.tracker.user.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
   @Autowired
-  private UserDetailsServiceImpl userDetailsService;
+  private UserDetailsService userDetailsService;
 
   @Autowired
   private JwtUtil jwtUtil;

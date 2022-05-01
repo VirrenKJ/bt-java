@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS `bt_master` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `bt_master`;
+
 CREATE TABLE `company` (
   `id` int NOT NULL AUTO_INCREMENT,
   `company_db_detail_id` int DEFAULT NULL,

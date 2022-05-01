@@ -122,7 +122,7 @@ ERROR in ch.qos.logback.core.pattern.parser.Compiler@31f58a59 - Failed to create
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:332)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1332)
-	at com.bug.tracker.bt.BtApplication.main(BtApplication.java:22)
+	at com.bug.tracker.config.BtApplication.main(BtApplication.java:22)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

@@ -4,7 +4,7 @@
     <persistence-units>
       <persistence-unit name="Default">
         <packages>
-          <package value="com.bug.tracker.bt" />
+          <package value="com.bug.tracker.config" />
         </packages>
       </persistence-unit>
     </persistence-units>
