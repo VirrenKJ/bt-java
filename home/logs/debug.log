@@ -16957,3 +16957,26 @@ Unconditional classes:
 2023-01-04AM 09:38:13 - Cleared SecurityContextHolder to complete request
 2023-01-04AM 09:38:13 - Completed 200 OK
 2023-01-04AM 09:38:13 - Cleared SecurityContextHolder to complete request
+2023-01-04AM 09:54:59 - Application availability state ReadinessState changed from ACCEPTING_TRAFFIC to REFUSING_TRAFFIC
+2023-01-04AM 09:54:59 - Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@25cd2834, started on Wed Jan 04 09:33:59 IST 2023
+2023-01-04AM 09:54:59 - Found key 'spring.liveBeansView.mbeanDomain' in PropertySource 'systemProperties' with value of type String
+2023-01-04AM 09:54:59 - Stopping beans in phase 2147483647
+2023-01-04AM 09:54:59 - Bean 'webServerGracefulShutdown' completed its stop procedure
+2023-01-04AM 09:54:59 - Stopping beans in phase 2147483646
+2023-01-04AM 09:54:59 - Bean 'webServerStartStop' completed its stop procedure
+2023-01-04AM 09:54:59 - Shutting down ExecutorService 'taskScheduler'
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Beans' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Caches' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Health' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Info' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Conditions' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Configprops' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Env' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Loggers' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Threaddump' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Metrics' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Scheduledtasks' from the JMX domain
+2023-01-04AM 09:54:59 - Unregister endpoint with ObjectName 'org.springframework.boot:type=Endpoint,name=Mappings' from the JMX domain
+2023-01-04AM 09:54:59 - Unregistering JMX-exposed beans on shutdown
+2023-01-04AM 09:54:59 - Unregistering JMX-exposed beans
+2023-01-04AM 09:54:59 - Closing JPA EntityManagerFactory for persistence unit 'default'
