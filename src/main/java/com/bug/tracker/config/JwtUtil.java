@@ -24,7 +24,7 @@ public class JwtUtil {
   }
 
   static String readFile() throws IOException {
-    byte[] encoded = Files.readAllBytes(Paths.get("/home/hostbooks/Storage/Personal/secret.txt"));
+    byte[] encoded = Files.readAllBytes(Paths.get("/Users/viren/DATA/Personal/secret.txt"));
     return new String(encoded, Charset.defaultCharset());
   }
 

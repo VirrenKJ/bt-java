@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @ComponentScan(basePackages = {"com.bug.tracker"})
 @SpringBootApplication
-@EnableAutoConfiguration
 @EnableJpaAuditing
 @EnableTransactionManagement
 @EnableScheduling
