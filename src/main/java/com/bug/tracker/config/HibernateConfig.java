@@ -23,7 +23,7 @@ public class HibernateConfig {
   private JpaProperties jpaProperties;
 
   @Bean
-  JpaVendorAdapter jpaVendorAdapter() {
+  public JpaVendorAdapter jpaVendorAdapter() {
     return new HibernateJpaVendorAdapter();
   }
 
@@ -31,7 +31,8 @@ public class HibernateConfig {
   LocalContainerEntityManagerFactoryBean entityManagerFactory(
           DataSource dataSource,
           MultiTenantConnectionProvider multiTenantConnectionProviderImpl,
-          CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl) {
+          CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl,
+          JpaVendorAdapter jpaVendorAdapter) {
     Map<String, Object> jpaPropertiesMap = new HashMap<>(jpaProperties.getProperties());
     jpaPropertiesMap.put(Environment.MULTI_TENANT, MultiTenancyStrategy.SCHEMA);
     jpaPropertiesMap.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProviderImpl);
@@ -40,7 +41,7 @@ public class HibernateConfig {
     LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
     em.setDataSource(dataSource);
     em.setPackagesToScan("com.bug.tracker");
-    em.setJpaVendorAdapter(this.jpaVendorAdapter());
+    em.setJpaVendorAdapter(jpaVendorAdapter);
     em.setJpaPropertyMap(jpaPropertiesMap);
     return em;
   }
